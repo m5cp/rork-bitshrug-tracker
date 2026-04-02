@@ -108,6 +108,26 @@ nonisolated struct FearGreedEntry: Codable, Sendable {
     }
 }
 
+// MARK: - CoinGecko Fallback
+
+nonisolated struct CoinGeckoSimpleResponse: Codable, Sendable {
+    let bitcoin: CoinGeckoBTC
+}
+
+nonisolated struct CoinGeckoBTC: Codable, Sendable {
+    let usd: Double
+    let usdMarketCap: Double?
+    let usd24hVol: Double?
+    let usd24hChange: Double?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case usd
+        case usdMarketCap = "usd_market_cap"
+        case usd24hVol = "usd_24h_vol"
+        case usd24hChange = "usd_24h_change"
+    }
+}
+
 // MARK: - Blockchain.info
 
 nonisolated struct BlockchainStatsResponse: Codable, Sendable {

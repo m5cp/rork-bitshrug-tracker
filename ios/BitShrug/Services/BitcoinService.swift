@@ -26,20 +26,22 @@ nonisolated class BitcoinService: Sendable {
 
     // MARK: - CryptoCompare Market Data
 
-    func fetchCryptoCompareMarketData() async throws -> (marketCap: Double, volume: Double, supply: Double) {
+    func fetchCryptoCompareMarketData() async throws -> (marketCap: Double, volume: Double, supply: Double, price: Double?, changePct24h: Double?) {
         let url = URL(string: "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=1&tsym=USD")!
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(CryptoCompareTopResponse.self, from: data)
 
         guard let btc = response.Data?.first(where: { $0.CoinInfo?.Name == "BTC" }) ?? response.Data?.first,
               let usd = btc.RAW?.USD else {
-            return (0, 0, 0)
+            return (0, 0, 0, nil, nil)
         }
 
         return (
             marketCap: usd.MKTCAP ?? 0,
             volume: usd.TOTALVOLUME24HTO ?? usd.VOLUME24HOUR ?? 0,
-            supply: usd.SUPPLY ?? 19_900_000
+            supply: usd.SUPPLY ?? 19_900_000,
+            price: usd.PRICE,
+            changePct24h: usd.CHANGEPCT24HOUR
         )
     }
 
@@ -64,7 +66,8 @@ nonisolated class BitcoinService: Sendable {
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(CryptoCompareHistoryResponse.self, from: data)
 
-        guard let entries = response.Data?.Data, entries.count >= 1400 else {
+        guard let entries = response.Data?.Data, entries.count >= 1000 else {
+            print("[BitShrug] 200-Week MA: only \(response.Data?.Data?.count ?? 0) entries, using estimate")
             return estimate200WeekMA()
         }
 
@@ -104,13 +107,56 @@ nonisolated class BitcoinService: Sendable {
         )
     }
 
-    // MARK: - Combined Price Fetch (Finnhub + CryptoCompare)
+    // MARK: - CoinGecko Fallback Price
+
+    func fetchCoinGeckoPrice() async throws -> BitcoinPriceData {
+        let url = URL(string: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(CoinGeckoSimpleResponse.self, from: data)
+        return BitcoinPriceData(
+            price: response.bitcoin.usd,
+            marketCap: response.bitcoin.usdMarketCap ?? 0,
+            volume24h: response.bitcoin.usd24hVol ?? 0,
+            change24h: response.bitcoin.usd24hChange ?? 0
+        )
+    }
+
+    // MARK: - Combined Price Fetch (Finnhub + CryptoCompare, CoinGecko fallback)
 
     func fetchPrice() async throws -> BitcoinPriceData {
-        async let finnhubTask = fetchFinnhubPrice()
         async let marketTask = fetchCryptoCompareMarketData()
 
-        let finnhub = try await finnhubTask
+        var priceSource: BitcoinPriceData?
+
+        do {
+            priceSource = try await fetchFinnhubPrice()
+        } catch {
+            print("[BitShrug] Finnhub failed: \(error.localizedDescription), trying CoinGecko...")
+            do {
+                let gecko = try await fetchCoinGeckoPrice()
+                let market = try await marketTask
+                return BitcoinPriceData(
+                    price: gecko.price,
+                    marketCap: market.marketCap > 0 ? market.marketCap : gecko.marketCap,
+                    volume24h: market.volume > 0 ? market.volume : gecko.volume24h,
+                    change24h: gecko.change24h
+                )
+            } catch {
+                print("[BitShrug] CoinGecko also failed: \(error.localizedDescription)")
+                let market = try await marketTask
+                if let ccPrice = market.price, ccPrice > 0 {
+                    return BitcoinPriceData(
+                        price: ccPrice,
+                        marketCap: market.marketCap,
+                        volume24h: market.volume,
+                        change24h: market.changePct24h ?? 0
+                    )
+                }
+                throw error
+            }
+        }
+
+        let finnhub = priceSource!
         let market = try await marketTask
 
         return BitcoinPriceData(
@@ -212,8 +258,10 @@ nonisolated class BitcoinService: Sendable {
     func calculateMVRVZScore(price: Double) -> Double {
         let daysSinceGenesis = daysSince(genesisDate())
         let logDays = log10(Double(daysSinceGenesis))
-        let estimatedRealizedPrice = pow(10, 4.84 * logDays - 14.6)
-        let zScore = (price - estimatedRealizedPrice) / estimatedRealizedPrice
+        let estimatedRealizedPrice = pow(10, 4.84 * logDays - 13.74)
+        guard estimatedRealizedPrice > 0 else { return 0 }
+        let mvrvRatio = price / estimatedRealizedPrice
+        let zScore = mvrvRatio - 1.0
         return min(max(zScore, -1.0), 10.0)
     }
 
@@ -223,7 +271,10 @@ nonisolated class BitcoinService: Sendable {
         let annualFlow = blocksPerDay * currentReward * 365.25
         let supply = currentSupply > 0 ? currentSupply : 19_900_000
         let s2fRatio = supply / annualFlow
-        let modelPrice = exp(3.21 * log(s2fRatio) - 1.02)
+        let lnS2F = log(s2fRatio)
+        let lnModelMarketCap = 3.3 * lnS2F + 14.6
+        let modelMarketCap = exp(lnModelMarketCap)
+        let modelPrice = modelMarketCap / supply
         guard modelPrice > 0 else { return 1.0 }
         return currentPrice / modelPrice
     }
@@ -250,14 +301,16 @@ nonisolated class BitcoinService: Sendable {
 
     func calculateSupplyInProfit(price: Double, mvrvZScore: Double) -> SupplyProfitData {
         let estimatedPercent: Double
-        if mvrvZScore < 0 {
-            estimatedPercent = max(20, 50 + mvrvZScore * 15)
-        } else if mvrvZScore < 2 {
-            estimatedPercent = 50 + mvrvZScore * 15
-        } else if mvrvZScore < 5 {
-            estimatedPercent = 80 + (mvrvZScore - 2) * 5
+        if mvrvZScore < -0.5 {
+            estimatedPercent = max(20, 45 + mvrvZScore * 20)
+        } else if mvrvZScore < 0.5 {
+            estimatedPercent = 55 + mvrvZScore * 30
+        } else if mvrvZScore < 1.5 {
+            estimatedPercent = 70 + (mvrvZScore - 0.5) * 15
+        } else if mvrvZScore < 3.0 {
+            estimatedPercent = 85 + (mvrvZScore - 1.5) * 6
         } else {
-            estimatedPercent = min(99, 95 + (mvrvZScore - 5) * 0.5)
+            estimatedPercent = min(99, 94 + (mvrvZScore - 3.0) * 1.5)
         }
         let clamped = min(max(estimatedPercent, 5), 99)
         return SupplyProfitData(estimatedPercent: clamped, zone: SupplyProfitZone(percent: clamped))

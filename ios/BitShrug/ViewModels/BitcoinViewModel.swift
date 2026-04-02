@@ -346,7 +346,43 @@ class BitcoinViewModel {
             marketCap = priceData.marketCap
             volume24h = priceData.volume24h
             change24h = priceData.change24h
+            print("[BitShrug] Price: $\(Int(price)), Change: \(String(format: "%.1f", change24h))%")
+        } catch {
+            print("[BitShrug] Price fetch failed: \(error.localizedDescription)")
+            errorMessage = "Failed to load price data"
+        }
 
+        do {
+            fearGreedValue = try await fngTask
+            print("[BitShrug] Fear & Greed: \(fearGreedValue)")
+        } catch {
+            print("[BitShrug] Fear & Greed failed: \(error.localizedDescription)")
+        }
+
+        do {
+            actual200WMA = try await weekMATask
+            print("[BitShrug] 200-Week MA: $\(Int(actual200WMA ?? 0))")
+        } catch {
+            print("[BitShrug] 200-Week MA failed: \(error.localizedDescription)")
+        }
+
+        do {
+            let stats = try await blockchainTask
+            hashRate = stats.hashRate
+            blockHeight = stats.blockHeight
+        } catch {
+            print("[BitShrug] Blockchain stats failed: \(error.localizedDescription)")
+        }
+
+        do {
+            let history = try await historyTask
+            historicalPrices = history
+            print("[BitShrug] Historical prices: \(history.count) days")
+        } catch {
+            print("[BitShrug] Historical prices failed: \(error.localizedDescription)")
+        }
+
+        if price > 0 {
             mvrvZScore = service.calculateMVRVZScore(price: price)
             stockToFlowRatio = service.calculateStockToFlow(currentPrice: price, currentSupply: currentSupply)
 
@@ -357,34 +393,20 @@ class BitcoinViewModel {
             powerLawResistance = powerLaw.resistancePrice
 
             rainbowBand = service.calculateRainbowBand(price: price)
-        } catch {
-            errorMessage = "Failed to load price data"
-        }
 
-        do {
-            fearGreedValue = try await fngTask
-        } catch {}
-
-        do {
-            actual200WMA = try await weekMATask
-        } catch {}
-
-        do {
-            let stats = try await blockchainTask
-            hashRate = stats.hashRate
-            blockHeight = stats.blockHeight
-        } catch {}
-
-        do {
-            let history = try await historyTask
-            historicalPrices = history
-
-            if price > 0 {
-                movingAverages = service.calculateMovingAverages(price: price, historicalPrices: history, actual200WMA: actual200WMA)
-                puellMultiple = service.calculatePuellMultiple(currentPrice: price, historicalPrices: history)
-                supplyInProfit = service.calculateSupplyInProfit(price: price, mvrvZScore: mvrvZScore)
+            if !historicalPrices.isEmpty {
+                movingAverages = service.calculateMovingAverages(price: price, historicalPrices: historicalPrices, actual200WMA: actual200WMA)
+                puellMultiple = service.calculatePuellMultiple(currentPrice: price, historicalPrices: historicalPrices)
             }
-        } catch {}
+            supplyInProfit = service.calculateSupplyInProfit(price: price, mvrvZScore: mvrvZScore)
+
+            print("[BitShrug] MVRV Z-Score: \(String(format: "%.2f", mvrvZScore))")
+            print("[BitShrug] S2F Ratio: \(String(format: "%.2f", stockToFlowRatio))")
+            print("[BitShrug] Puell: \(String(format: "%.2f", puellMultiple))")
+            if let sp = supplyInProfit {
+                print("[BitShrug] Supply in Profit: \(String(format: "%.0f", sp.estimatedPercent))%")
+            }
+        }
 
         previousSignalStrength = loadPreviousSignalStrength()
         previousComponentStatuses = loadPreviousComponentStatuses()
