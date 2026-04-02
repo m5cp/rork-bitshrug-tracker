@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		XX298127CFBB2CF3FA631BXX /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = XXDCC169DE7B2F3C1C8B10XX /* RevenueCat */; };
 		XXF07778FFC789DC87B2FBXX /* BitShrugWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = XXF7C7B702B31B98CDA1C4XX /* BitShrugWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -66,13 +67,20 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		XXEB2A47268E1604E2AC1BXX /* BitShrugWidget */ = {
+		105FC57C2E9EAD3100EA8BCF /* BitShrug */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrugWidget;
+			path = BitShrug;
 			sourceTree = "<group>";
-			exceptions = (
-				XXE90DEC98A937D64A7BB2XX /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
-			);
+		};
+		105FC58C2E9EAD3200EA8BCF /* BitShrugTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BitShrugTests;
+			sourceTree = "<group>";
+		};
+		105FC5962E9EAD3200EA8BCF /* BitShrugUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BitShrugUITests;
+			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -81,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				XX298127CFBB2CF3FA631BXX /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,20 +117,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		105FC57C2E9EAD3100EA8BCF /* BitShrug */ = {
+		XXEB2A47268E1604E2AC1BXX /* BitShrugWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrug;
+			path = BitShrugWidget;
 			sourceTree = "<group>";
-		};
-		105FC58C2E9EAD3200EA8BCF /* BitShrugTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrugTests;
-			sourceTree = "<group>";
-		};
-		105FC5962E9EAD3200EA8BCF /* BitShrugUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrugUITests;
-			sourceTree = "<group>";
+			exceptions = (
+				XXE90DEC98A937D64A7BB2XX /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -170,6 +172,7 @@
 			);
 			name = BitShrug;
 			packageProductDependencies = (
+				XXDCC169DE7B2F3C1C8B10XX /* RevenueCat */,
 			);
 			productName = BitShrug;
 			productReference = 105FC57A2E9EAD3100EA8BCF /* BitShrug.app */;
@@ -282,6 +285,9 @@
 				105FC5882E9EAD3200EA8BCF /* BitShrugTests */,
 				105FC5922E9EAD3200EA8BCF /* BitShrugUITests */,
 				XX186114D8907569F9E0A4XX /* BitShrugWidget */,
+			);
+			packageReferences = (
+				XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 		};
 /* End PBXProject section */
@@ -733,6 +739,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		XXDCC169DE7B2F3C1C8B10XX /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 105FC5722E9EAD3100EA8BCF /* Project object */;
 }

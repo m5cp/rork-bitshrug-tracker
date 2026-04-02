@@ -1,9 +1,9 @@
 import SwiftUI
+import RevenueCat
 
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @State private var selectedPlan: Plan = .yearly
     @State private var premium = PremiumManager.shared
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -23,11 +23,13 @@ struct PaywallView: View {
                     featureComparison
                         .padding(.bottom, 36)
 
-                    plans
-                        .padding(.bottom, 32)
-
-                    ctaButton
-                        .padding(.bottom, 14)
+                    if premium.isLoading {
+                        ProgressView()
+                            .padding(.bottom, 32)
+                    } else if let current = premium.offerings?.current {
+                        packagesSection(current)
+                            .padding(.bottom, 32)
+                    }
 
                     tagline
                         .padding(.bottom, 28)
@@ -54,6 +56,17 @@ struct PaywallView: View {
             .padding(.top, 12)
             .padding(.trailing, 16)
             .accessibilityLabel("Close")
+        }
+        .alert("Error", isPresented: .init(
+            get: { premium.error != nil },
+            set: { if !$0 { premium.error = nil } }
+        )) {
+            Button("OK") { premium.error = nil }
+        } message: {
+            Text(premium.error ?? "")
+        }
+        .onChange(of: premium.isPremium) { _, isPremium in
+            if isPremium { dismiss() }
         }
     }
 
@@ -96,12 +109,12 @@ struct PaywallView: View {
 
             featureRow(name: "Environment Score", free: true, pro: true, isLast: false)
             featureRow(name: "Price & Chart", free: true, pro: true, isLast: false)
-            featureRow(name: "3 Core Indicators", free: true, pro: true, isLast: false)
-            featureRow(name: "All 6+ Indicators", free: false, pro: true, isLast: false)
-            featureRow(name: "Daily Insights", free: false, pro: true, isLast: false)
-            featureRow(name: "Weekly Summary", free: false, pro: true, isLast: false)
-            featureRow(name: "Smart Notifications", free: false, pro: true, isLast: false)
-            featureRow(name: "Power Law Charts", free: false, pro: true, isLast: true)
+            featureRow(name: "All Indicators", free: true, pro: true, isLast: false)
+            featureRow(name: "Power Law & Cycle", free: true, pro: true, isLast: false)
+            featureRow(name: "Daily Insights", free: true, pro: true, isLast: false)
+            featureRow(name: "Weekly Summary", free: true, pro: true, isLast: false)
+            featureRow(name: "Smart Notifications", free: true, pro: true, isLast: false)
+            featureRow(name: "Support Development", free: false, pro: true, isLast: true)
         }
         .padding(.vertical, 14)
         .background(Color(.secondarySystemBackground))
@@ -136,93 +149,46 @@ struct PaywallView: View {
         }
     }
 
-    private var plans: some View {
+    private func packagesSection(_ offering: Offering) -> some View {
         VStack(spacing: 10) {
-            planCard(
-                plan: .yearly,
-                label: "$39 / year",
-                detail: "$3.25/mo \u{2014} Save 46%",
-                badge: "Best Value"
-            )
-
-            planCard(
-                plan: .monthly,
-                label: "$5.99 / month",
-                detail: nil,
-                badge: nil
-            )
+            ForEach(offering.availablePackages, id: \.identifier) { package in
+                packageCard(package)
+            }
         }
     }
 
-    private func planCard(plan: Plan, label: String, detail: String?, badge: String?) -> some View {
+    private func packageCard(_ package: Package) -> some View {
         Button {
-            withAnimation(.spring(duration: 0.25)) {
-                selectedPlan = plan
-            }
+            Task { await premium.purchase(package: package) }
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 8) {
-                        Text(label)
-                            .font(.system(.body, weight: .semibold))
-                            .foregroundStyle(.primary)
+                    Text(package.storeProduct.localizedTitle)
+                        .font(.system(.body, weight: .semibold))
+                        .foregroundStyle(.primary)
 
-                        if let badge {
-                            Text(badge)
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(.orange)
-                                .clipShape(Capsule())
-                        }
-                    }
-
-                    if let detail {
-                        Text(detail)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text(package.storeProduct.localizedPriceString)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
-                Image(systemName: selectedPlan == plan ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 22))
-                    .foregroundStyle(selectedPlan == plan ? .orange : Color(.tertiaryLabel))
+                if premium.isPurchasing {
+                    ProgressView()
+                        .tint(.orange)
+                } else {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.orange)
+                }
             }
             .padding(16)
             .background(Color(.secondarySystemBackground))
             .clipShape(.rect(cornerRadius: 14))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .strokeBorder(
-                        selectedPlan == plan ? .orange : .clear,
-                        lineWidth: 1.5
-                    )
-            )
         }
         .buttonStyle(.plain)
-        .sensoryFeedback(.selection, trigger: selectedPlan)
-        .accessibilityLabel("\(label)\(badge != nil ? ", \(badge!)" : "")")
-    }
-
-    private var ctaButton: some View {
-        Button {
-            premium.unlock()
-            premium.markPaywallSeen()
-            dismiss()
-        } label: {
-            Text("Start 7-Day Free Trial")
-                .font(.system(.body, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 52)
-                .background(.orange)
-                .clipShape(.rect(cornerRadius: 14))
-        }
-        .sensoryFeedback(.success, trigger: premium.isPremium)
-        .accessibilityLabel("Start free trial")
+        .disabled(premium.isPurchasing)
     }
 
     private var tagline: some View {
@@ -234,7 +200,7 @@ struct PaywallView: View {
     private var legalLinks: some View {
         HStack(spacing: 16) {
             Button("Restore Purchases") {
-                premium.unlock()
+                Task { await premium.restore() }
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -254,9 +220,4 @@ struct PaywallView: View {
                 .foregroundStyle(.secondary)
         }
     }
-}
-
-private enum Plan {
-    case monthly
-    case yearly
 }
