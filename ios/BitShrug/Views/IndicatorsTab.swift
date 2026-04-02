@@ -84,7 +84,7 @@ struct IndicatorsTab: View {
                         sentimentCard
                             .padding(.top, 8)
 
-                        indicatorGrid
+                        indicatorsList
 
                         disclaimer
                     }
@@ -102,7 +102,9 @@ struct IndicatorsTab: View {
     }
 
     private var loadingView: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
+            ShrugBadge(size: .regular, style: .glowing)
+                .opacity(0.5)
             ProgressView()
                 .scaleEffect(1.1)
                 .tint(.orange.opacity(0.5))
@@ -117,61 +119,61 @@ struct IndicatorsTab: View {
     private var sentimentCard: some View {
         let level = viewModel.fearGreedLevel
 
-        return VStack(spacing: 14) {
-            HStack {
-                Text("MARKET SENTIMENT")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
-                Spacer()
-            }
+        return VStack(spacing: 16) {
+            SectionHeader(icon: "heart.text.square", title: "MARKET SENTIMENT")
 
-            HStack(spacing: 16) {
+            HStack(spacing: 18) {
                 ZStack {
                     Circle()
-                        .stroke(level.color.opacity(0.15), lineWidth: 5)
+                        .stroke(level.color.opacity(0.12), lineWidth: 6)
                     Circle()
                         .trim(from: 0, to: Double(viewModel.fearGreedValue) / 100.0)
-                        .stroke(level.color, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                        .stroke(
+                            AngularGradient(
+                                colors: [level.color.opacity(0.5), level.color],
+                                center: .center,
+                                startAngle: .degrees(-90),
+                                endAngle: .degrees(-90 + 360 * Double(viewModel.fearGreedValue) / 100.0)
+                            ),
+                            style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                        )
                         .rotationEffect(.degrees(-90))
                         .animation(.spring(duration: 0.6), value: viewModel.fearGreedValue)
 
                     Text("\(viewModel.fearGreedValue)")
-                        .font(.system(.title3, design: .monospaced, weight: .bold))
+                        .font(.system(.title3, design: .monospaced, weight: .heavy))
                         .foregroundStyle(.primary)
                 }
-                .frame(width: 60, height: 60)
+                .frame(width: 68, height: 68)
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text("Fear & Greed Index")
                         .font(.subheadline)
-                        .fontWeight(.medium)
+                        .fontWeight(.semibold)
                         .foregroundStyle(.primary)
 
                     Text(level.label)
-                        .font(.system(size: 11, weight: .bold))
+                        .font(.system(size: 12, weight: .heavy))
                         .foregroundStyle(level.color)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(level.color.opacity(0.12))
+                        .clipShape(Capsule())
 
                     Text(level.signalDescription)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .lineSpacing(2)
                 }
 
                 Spacer()
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.accent)
     }
 
-    private var indicatorGrid: some View {
-        let columns = [
-            GridItem(.flexible(), spacing: 10),
-            GridItem(.flexible(), spacing: 10)
-        ]
-
-        return LazyVGrid(columns: columns, spacing: 10) {
+    private var indicatorsList: some View {
+        VStack(spacing: 12) {
             ForEach(Array(allIndicators.enumerated()), id: \.offset) { _, indicator in
                 IndicatorCardView(
                     icon: indicator.icon,

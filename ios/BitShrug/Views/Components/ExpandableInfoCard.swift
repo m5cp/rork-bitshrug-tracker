@@ -18,16 +18,22 @@ struct ExpandableInfoCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 12) {
                     Image(systemName: icon)
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 14, weight: .bold))
                         .foregroundStyle(iconColor)
-                        .frame(width: 32, height: 32)
-                        .background(iconColor.opacity(0.12))
-                        .clipShape(.rect(cornerRadius: 8))
+                        .frame(width: 34, height: 34)
+                        .background(
+                            LinearGradient(
+                                colors: [iconColor.opacity(0.15), iconColor.opacity(0.06)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .clipShape(.rect(cornerRadius: 9))
 
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: 3) {
                         Text(title)
                             .font(.subheadline)
-                            .fontWeight(.semibold)
+                            .fontWeight(.bold)
                             .foregroundStyle(.primary)
 
                         Text(summary)
@@ -39,25 +45,38 @@ struct ExpandableInfoCard: View {
                     Spacer(minLength: 0)
 
                     Image(systemName: "chevron.down")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(.tertiary)
                         .rotationEffect(.degrees(isExpanded ? 180 : 0))
                 }
 
                 if isExpanded {
+                    Divider()
+                        .overlay(Color.white.opacity(0.06))
+                        .padding(.vertical, 12)
+
                     Text(detail)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .lineSpacing(4)
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top, 12)
-                        .padding(.leading, 44)
+                        .padding(.leading, 46)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
-            .padding(14)
-            .background(Color.white.opacity(0.04))
-            .clipShape(.rect(cornerRadius: 14))
+            .padding(16)
+            .background(
+                LinearGradient(
+                    colors: [Color.white.opacity(0.06), Color.white.opacity(0.03)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .clipShape(.rect(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .strokeBorder(Color.white.opacity(0.07), lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.impact(flexibility: .soft), trigger: isExpanded)
@@ -70,13 +89,19 @@ struct KeyPointRow: View {
     let text: String
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: 12, weight: .bold))
                 .foregroundStyle(iconColor)
-                .frame(width: 24, height: 24)
-                .background(iconColor.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 6))
+                .frame(width: 26, height: 26)
+                .background(
+                    LinearGradient(
+                        colors: [iconColor.opacity(0.12), iconColor.opacity(0.04)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(.rect(cornerRadius: 7))
 
             Text(text)
                 .font(.subheadline)
@@ -93,18 +118,24 @@ struct CompactFactCard: View {
     let content: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
                 Image(systemName: icon)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(iconColor)
-                    .frame(width: 28, height: 28)
-                    .background(iconColor.opacity(0.12))
-                    .clipShape(.rect(cornerRadius: 7))
+                    .frame(width: 30, height: 30)
+                    .background(
+                        LinearGradient(
+                            colors: [iconColor.opacity(0.15), iconColor.opacity(0.06)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(.rect(cornerRadius: 8))
 
                 Text(title)
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
                     .foregroundStyle(.primary)
             }
 

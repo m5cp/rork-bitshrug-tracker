@@ -28,7 +28,7 @@ struct HomeTab: View {
 
                         if viewModel.historicalPrices.count > 30 {
                             chartSection
-                                .padding(.bottom, 24)
+                                .padding(.bottom, 20)
                         }
 
                         if scoreHistory.entries.count >= 2 {
@@ -137,22 +137,22 @@ struct HomeTab: View {
     }
 
     private var brandMark: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
             Text("BitShrug")
                 .font(.system(.subheadline, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
-            Text("\u{00AF}\\_(ツ)_/\u{00AF}")
-                .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(.tertiary)
+            ShrugBadge(size: .small, style: .inline)
         }
     }
 
     private var loadingView: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
+            ShrugBadge(size: .large, style: .glowing)
+                .opacity(0.6)
             ProgressView()
                 .scaleEffect(1.1)
                 .tint(.orange.opacity(0.5))
-            Text("Loading")
+            Text("Loading market data...")
                 .font(.caption)
                 .foregroundStyle(.quaternary)
         }
@@ -172,27 +172,27 @@ struct HomeTab: View {
     }
 
     private var priceBlock: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 10) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 if viewModel.price > 0 {
                     Text(viewModel.formattedPrice)
-                        .font(.system(size: isRegular ? 52 : 42, weight: .bold))
+                        .font(.system(size: isRegular ? 52 : 44, weight: .heavy))
                         .foregroundStyle(.primary)
                         .contentTransition(.numericText())
                 } else {
                     Text("\u{2014}")
-                        .font(.system(size: isRegular ? 52 : 42, weight: .bold))
+                        .font(.system(size: isRegular ? 52 : 44, weight: .heavy))
                         .foregroundStyle(.quaternary)
                 }
 
                 if viewModel.price > 0 {
                     Text(viewModel.formattedChange)
-                        .font(.system(.subheadline, design: .monospaced, weight: .semibold))
+                        .font(.system(.subheadline, design: .monospaced, weight: .bold))
                         .foregroundStyle(viewModel.change24h >= 0 ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
                         .background(
-                            (viewModel.change24h >= 0 ? Color.green : Color.red).opacity(0.1)
+                            (viewModel.change24h >= 0 ? Color.green : Color.red).opacity(0.12)
                         )
                         .clipShape(Capsule())
                 }
@@ -231,18 +231,18 @@ struct HomeTab: View {
                 progress: Double(animatedScore) / 100.0,
                 label: viewModel.environmentScoreLabel,
                 color: signal.color,
-                size: 88
+                size: 96
             )
 
             VStack(alignment: .leading, spacing: 6) {
                 Text("ENVIRONMENT")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1.2)
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.secondary)
+                    .tracking(1.5)
 
                 Text(signal.label)
                     .font(.title2)
-                    .fontWeight(.bold)
+                    .fontWeight(.heavy)
                     .foregroundStyle(signal.color)
 
                 Text(viewModel.environmentMessage)
@@ -254,15 +254,7 @@ struct HomeTab: View {
 
             Spacer(minLength: 0)
         }
-        .padding(18)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white.opacity(0.04))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .strokeBorder(signal.color.opacity(0.15), lineWidth: 1)
-                )
-        )
+        .premiumCard(.accent)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Environment Score \(viewModel.environmentScore), \(viewModel.environmentScoreLabel)")
     }
@@ -271,37 +263,23 @@ struct HomeTab: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("PRICE")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.tertiary)
-                .tracking(1)
+            SectionHeader(icon: "chart.xyaxis.line", title: "PRICE")
 
             PriceChartView(
                 prices: viewModel.historicalPrices,
                 movingAverages: viewModel.movingAverages
             )
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }
 
-    // MARK: - Insight ("What Changed")
+    // MARK: - Insight
 
     private var insightSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: "sparkle")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.orange)
-                Text("WHAT CHANGED")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
-                Spacer()
-
+            SectionHeader(icon: "sparkle", iconColor: .orange, title: "WHAT CHANGED") {
                 if let change = viewModel.signalChangeText {
                     Text(change)
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
@@ -311,7 +289,7 @@ struct HomeTab: View {
 
             Text(viewModel.insightHeadline)
                 .font(.subheadline)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .foregroundStyle(.primary)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
@@ -319,12 +297,10 @@ struct HomeTab: View {
             Text(viewModel.insightExpansion)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .lineSpacing(2)
+                .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard()
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }
@@ -332,11 +308,8 @@ struct HomeTab: View {
     // MARK: - Score Drivers
 
     private var driversSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("SCORE BREAKDOWN")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.tertiary)
-                .tracking(1)
+        VStack(alignment: .leading, spacing: 14) {
+            SectionHeader(icon: "gauge.with.dots.needle.bottom.50percent", title: "SCORE BREAKDOWN")
 
             VStack(spacing: 0) {
                 driverRow(name: "Trend", score: viewModel.trendScore, maxScore: 30, status: viewModel.trendStatus, explanation: viewModel.trendExplanation, isLast: false)
@@ -345,9 +318,7 @@ struct HomeTab: View {
                 driverRow(name: "Volatility", score: viewModel.volatilityScore, maxScore: 20, status: viewModel.volatilityStatus, explanation: viewModel.volatilityExplanation, isLast: true)
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }
@@ -368,14 +339,14 @@ struct HomeTab: View {
                     HStack(spacing: 8) {
                         Text(name)
                             .font(.subheadline)
-                            .fontWeight(.medium)
+                            .fontWeight(.semibold)
                             .foregroundStyle(.primary)
 
                         Text(status.label)
-                            .font(.system(size: 9, weight: .bold))
+                            .font(.system(size: 9, weight: .heavy))
                             .foregroundStyle(color)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
                             .background(color.opacity(0.12))
                             .clipShape(Capsule())
                     }
@@ -389,7 +360,7 @@ struct HomeTab: View {
                 Spacer(minLength: 0)
 
                 Text("\(score)/\(maxScore)")
-                    .font(.system(.caption, design: .monospaced, weight: .semibold))
+                    .font(.system(.caption, design: .monospaced, weight: .bold))
                     .foregroundStyle(.secondary)
             }
             .padding(.vertical, 10)
@@ -400,12 +371,19 @@ struct HomeTab: View {
                         .fill(Color.white.opacity(0.06))
 
                     Capsule()
-                        .fill(color.opacity(0.7))
+                        .fill(
+                            LinearGradient(
+                                colors: [color.opacity(0.5), color.opacity(0.9)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                         .frame(width: max(0, geo.size.width * progress))
                         .animation(.spring(duration: 0.6), value: progress)
                 }
             }
-            .frame(height: 4)
+            .frame(height: 5)
+            .clipShape(Capsule())
             .padding(.bottom, isLast ? 0 : 8)
 
             if !isLast {
@@ -419,25 +397,16 @@ struct HomeTab: View {
     // MARK: - Weekly Summary
 
     private var weeklySummarySection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Image(systemName: "calendar")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.orange)
-                Text("THIS WEEK")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
-                Spacer()
-
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(icon: "calendar", title: "THIS WEEK") {
                 let dir = viewModel.weeklyDirection
                 Text(dir)
-                    .font(.system(size: 10, weight: .bold))
+                    .font(.system(size: 10, weight: .heavy))
                     .foregroundStyle(dir == "Improving" ? Color(red: 0.2, green: 0.85, blue: 0.5) : dir == "Weakening" ? Color(red: 0.95, green: 0.3, blue: 0.3) : .secondary)
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
+                    .padding(.vertical, 4)
                     .background(
-                        (dir == "Improving" ? Color.green : dir == "Weakening" ? Color.red : Color.white).opacity(0.08)
+                        (dir == "Improving" ? Color.green : dir == "Weakening" ? Color.red : Color.white).opacity(0.1)
                     )
                     .clipShape(Capsule())
             }
@@ -451,12 +420,10 @@ struct HomeTab: View {
             Text(viewModel.weeklyExplanation)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .lineSpacing(2)
+                .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard()
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }
@@ -464,45 +431,43 @@ struct HomeTab: View {
     // MARK: - Market Context
 
     private var contextSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Image(systemName: "globe")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.orange)
-                Text("MARKET CONTEXT")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
-                Spacer()
-            }
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(icon: "globe", title: "MARKET CONTEXT")
 
             Text(viewModel.marketContext)
                 .font(.subheadline)
                 .foregroundStyle(.primary)
-                .lineSpacing(2)
+                .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
 
             if let phase = viewModel.halvingInfo?.currentPhase {
-                HStack(spacing: 8) {
+                HStack(spacing: 10) {
                     Image(systemName: phase.icon)
-                        .font(.system(size: 11))
+                        .font(.system(size: 11, weight: .bold))
                         .foregroundStyle(phase.color)
-                    Text("Cycle Phase: \(phase.label)")
+                        .frame(width: 24, height: 24)
+                        .background(phase.color.opacity(0.12))
+                        .clipShape(.rect(cornerRadius: 6))
+
+                    Text("Cycle: \(phase.label)")
                         .font(.caption)
+                        .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
 
                     Spacer()
 
                     Text(viewModel.rainbowBand.label)
-                        .font(.system(size: 10, weight: .medium))
+                        .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(viewModel.rainbowBand.color)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(viewModel.rainbowBand.color.opacity(0.1))
+                        .clipShape(Capsule())
                 }
                 .padding(.top, 4)
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard()
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }

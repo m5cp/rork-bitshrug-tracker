@@ -26,22 +26,13 @@ struct ScoreHistoryChartView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: "chart.line.uptrend.xyaxis")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.orange)
-                Text("SCORE HISTORY")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
-                Spacer()
-
+            SectionHeader(icon: "chart.line.uptrend.xyaxis", title: "SCORE HISTORY") {
                 if chartEntries.count >= 2 {
                     let first = chartEntries.first!.score
                     let last = chartEntries.last!.score
                     let delta = last - first
                     Text("\(delta >= 0 ? "+" : "")\(delta) pts")
-                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .font(.system(size: 10, weight: .heavy, design: .monospaced))
                         .foregroundStyle(delta >= 0 ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
                 }
             }
@@ -55,7 +46,7 @@ struct ScoreHistoryChartView: View {
                         )
                         .foregroundStyle(scoreColor)
                         .interpolationMethod(.catmullRom)
-                        .lineStyle(StrokeStyle(lineWidth: 2))
+                        .lineStyle(StrokeStyle(lineWidth: 2.5))
                     }
 
                     ForEach(chartEntries) { entry in
@@ -110,8 +101,6 @@ struct ScoreHistoryChartView: View {
                 .frame(height: 120)
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
     }
 }

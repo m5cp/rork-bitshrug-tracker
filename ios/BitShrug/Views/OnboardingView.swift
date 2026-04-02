@@ -19,8 +19,8 @@ struct OnboardingView: View {
             icon: "gauge.with.dots.needle.bottom.50percent",
             iconColor: .orange,
             title: "Environment Score",
-            subtitle: "A single 0\u{2013}100 score built from trend,\nmomentum, positioning, and volatility.",
-            detail: "Know the conditions \u{2014} not predictions."
+            subtitle: "A single 0–100 score built from trend,\nmomentum, positioning, and volatility.",
+            detail: "Know the conditions — not predictions."
         ),
         OnboardingPage(
             icon: "chart.line.uptrend.xyaxis",
@@ -44,12 +44,12 @@ struct OnboardingView: View {
 
             TabView(selection: $currentPage) {
                 ForEach(Array(pages.enumerated()), id: \.offset) { index, page in
-                    pageView(page)
+                    pageView(page, isFirst: index == 0)
                         .tag(index)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: isRegular ? 420 : 380)
+            .frame(height: isRegular ? 440 : 400)
 
             pageIndicator
                 .padding(.top, 24)
@@ -63,15 +63,20 @@ struct OnboardingView: View {
         .background(Color(.systemBackground).ignoresSafeArea())
     }
 
-    private func pageView(_ page: OnboardingPage) -> some View {
+    private func pageView(_ page: OnboardingPage, isFirst: Bool) -> some View {
         VStack(spacing: 20) {
-            Image(systemName: page.icon)
-                .font(.system(size: 56))
-                .foregroundStyle(page.iconColor)
-                .padding(.bottom, 8)
+            if isFirst {
+                ShrugBadge(size: .hero, style: .hero)
+                    .padding(.bottom, 4)
+            } else {
+                Image(systemName: page.icon)
+                    .font(.system(size: 56))
+                    .foregroundStyle(page.iconColor)
+                    .padding(.bottom, 8)
+            }
 
             Text(page.title)
-                .font(.system(size: isRegular ? 32 : 28, weight: .bold))
+                .font(.system(size: isRegular ? 32 : 28, weight: .heavy))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.primary)
 
@@ -115,12 +120,19 @@ struct OnboardingView: View {
             }
         } label: {
             Text(currentPage < pages.count - 1 ? "Continue" : "Get Started")
-                .font(.system(.body, weight: .semibold))
+                .font(.system(.body, weight: .bold))
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 52)
-                .background(.orange)
-                .clipShape(.rect(cornerRadius: 14))
+                .frame(height: 54)
+                .background(
+                    LinearGradient(
+                        colors: [.orange, Color(red: 1.0, green: 0.5, blue: 0.1)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .clipShape(.rect(cornerRadius: 16))
+                .shadow(color: .orange.opacity(0.3), radius: 12, y: 4)
         }
         .sensoryFeedback(.impact(flexibility: .soft), trigger: currentPage)
     }

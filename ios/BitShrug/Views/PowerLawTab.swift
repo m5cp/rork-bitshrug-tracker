@@ -48,7 +48,9 @@ struct PowerLawTab: View {
     }
 
     private var loadingPlaceholder: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
+            ShrugBadge(size: .regular, style: .glowing)
+                .opacity(0.5)
             ProgressView()
                 .tint(.orange.opacity(0.5))
             Text("Loading")
@@ -93,29 +95,30 @@ struct PowerLawTab: View {
             verdictColor = Color(red: 0.95, green: 0.3, blue: 0.3)
         }
 
-        return VStack(spacing: 14) {
-            HStack(spacing: 8) {
-                Text("\u{00AF}\\_(ツ)_/\u{00AF}")
-                    .font(.system(.title3, design: .monospaced))
-                    .foregroundStyle(.orange)
+        return VStack(spacing: 16) {
+            HStack(spacing: 10) {
+                ShrugBadge(size: .large, style: .hero)
+
                 Text("IS THE POWER LAW VALID?")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.secondary)
+                    .tracking(1.5)
                 Spacer()
             }
 
-            Text(verdict)
-                .font(.title3)
-                .fontWeight(.bold)
-                .foregroundStyle(verdictColor)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(verdict)
+                    .font(.title3)
+                    .fontWeight(.heavy)
+                    .foregroundStyle(verdictColor)
 
-            Text(explanation)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .lineSpacing(2)
-                .fixedSize(horizontal: false, vertical: true)
+                Text(explanation)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 6) {
                 Image(systemName: "info.circle")
@@ -125,23 +128,16 @@ struct PowerLawTab: View {
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.accent)
     }
 
     // MARK: - Power Law Chart
 
     private var corridorChart: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("POWER LAW CORRIDOR")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.tertiary)
-                    .tracking(1)
-                Spacer()
-
+            SectionHeader(icon: "chart.line.uptrend.xyaxis", title: "POWER LAW CORRIDOR") {
                 HStack(spacing: 12) {
                     legendDot(color: .orange, label: "Price")
                     legendDot(color: .green.opacity(0.5), label: "Support")
@@ -156,9 +152,7 @@ struct PowerLawTab: View {
                 currentPrice: viewModel.price
             )
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
     }
 
     private func legendDot(color: Color, label: String) -> some View {
@@ -167,7 +161,7 @@ struct PowerLawTab: View {
                 .fill(color)
                 .frame(width: 6, height: 6)
             Text(label)
-                .font(.system(size: 9, weight: .medium))
+                .font(.system(size: 9, weight: .bold))
                 .foregroundStyle(.tertiary)
         }
     }
@@ -195,20 +189,20 @@ struct PowerLawTab: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("POSITION")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(.tertiary)
-                        .tracking(1)
+                        .font(.system(size: 10, weight: .heavy))
+                        .foregroundStyle(.secondary)
+                        .tracking(1.5)
 
                     Text(zoneName)
                         .font(.title3)
-                        .fontWeight(.bold)
+                        .fontWeight(.heavy)
                         .foregroundStyle(zoneColor)
                 }
 
                 Spacer()
 
                 Text("\(Int(viewModel.powerLawPercent * 100))%")
-                    .font(.system(.title2, design: .monospaced, weight: .bold))
+                    .font(.system(.title2, design: .monospaced, weight: .heavy))
                     .foregroundStyle(.primary)
             }
 
@@ -216,21 +210,19 @@ struct PowerLawTab: View {
 
             HStack {
                 Text("Support")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(.green.opacity(0.7))
                 Spacer()
                 Text("Midpoint")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text("Resistance")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(.red.opacity(0.7))
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
     }
 
     private func corridorBar(position: Double) -> some View {
@@ -247,13 +239,14 @@ struct PowerLawTab: View {
 
                 Circle()
                     .fill(.white)
-                    .frame(width: 16, height: 16)
-                    .shadow(color: .white.opacity(0.3), radius: 6)
-                    .offset(x: max(0, min(width - 16, width * position - 8)))
+                    .frame(width: 18, height: 18)
+                    .shadow(color: .white.opacity(0.4), radius: 8)
+                    .shadow(color: .white.opacity(0.2), radius: 16)
+                    .offset(x: max(0, min(width - 18, width * position - 9)))
                     .animation(.spring(duration: 0.5), value: position)
             }
         }
-        .frame(height: 16)
+        .frame(height: 18)
     }
 
     // MARK: - Price Range
@@ -266,18 +259,16 @@ struct PowerLawTab: View {
             Spacer()
             priceColumn(label: "Resistance", price: viewModel.powerLawResistance, color: Color(red: 0.95, green: 0.3, blue: 0.3))
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard()
     }
 
     private func priceColumn(label: String, price: Double, color: Color) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 5) {
             Text(label)
-                .font(.system(size: 10, weight: .medium))
+                .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.tertiary)
             Text(formatPrice(price))
-                .font(.system(.footnote, design: .monospaced, weight: .semibold))
+                .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(color)
         }
     }
@@ -287,27 +278,25 @@ struct PowerLawTab: View {
     private var rainbowCard: some View {
         let band = viewModel.rainbowBand
 
-        return VStack(spacing: 14) {
+        return VStack(spacing: 16) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("RAINBOW CHART")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(.tertiary)
-                        .tracking(1)
+                    SectionHeader(icon: "rainbow", iconColor: .purple, title: "RAINBOW CHART")
 
                     Text(band.label)
                         .font(.title3)
-                        .fontWeight(.bold)
+                        .fontWeight(.heavy)
                         .foregroundStyle(band.color)
+                        .padding(.top, 4)
                 }
 
                 Spacer()
 
                 Text(band.signalType)
-                    .font(.system(size: 11, weight: .bold))
+                    .font(.system(size: 11, weight: .heavy))
                     .foregroundStyle(signalTypeColor(band.signalType))
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
+                    .padding(.vertical, 6)
                     .background(signalTypeColor(band.signalType).opacity(0.12))
                     .clipShape(Capsule())
             }
@@ -318,9 +307,7 @@ struct PowerLawTab: View {
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
     }
 
     private func rainbowBands(currentBand: RainbowBand) -> some View {
@@ -331,14 +318,14 @@ struct PowerLawTab: View {
                 HStack(spacing: 8) {
                     RoundedRectangle(cornerRadius: 3)
                         .fill(band.color.opacity(isCurrent ? 1.0 : 0.3))
-                        .frame(height: isCurrent ? 24 : 10)
+                        .frame(height: isCurrent ? 26 : 10)
 
                     if isCurrent {
                         HStack(spacing: 4) {
                             Image(systemName: "location.fill")
                                 .font(.system(size: 8))
                             Text("You are here")
-                                .font(.system(size: 10, weight: .bold))
+                                .font(.system(size: 10, weight: .heavy))
                         }
                         .foregroundStyle(band.color)
                         .frame(width: 90, alignment: .leading)
@@ -356,18 +343,25 @@ struct PowerLawTab: View {
 
     private var mathSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("THE FORMULA")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.tertiary)
-                .tracking(1)
+            SectionHeader(icon: "function", title: "THE FORMULA")
 
-            Text("log\u{2081}\u{2080}(price) = 5.71 \u{00D7} log\u{2081}\u{2080}(days) \u{2212} k")
-                .font(.system(.body, design: .monospaced, weight: .medium))
-                .foregroundStyle(.orange)
-                .padding(12)
+            Text("log₁₀(price) = 5.71 × log₁₀(days) − k")
+                .font(.system(.body, design: .monospaced, weight: .bold))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.orange, Color(red: 1.0, green: 0.6, blue: 0.1)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .padding(14)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .background(.orange.opacity(0.08))
-                .clipShape(.rect(cornerRadius: 10))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .strokeBorder(.orange.opacity(0.15), lineWidth: 1)
+                )
+                .clipShape(.rect(cornerRadius: 12))
 
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 mathTile(label: "price", value: "BTC price in USD")
@@ -382,23 +376,21 @@ struct PowerLawTab: View {
             HStack(spacing: 0) {
                 mathStat(label: "Days", value: "\(days)")
                 Spacer()
-                mathStat(label: "log\u{2081}\u{2080}(days)", value: String(format: "%.3f", logDays))
+                mathStat(label: "log₁₀(days)", value: String(format: "%.3f", logDays))
                 Spacer()
                 mathStat(label: "Slope", value: "5.71")
             }
             .padding(12)
             .background(Color.white.opacity(0.03))
-            .clipShape(.rect(cornerRadius: 10))
+            .clipShape(.rect(cornerRadius: 12))
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
+        .premiumCard(.highlighted)
     }
 
     private func mathTile(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .font(.system(.caption, design: .monospaced, weight: .bold))
+                .font(.system(.caption, design: .monospaced, weight: .heavy))
                 .foregroundStyle(.orange)
             Text(value)
                 .font(.caption2)
@@ -413,10 +405,10 @@ struct PowerLawTab: View {
     private func mathStat(label: String, value: String) -> some View {
         VStack(spacing: 3) {
             Text(label)
-                .font(.system(size: 9, weight: .medium))
+                .font(.system(size: 9, weight: .bold))
                 .foregroundStyle(.tertiary)
             Text(value)
-                .font(.system(.footnote, design: .monospaced, weight: .semibold))
+                .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
         }
     }
@@ -438,7 +430,7 @@ struct PowerLawTab: View {
                 iconColor: .blue,
                 title: "What is a Power Law?",
                 summary: "A relationship where one quantity scales as a power of another",
-                detail: "Price \u{221D} Time\u{2075}\u{22C5}\u{2077}\u{00B9} — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
+                detail: "Price ∝ Time⁵·⁷¹ — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
             )
 
             ExpandableInfoCard(

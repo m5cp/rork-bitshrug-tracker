@@ -48,14 +48,12 @@ struct AboutView: View {
     }
 
     private var headerSection: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 12) {
             Text("BitShrug")
-                .font(.system(.title2, design: .monospaced, weight: .bold))
+                .font(.system(.title2, design: .monospaced, weight: .heavy))
                 .foregroundStyle(.primary)
 
-            Text("\u{00AF}\\_(ツ)_/\u{00AF}")
-                .font(.system(.caption, design: .monospaced))
-                .foregroundStyle(.tertiary)
+            ShrugBadge(size: .large, style: .hero)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 24)
@@ -65,15 +63,21 @@ struct AboutView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) {
                 Image(systemName: "binoculars.fill")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.orange)
-                    .frame(width: 32, height: 32)
-                    .background(.orange.opacity(0.12))
-                    .clipShape(.rect(cornerRadius: 8))
+                    .frame(width: 34, height: 34)
+                    .background(
+                        LinearGradient(
+                            colors: [.orange.opacity(0.15), .orange.opacity(0.06)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(.rect(cornerRadius: 9))
 
                 Text("What is BitShrug?")
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
 
             Text("Understand the Bitcoin macro environment — without the noise. Focus on where we are in the cycle, how conditions are shifting, and whether the environment supports long-term positioning.")
@@ -82,35 +86,39 @@ struct AboutView: View {
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 16))
+        .premiumCard(.accent)
     }
 
     private var scoreCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 10) {
                 Image(systemName: "gauge.with.dots.needle.bottom.50percent")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.orange)
-                    .frame(width: 32, height: 32)
-                    .background(.orange.opacity(0.12))
-                    .clipShape(.rect(cornerRadius: 8))
+                    .frame(width: 34, height: 34)
+                    .background(
+                        LinearGradient(
+                            colors: [.orange.opacity(0.15), .orange.opacity(0.06)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(.rect(cornerRadius: 9))
 
                 Text("Environment Score")
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
 
-            Text("A single 0\u{2013}100 score reflecting current conditions across four components:")
+            Text("A single 0–100 score reflecting current conditions across four components:")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
             VStack(spacing: 8) {
-                componentChip(name: "Trend", range: "0\u{2013}30", icon: "chart.xyaxis.line")
-                componentChip(name: "Momentum", range: "0\u{2013}25", icon: "bolt.fill")
-                componentChip(name: "Positioning", range: "0\u{2013}25", icon: "scope")
-                componentChip(name: "Volatility", range: "0\u{2013}20", icon: "waveform.path.ecg")
+                componentChip(name: "Trend", range: "0–30", icon: "chart.xyaxis.line")
+                componentChip(name: "Momentum", range: "0–25", icon: "bolt.fill")
+                componentChip(name: "Positioning", range: "0–25", icon: "scope")
+                componentChip(name: "Volatility", range: "0–20", icon: "waveform.path.ecg")
             }
 
             Text("Reflects conditions — not outcomes.")
@@ -118,27 +126,25 @@ struct AboutView: View {
                 .foregroundStyle(.tertiary)
                 .italic()
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 16))
+        .premiumCard(.highlighted)
     }
 
     private func componentChip(name: String, range: String, icon: String) -> some View {
         HStack(spacing: 10) {
             Image(systemName: icon)
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: 11, weight: .bold))
                 .foregroundStyle(.orange)
                 .frame(width: 22)
 
             Text(name)
                 .font(.subheadline)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .foregroundStyle(.primary)
 
             Spacer()
 
             Text(range)
-                .font(.system(.caption, design: .monospaced, weight: .medium))
+                .font(.system(.caption, design: .monospaced, weight: .bold))
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 6)
@@ -151,22 +157,28 @@ struct AboutView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) {
                 Image(systemName: "slider.horizontal.3")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.orange)
-                    .frame(width: 32, height: 32)
-                    .background(.orange.opacity(0.12))
-                    .clipShape(.rect(cornerRadius: 8))
+                    .frame(width: 34, height: 34)
+                    .background(
+                        LinearGradient(
+                            colors: [.orange.opacity(0.15), .orange.opacity(0.06)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(.rect(cornerRadius: 9))
 
                 Text("How to Read It")
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
 
             VStack(spacing: 6) {
-                rangeRow(range: "75\u{2013}100", label: "Strong", color: Color(red: 0.2, green: 0.85, blue: 0.5))
-                rangeRow(range: "55\u{2013}74", label: "Moderate", color: .blue)
-                rangeRow(range: "35\u{2013}54", label: "Weak", color: .orange)
-                rangeRow(range: "0\u{2013}34", label: "High Risk", color: Color(red: 0.95, green: 0.3, blue: 0.3))
+                rangeRow(range: "75–100", label: "Strong", color: Color(red: 0.2, green: 0.85, blue: 0.5))
+                rangeRow(range: "55–74", label: "Moderate", color: .blue)
+                rangeRow(range: "35–54", label: "Weak", color: .orange)
+                rangeRow(range: "0–34", label: "High Risk", color: Color(red: 0.95, green: 0.3, blue: 0.3))
             }
 
             Text("For long-term positioning, not short-term trading.")
@@ -174,25 +186,23 @@ struct AboutView: View {
                 .foregroundStyle(.tertiary)
                 .italic()
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 16))
+        .premiumCard()
     }
 
     private func rangeRow(range: String, label: String, color: Color) -> some View {
         HStack {
             Text(range)
-                .font(.system(.caption, design: .monospaced, weight: .medium))
+                .font(.system(.caption, design: .monospaced, weight: .bold))
                 .foregroundStyle(.secondary)
                 .frame(width: 60, alignment: .leading)
 
             RoundedRectangle(cornerRadius: 3)
-                .fill(color.opacity(0.6))
-                .frame(width: 4, height: 18)
+                .fill(color.opacity(0.7))
+                .frame(width: 4, height: 20)
 
             Text(label)
                 .font(.subheadline)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .foregroundStyle(color)
 
             Spacer()
@@ -205,26 +215,24 @@ struct AboutView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) {
                 Image(systemName: "server.rack")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.secondary)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 34, height: 34)
                     .background(Color.white.opacity(0.06))
-                    .clipShape(.rect(cornerRadius: 8))
+                    .clipShape(.rect(cornerRadius: 9))
 
                 Text("Data Sources")
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
             }
 
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 10) {
                 sourceRow(name: "CoinGecko", detail: "Price, market cap, volume, history")
                 sourceRow(name: "Alternative.me", detail: "Fear & Greed Index")
                 sourceRow(name: "Local Models", detail: "All indicators calculated from price data")
             }
         }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 16))
+        .premiumCard()
     }
 
     private func sourceRow(name: String, detail: String) -> some View {
@@ -234,10 +242,10 @@ struct AboutView: View {
                 .frame(width: 5, height: 5)
                 .padding(.top, 6)
 
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(name)
                     .font(.caption)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
                     .foregroundStyle(.primary)
                 Text(detail)
                     .font(.caption2)
@@ -250,11 +258,11 @@ struct AboutView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Image(systemName: "exclamationmark.triangle")
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(.tertiary)
                 Text("Disclaimer")
                     .font(.caption)
-                    .fontWeight(.bold)
+                    .fontWeight(.heavy)
                     .foregroundStyle(.tertiary)
             }
 
@@ -266,6 +274,10 @@ struct AboutView: View {
         }
         .padding(16)
         .background(Color.white.opacity(0.03))
-        .clipShape(.rect(cornerRadius: 14))
+        .clipShape(.rect(cornerRadius: 16))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(Color.white.opacity(0.04), lineWidth: 1)
+        )
     }
 }

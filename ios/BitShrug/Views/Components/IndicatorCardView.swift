@@ -17,49 +17,75 @@ struct IndicatorCardView: View {
             }
         } label: {
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .top, spacing: 10) {
+                HStack(spacing: 12) {
                     Image(systemName: icon)
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(.orange)
-                        .frame(width: 28, height: 28)
-                        .background(.orange.opacity(0.12))
-                        .clipShape(.rect(cornerRadius: 7))
+                        .frame(width: 34, height: 34)
+                        .background(
+                            LinearGradient(
+                                colors: [.orange.opacity(0.15), .orange.opacity(0.06)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .clipShape(.rect(cornerRadius: 9))
 
-                    VStack(alignment: .leading, spacing: 3) {
+                    VStack(alignment: .leading, spacing: 4) {
                         Text(title)
                             .font(.caption)
-                            .fontWeight(.medium)
+                            .fontWeight(.bold)
                             .foregroundStyle(.secondary)
 
                         Text(value)
-                            .font(.system(.subheadline, design: .monospaced, weight: .semibold))
+                            .font(.system(.subheadline, design: .monospaced, weight: .bold))
                             .foregroundStyle(.primary)
                     }
 
                     Spacer()
 
-                    Text(status)
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundStyle(statusColor)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(statusColor.opacity(0.12))
-                        .clipShape(Capsule())
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text(status)
+                            .font(.system(size: 10, weight: .heavy))
+                            .foregroundStyle(statusColor)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(statusColor.opacity(0.12))
+                            .clipShape(Capsule())
+
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.tertiary)
+                            .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                    }
                 }
 
                 if isExpanded {
+                    Divider()
+                        .overlay(Color.white.opacity(0.06))
+                        .padding(.vertical, 12)
+
                     Text(detail)
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .lineSpacing(2)
+                        .lineSpacing(3)
                         .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top, 10)
                         .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
-            .padding(14)
-            .background(Color.white.opacity(0.05))
-            .clipShape(.rect(cornerRadius: 14))
+            .padding(16)
+            .background(
+                LinearGradient(
+                    colors: [Color.white.opacity(0.06), Color.white.opacity(0.03)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .clipShape(.rect(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .strokeBorder(Color.white.opacity(0.07), lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.impact(flexibility: .soft), trigger: isExpanded)
@@ -85,16 +111,22 @@ struct WideIndicatorCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 12) {
                     Image(systemName: icon)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(.orange)
-                        .frame(width: 32, height: 32)
-                        .background(.orange.opacity(0.12))
-                        .clipShape(.rect(cornerRadius: 8))
+                        .frame(width: 34, height: 34)
+                        .background(
+                            LinearGradient(
+                                colors: [.orange.opacity(0.15), .orange.opacity(0.06)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .clipShape(.rect(cornerRadius: 9))
 
                     VStack(alignment: .leading, spacing: 2) {
                         Text(title)
                             .font(.subheadline)
-                            .fontWeight(.medium)
+                            .fontWeight(.semibold)
                             .foregroundStyle(.primary)
 
                         Text(detail)
@@ -107,11 +139,11 @@ struct WideIndicatorCard: View {
 
                     VStack(alignment: .trailing, spacing: 2) {
                         Text(value)
-                            .font(.system(.subheadline, design: .monospaced, weight: .semibold))
+                            .font(.system(.subheadline, design: .monospaced, weight: .bold))
                             .foregroundStyle(.primary)
 
                         Text(status)
-                            .font(.system(size: 10, weight: .bold))
+                            .font(.system(size: 10, weight: .heavy))
                             .foregroundStyle(statusColor)
                     }
                 }
@@ -129,8 +161,18 @@ struct WideIndicatorCard: View {
                 }
             }
             .padding(16)
-            .background(Color.white.opacity(0.05))
-            .clipShape(.rect(cornerRadius: 16))
+            .background(
+                LinearGradient(
+                    colors: [Color.white.opacity(0.06), Color.white.opacity(0.03)],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .clipShape(.rect(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .strokeBorder(Color.white.opacity(0.07), lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.impact(flexibility: .soft), trigger: isExpanded)

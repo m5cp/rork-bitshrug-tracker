@@ -21,9 +21,15 @@ struct ShareCardView: View {
                     Text("BitShrug")
                         .font(.system(.subheadline, design: .monospaced, weight: .bold))
                         .foregroundStyle(.white)
-                    Text("\u{00AF}\\_(ツ)_/\u{00AF}")
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.5))
+                    Text("¯\\_(ツ)_/¯")
+                        .font(.system(.caption, design: .monospaced, weight: .heavy))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color(red: 1.0, green: 0.8, blue: 0.3), .orange],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                     Spacer()
                 }
 
@@ -35,13 +41,14 @@ struct ShareCardView: View {
                             .trim(from: 0, to: Double(score) / 100.0)
                             .stroke(scoreColor, style: StrokeStyle(lineWidth: 6, lineCap: .round))
                             .rotationEffect(.degrees(-90))
+                            .shadow(color: scoreColor.opacity(0.4), radius: 6)
 
                         VStack(spacing: 0) {
                             Text("\(score)")
-                                .font(.system(size: 28, weight: .bold, design: .monospaced))
+                                .font(.system(size: 28, weight: .heavy, design: .monospaced))
                                 .foregroundStyle(.white)
                             Text(label.uppercased())
-                                .font(.system(size: 8, weight: .bold))
+                                .font(.system(size: 8, weight: .heavy))
                                 .foregroundStyle(scoreColor)
                                 .tracking(0.5)
                         }
@@ -50,16 +57,16 @@ struct ShareCardView: View {
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text("ENVIRONMENT SCORE")
-                            .font(.system(size: 9, weight: .bold))
+                            .font(.system(size: 9, weight: .heavy))
                             .foregroundStyle(.white.opacity(0.4))
                             .tracking(1)
 
                         Text(price)
-                            .font(.system(size: 24, weight: .bold))
+                            .font(.system(size: 24, weight: .heavy))
                             .foregroundStyle(.white)
 
                         Text(change)
-                            .font(.system(.caption, design: .monospaced, weight: .semibold))
+                            .font(.system(.caption, design: .monospaced, weight: .bold))
                             .foregroundStyle(isPositive ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
                     }
 
