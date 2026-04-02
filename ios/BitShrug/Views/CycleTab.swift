@@ -36,65 +36,64 @@ struct CycleTab: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(spacing: 20) {
-                            Color.clear.frame(height: 0).id("top")
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 20) {
+                        Color.clear.frame(height: 0).id("top")
 
-                            if viewModel.isLoading && viewModel.price == 0 {
-                                loadingPlaceholder
-                            } else {
-                                SectionJumpBar(sections: sections) { id in
-                                    withAnimation(.easeInOut(duration: 0.3)) {
-                                        proxy.scrollTo(id, anchor: .top)
-                                    }
+                        if viewModel.isLoading && viewModel.price == 0 {
+                            loadingPlaceholder
+                        } else {
+                            SectionJumpBar(sections: sections) { id in
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    proxy.scrollTo(id, anchor: .top)
                                 }
-
-                                shrugVerdict
-                                    .id("verdict")
-
-                                cycleRing
-
-                                phaseTimeline
-                                    .id("phases")
-
-                                halvingStats
-
-                                conceptsExplainer
-                                    .id("concepts")
-
-                                historicalHalvings
-                                    .id("history")
-
-                                historicalCycleReturns
-
-                                whyCyclesSection
-                                    .id("why")
-
-                                couldCyclesEndSection
-
-                                strategySection
-
-                                educationSection
-                                    .id("learn")
-
-                                disclaimer
                             }
-                        }
-                        .frame(maxWidth: contentMaxWidth)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, horizontalPadding)
-                        .padding(.bottom, 40)
-                        .onGeometryChange(for: CGFloat.self) { geo in
-                            geo.frame(in: .global).minY
-                        } action: { value in
-                            showScrollToTop = value < -200
+
+                            shrugVerdict
+                                .id("verdict")
+
+                            cycleRing
+
+                            phaseTimeline
+                                .id("phases")
+
+                            halvingStats
+
+                            conceptsExplainer
+                                .id("concepts")
+
+                            historicalHalvings
+                                .id("history")
+
+                            historicalCycleReturns
+
+                            whyCyclesSection
+                                .id("why")
+
+                            couldCyclesEndSection
+
+                            strategySection
+
+                            educationSection
+                                .id("learn")
+
+                            disclaimer
                         }
                     }
-                    .scrollIndicators(.hidden)
-                    .refreshable { await viewModel.loadData() }
-
+                    .frame(maxWidth: contentMaxWidth)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.bottom, 40)
+                    .onGeometryChange(for: CGFloat.self) { geo in
+                        geo.frame(in: .global).minY
+                    } action: { value in
+                        showScrollToTop = value < -200
+                    }
+                }
+                .scrollIndicators(.hidden)
+                .refreshable { await viewModel.loadData() }
+                .overlay(alignment: .bottomTrailing) {
                     FloatingScrollToTopButton(isVisible: showScrollToTop) {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             proxy.scrollTo("top", anchor: .top)

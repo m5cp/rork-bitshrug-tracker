@@ -27,70 +27,69 @@ struct HomeTab: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            Color.clear.frame(height: 0).id("top")
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 0) {
+                        Color.clear.frame(height: 0).id("top")
 
-                            if viewModel.isLoading && viewModel.price == 0 {
-                                loadingView
-                            } else {
-                                SectionJumpBar(sections: sections) { id in
-                                    withAnimation(.easeInOut(duration: 0.3)) {
-                                        proxy.scrollTo(id, anchor: .top)
-                                    }
+                        if viewModel.isLoading && viewModel.price == 0 {
+                            loadingView
+                        } else {
+                            SectionJumpBar(sections: sections) { id in
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    proxy.scrollTo(id, anchor: .top)
                                 }
-                                .padding(.bottom, 16)
-
-                                heroSection
-                                    .padding(.bottom, 24)
-
-                                if viewModel.historicalPrices.count > 30 {
-                                    chartSection
-                                        .id("price")
-                                        .padding(.bottom, 20)
-                                }
-
-                                if scoreHistory.entries.count >= 2 {
-                                    ScoreHistoryChartView(entries: scoreHistory.entries)
-                                        .padding(.bottom, 20)
-                                        .opacity(appeared ? 1 : 0)
-                                        .offset(y: appeared ? 0 : 16)
-                                }
-
-                                insightSection
-                                    .id("insight")
-                                    .padding(.bottom, 20)
-
-                                driversSection
-                                    .id("breakdown")
-                                    .padding(.bottom, 20)
-
-                                weeklySummarySection
-                                    .id("weekly")
-                                    .padding(.bottom, 20)
-
-                                contextSection
-                                    .id("context")
-                                    .padding(.bottom, 20)
-
-                                disclaimer
                             }
-                        }
-                        .frame(maxWidth: contentMaxWidth)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, horizontalPadding)
-                        .padding(.bottom, 40)
-                        .onGeometryChange(for: CGFloat.self) { geo in
-                            geo.frame(in: .global).minY
-                        } action: { value in
-                            showScrollToTop = value < -200
+                            .padding(.bottom, 16)
+
+                            heroSection
+                                .padding(.bottom, 24)
+
+                            if viewModel.historicalPrices.count > 30 {
+                                chartSection
+                                    .id("price")
+                                    .padding(.bottom, 20)
+                            }
+
+                            if scoreHistory.entries.count >= 2 {
+                                ScoreHistoryChartView(entries: scoreHistory.entries)
+                                    .padding(.bottom, 20)
+                                    .opacity(appeared ? 1 : 0)
+                                    .offset(y: appeared ? 0 : 16)
+                            }
+
+                            insightSection
+                                .id("insight")
+                                .padding(.bottom, 20)
+
+                            driversSection
+                                .id("breakdown")
+                                .padding(.bottom, 20)
+
+                            weeklySummarySection
+                                .id("weekly")
+                                .padding(.bottom, 20)
+
+                            contextSection
+                                .id("context")
+                                .padding(.bottom, 20)
+
+                            disclaimer
                         }
                     }
-                    .scrollIndicators(.hidden)
-                    .refreshable { await viewModel.loadData() }
-
+                    .frame(maxWidth: contentMaxWidth)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, horizontalPadding)
+                    .padding(.bottom, 40)
+                    .onGeometryChange(for: CGFloat.self) { geo in
+                        geo.frame(in: .global).minY
+                    } action: { value in
+                        showScrollToTop = value < -200
+                    }
+                }
+                .scrollIndicators(.hidden)
+                .refreshable { await viewModel.loadData() }
+                .overlay(alignment: .bottomTrailing) {
                     FloatingScrollToTopButton(isVisible: showScrollToTop) {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             proxy.scrollTo("top", anchor: .top)
