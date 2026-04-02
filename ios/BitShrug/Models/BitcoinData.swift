@@ -1,27 +1,98 @@
 import Foundation
 import SwiftUI
 
-nonisolated struct CoinGeckoResponse: Codable, Sendable {
-    let bitcoin: CoinGeckoPrice
+// MARK: - Finnhub
+
+nonisolated struct FinnhubQuoteResponse: Codable, Sendable {
+    let c: Double
+    let d: Double?
+    let dp: Double?
+    let h: Double
+    let l: Double
+    let o: Double
+    let pc: Double
+    let t: Int?
 }
 
-nonisolated struct CoinGeckoPrice: Codable, Sendable {
-    let usd: Double
-    let usdMarketCap: Double
-    let usd24hVol: Double
-    let usd24hChange: Double
+// MARK: - CryptoCompare
+
+nonisolated struct CryptoCompareTopResponse: Codable, Sendable {
+    let Data: [CryptoCompareTopCoin]?
 
     nonisolated enum CodingKeys: String, CodingKey {
-        case usd
-        case usdMarketCap = "usd_market_cap"
-        case usd24hVol = "usd_24h_vol"
-        case usd24hChange = "usd_24h_change"
+        case Data = "Data"
     }
 }
 
-nonisolated struct MarketChartResponse: Codable, Sendable {
-    let prices: [[Double]]
+nonisolated struct CryptoCompareTopCoin: Codable, Sendable {
+    let CoinInfo: CryptoCompareCoinInfo?
+    let RAW: CryptoCompareRAW?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case CoinInfo = "CoinInfo"
+        case RAW = "RAW"
+    }
 }
+
+nonisolated struct CryptoCompareCoinInfo: Codable, Sendable {
+    let Name: String?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case Name = "Name"
+    }
+}
+
+nonisolated struct CryptoCompareRAW: Codable, Sendable {
+    let USD: CryptoCompareUSD?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case USD = "USD"
+    }
+}
+
+nonisolated struct CryptoCompareUSD: Codable, Sendable {
+    let PRICE: Double?
+    let MKTCAP: Double?
+    let TOTALVOLUME24HTO: Double?
+    let CHANGEPCT24HOUR: Double?
+    let SUPPLY: Double?
+    let VOLUME24HOUR: Double?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case PRICE
+        case MKTCAP
+        case TOTALVOLUME24HTO
+        case CHANGEPCT24HOUR
+        case SUPPLY
+        case VOLUME24HOUR
+    }
+}
+
+nonisolated struct CryptoCompareHistoryResponse: Codable, Sendable {
+    let Data: CryptoCompareHistoryData?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case Data = "Data"
+    }
+}
+
+nonisolated struct CryptoCompareHistoryData: Codable, Sendable {
+    let Data: [CryptoCompareHistoryEntry]?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case Data = "Data"
+    }
+}
+
+nonisolated struct CryptoCompareHistoryEntry: Codable, Sendable {
+    let time: Int
+    let close: Double
+    let high: Double
+    let low: Double
+    let open: Double
+}
+
+// MARK: - Alternative.me Fear & Greed
 
 nonisolated struct FearGreedResponse: Codable, Sendable {
     let data: [FearGreedEntry]
@@ -34,6 +105,20 @@ nonisolated struct FearGreedEntry: Codable, Sendable {
     nonisolated enum CodingKeys: String, CodingKey {
         case value
         case valueClassification = "value_classification"
+    }
+}
+
+// MARK: - Blockchain.info
+
+nonisolated struct BlockchainStatsResponse: Codable, Sendable {
+    let hashRate: Double?
+    let nBlocksTotal: Int?
+    let difficulty: Double?
+
+    nonisolated enum CodingKeys: String, CodingKey {
+        case hashRate = "hash_rate"
+        case nBlocksTotal = "n_blocks_total"
+        case difficulty
     }
 }
 

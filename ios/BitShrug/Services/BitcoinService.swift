@@ -5,28 +5,82 @@ nonisolated class BitcoinService: Sendable {
 
     private init() {}
 
-    func fetchPrice() async throws -> BitcoinPriceData {
-        let url = URL(string: "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true")!
+    // MARK: - Finnhub Price
+
+    func fetchFinnhubPrice() async throws -> BitcoinPriceData {
+        let apiKey = Config.EXPO_PUBLIC_FINNHUB_API_KEY
+        let url = URL(string: "https://finnhub.io/api/v1/quote?symbol=BINANCE:BTCUSDT&token=\(apiKey)")!
         let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try JSONDecoder().decode(CoinGeckoResponse.self, from: data)
+        let quote = try JSONDecoder().decode(FinnhubQuoteResponse.self, from: data)
+
+        let price = quote.c
+        let change24h = quote.dp ?? 0
+
         return BitcoinPriceData(
-            price: response.bitcoin.usd,
-            marketCap: response.bitcoin.usdMarketCap,
-            volume24h: response.bitcoin.usd24hVol,
-            change24h: response.bitcoin.usd24hChange
+            price: price,
+            marketCap: 0,
+            volume24h: 0,
+            change24h: change24h
         )
     }
 
-    func fetchHistoricalPrices(days: Int = 365) async throws -> [PricePoint] {
-        let url = URL(string: "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=\(days)&interval=daily")!
+    // MARK: - CryptoCompare Market Data
+
+    func fetchCryptoCompareMarketData() async throws -> (marketCap: Double, volume: Double, supply: Double) {
+        let url = URL(string: "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=1&tsym=USD")!
         let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try JSONDecoder().decode(MarketChartResponse.self, from: data)
-        return response.prices.compactMap { entry in
-            guard entry.count >= 2 else { return nil }
-            let date = Date(timeIntervalSince1970: entry[0] / 1000)
-            return PricePoint(date: date, price: entry[1])
+        let response = try JSONDecoder().decode(CryptoCompareTopResponse.self, from: data)
+
+        guard let btc = response.Data?.first(where: { $0.CoinInfo?.Name == "BTC" }) ?? response.Data?.first,
+              let usd = btc.RAW?.USD else {
+            return (0, 0, 0)
+        }
+
+        return (
+            marketCap: usd.MKTCAP ?? 0,
+            volume: usd.TOTALVOLUME24HTO ?? usd.VOLUME24HOUR ?? 0,
+            supply: usd.SUPPLY ?? 19_900_000
+        )
+    }
+
+    // MARK: - CryptoCompare Historical Prices
+
+    func fetchHistoricalPrices(days: Int = 365) async throws -> [PricePoint] {
+        let url = URL(string: "https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=\(days)")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(CryptoCompareHistoryResponse.self, from: data)
+
+        guard let entries = response.Data?.Data else { return [] }
+
+        return entries.map { entry in
+            PricePoint(date: Date(timeIntervalSince1970: Double(entry.time)), price: entry.close)
         }
     }
+
+    // MARK: - Fetch 200-Week MA from long history
+
+    func fetch200WeekMA() async throws -> Double {
+        let url = URL(string: "https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=1400")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(CryptoCompareHistoryResponse.self, from: data)
+
+        guard let entries = response.Data?.Data, entries.count >= 1400 else {
+            return estimate200WeekMA()
+        }
+
+        let weeklyPrices = stride(from: 0, to: entries.count, by: 7).map { i -> Double in
+            let end = min(i + 7, entries.count)
+            let week = entries[i..<end]
+            return week.map(\.close).reduce(0, +) / Double(week.count)
+        }
+
+        let count = min(200, weeklyPrices.count)
+        guard count > 0 else { return estimate200WeekMA() }
+        let last200 = weeklyPrices.suffix(count)
+        return last200.reduce(0, +) / Double(count)
+    }
+
+    // MARK: - Fear & Greed
 
     func fetchFearGreed() async throws -> Int {
         let url = URL(string: "https://api.alternative.me/fng/")!
@@ -37,6 +91,37 @@ nonisolated class BitcoinService: Sendable {
         }
         return value
     }
+
+    // MARK: - Blockchain.info Stats
+
+    func fetchBlockchainStats() async throws -> (hashRate: Double, blockHeight: Int) {
+        let url = URL(string: "https://api.blockchain.info/stats")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(BlockchainStatsResponse.self, from: data)
+        return (
+            hashRate: response.hashRate ?? 0,
+            blockHeight: response.nBlocksTotal ?? 0
+        )
+    }
+
+    // MARK: - Combined Price Fetch (Finnhub + CryptoCompare)
+
+    func fetchPrice() async throws -> BitcoinPriceData {
+        async let finnhubTask = fetchFinnhubPrice()
+        async let marketTask = fetchCryptoCompareMarketData()
+
+        let finnhub = try await finnhubTask
+        let market = try await marketTask
+
+        return BitcoinPriceData(
+            price: finnhub.price,
+            marketCap: market.marketCap,
+            volume24h: market.volume,
+            change24h: finnhub.change24h
+        )
+    }
+
+    // MARK: - Moving Average Calculations
 
     func calculate200DayEMA(prices: [PricePoint]) -> Double? {
         guard prices.count >= 200 else { return nil }
@@ -95,32 +180,32 @@ nonisolated class BitcoinService: Sendable {
         return sqrt(variance) * 100
     }
 
-    func estimate200WeekMA(currentPrice: Double) -> Double {
+    func estimate200WeekMA() -> Double {
         let days = Double(daysSince(genesisDate()))
         let logDays = log10(days)
         let log200WMA = 5.71 * logDays - 17.51
         return pow(10, log200WMA)
     }
 
-    func calculateMovingAverages(price: Double, historicalPrices: [PricePoint]) -> MovingAverageData {
+    func calculateMovingAverages(price: Double, historicalPrices: [PricePoint], actual200WMA: Double?) -> MovingAverageData {
         let ema200 = calculate200DayEMA(prices: historicalPrices) ?? price * 0.85
         let sma50 = calculate50DaySMA(prices: historicalPrices) ?? price * 0.95
         let sma200 = calculate200DaySMA(prices: historicalPrices) ?? price * 0.85
-        let estimated200WMA = estimate200WeekMA(currentPrice: price)
+        let weekMA = actual200WMA ?? estimate200WeekMA()
 
         let priceVsEMA = ((price - ema200) / ema200) * 100
-        let priceVs200WMA = ((price - estimated200WMA) / estimated200WMA) * 100
+        let priceVs200WMA = ((price - weekMA) / weekMA) * 100
 
         return MovingAverageData(
             ema200Day: ema200,
             sma50Day: sma50,
             sma200Day: sma200,
             currentPrice: price,
-            estimated200WMA: estimated200WMA,
+            estimated200WMA: weekMA,
             priceVsEMA: priceVsEMA,
             priceVs200WMA: priceVs200WMA,
             isAboveEMA: price > ema200,
-            isAbove200WMA: price > estimated200WMA
+            isAbove200WMA: price > weekMA
         )
     }
 
@@ -132,13 +217,14 @@ nonisolated class BitcoinService: Sendable {
         return min(max(zScore, -1.0), 10.0)
     }
 
-    func calculateStockToFlow(currentPrice: Double) -> Double {
-        let currentSupply: Double = 19_900_000
+    func calculateStockToFlow(currentPrice: Double, currentSupply: Double) -> Double {
         let blocksPerDay: Double = 144
         let currentReward: Double = 3.125
         let annualFlow = blocksPerDay * currentReward * 365.25
-        let s2fRatio = currentSupply / annualFlow
+        let supply = currentSupply > 0 ? currentSupply : 19_900_000
+        let s2fRatio = supply / annualFlow
         let modelPrice = exp(3.21 * log(s2fRatio) - 1.02)
+        guard modelPrice > 0 else { return 1.0 }
         return currentPrice / modelPrice
     }
 

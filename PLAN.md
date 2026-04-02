@@ -19,7 +19,7 @@ BitShrug is a premium Bitcoin macro analysis app that helps users understand the
 ### Indicators (Tab 2)
 - **Fear & Greed Index** — circular gauge with sentiment label and description
 - **200-Day EMA** — bull/bear status with % distance
-- **200-Week MA** — estimated via log regression, shows price vs long-term floor
+- **200-Week MA** — calculated from 1,400 days of real price history, shows price vs long-term floor
 - **MVRV Z-Score** — market value vs realized value with zone labels (Deep Value → Euphoria)
 - **Puell Multiple** — miner revenue vs 365-day average
 - **Stock-to-Flow** — scarcity model ratio
@@ -62,7 +62,7 @@ BitShrug is a premium Bitcoin macro analysis app that helps users understand the
 - **About BitShrug** — Environment Score explanation, score ranges, data sources, disclaimer
 - **Privacy section** — no personal data collected, no tracking
 - **Notification settings** — granular toggle for each alert type
-- **Data sources** — CoinGecko, Alternative.me, calculated indicators
+- **Data sources** — Finnhub, CryptoCompare, Alternative.me, Blockchain.info, calculated indicators
 
 ## Design
 
@@ -78,11 +78,13 @@ BitShrug is a premium Bitcoin macro analysis app that helps users understand the
 - **Entrance animations** — fade + slide on Home tab sections
 - **Haptic feedback** — success on data refresh, selection on range picker, impact on interactions
 
-## Data Sources (all free, no API keys required)
+## Data Sources
 
-- **CoinGecko API** — live price + 365 days of daily historical prices
-- **Alternative.me API** — Fear & Greed Index
-- **Mathematical models** — Environment Score (Trend/Momentum/Positioning/Volatility), MVRV Z-Score, Puell Multiple, S2F, Power Law corridor, Rainbow Chart (all calculated from price + genesis date regression)
+- **Finnhub API** — real-time BTC price and 24h change (requires API key via `EXPO_PUBLIC_FINNHUB_API_KEY`)
+- **CryptoCompare API** — market cap, volume, circulating supply, 365-day daily history, 1400-day history for 200-Week MA calculation (free, no key)
+- **Alternative.me API** — Fear & Greed Index (free, no key)
+- **Blockchain.info API** — hash rate, block height (free, no key)
+- **Calculated indicators** — Environment Score (Trend/Momentum/Positioning/Volatility), MVRV Z-Score, Puell Multiple, S2F (using real supply data), Power Law corridor, Rainbow Chart, 200-Day EMA, 50/200-Day SMA (all computed from real historical price data)
 
 ## Architecture
 

@@ -19,6 +19,10 @@ class BitcoinViewModel {
     var movingAverages: MovingAverageData?
     var supplyInProfit: SupplyProfitData?
     var historicalPrices: [PricePoint] = []
+    var currentSupply: Double = 19_900_000
+    var actual200WMA: Double?
+    var hashRate: Double = 0
+    var blockHeight: Int = 0
     var isLoading: Bool = false
     var lastUpdated: Date?
     var errorMessage: String?
@@ -333,6 +337,8 @@ class BitcoinViewModel {
         async let priceTask = service.fetchPrice()
         async let fngTask = service.fetchFearGreed()
         async let historyTask = service.fetchHistoricalPrices(days: 365)
+        async let weekMATask = service.fetch200WeekMA()
+        async let blockchainTask = service.fetchBlockchainStats()
 
         do {
             let priceData = try await priceTask
@@ -342,7 +348,7 @@ class BitcoinViewModel {
             change24h = priceData.change24h
 
             mvrvZScore = service.calculateMVRVZScore(price: price)
-            stockToFlowRatio = service.calculateStockToFlow(currentPrice: price)
+            stockToFlowRatio = service.calculateStockToFlow(currentPrice: price, currentSupply: currentSupply)
 
             let powerLaw = service.calculatePowerLaw(price: price)
             powerLawPosition = powerLaw.position
@@ -360,11 +366,21 @@ class BitcoinViewModel {
         } catch {}
 
         do {
+            actual200WMA = try await weekMATask
+        } catch {}
+
+        do {
+            let stats = try await blockchainTask
+            hashRate = stats.hashRate
+            blockHeight = stats.blockHeight
+        } catch {}
+
+        do {
             let history = try await historyTask
             historicalPrices = history
 
             if price > 0 {
-                movingAverages = service.calculateMovingAverages(price: price, historicalPrices: history)
+                movingAverages = service.calculateMovingAverages(price: price, historicalPrices: history, actual200WMA: actual200WMA)
                 puellMultiple = service.calculatePuellMultiple(currentPrice: price, historicalPrices: history)
                 supplyInProfit = service.calculateSupplyInProfit(price: price, mvrvZScore: mvrvZScore)
             }
