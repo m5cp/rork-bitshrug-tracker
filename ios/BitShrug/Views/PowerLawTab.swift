@@ -4,44 +4,81 @@ struct PowerLawTab: View {
     let viewModel: BitcoinViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
 
+    @State private var showScrollToTop: Bool = false
+
+    private let sections: [SectionAnchor] = [
+        SectionAnchor(id: "verdict", icon: "hand.raised", label: "Verdict"),
+        SectionAnchor(id: "corridor", icon: "chart.line.uptrend.xyaxis", label: "Corridor"),
+        SectionAnchor(id: "rainbow", icon: "rainbow", label: "Rainbow"),
+        SectionAnchor(id: "math", icon: "function", label: "Formula"),
+        SectionAnchor(id: "learn", icon: "book.closed", label: "Learn"),
+    ]
+
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
     private var horizontalPadding: CGFloat { isRegular ? 32 : 20 }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if viewModel.isLoading && viewModel.price == 0 {
-                        loadingPlaceholder
-                    } else {
-                        shrugVerdict
-                            .padding(.top, 8)
+            ZStack {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            Color.clear.frame(height: 0).id("top")
 
-                        if viewModel.historicalPrices.count > 30 {
-                            corridorChart
+                            if viewModel.isLoading && viewModel.price == 0 {
+                                loadingPlaceholder
+                            } else {
+                                SectionJumpBar(sections: sections) { id in
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        proxy.scrollTo(id, anchor: .top)
+                                    }
+                                }
+
+                                shrugVerdict
+                                    .id("verdict")
+
+                                if viewModel.historicalPrices.count > 30 {
+                                    corridorChart
+                                        .id("corridor")
+                                }
+
+                                corridorCard
+
+                                priceRange
+
+                                rainbowCard
+                                    .id("rainbow")
+
+                                mathSection
+                                    .id("math")
+
+                                educationSection
+                                    .id("learn")
+
+                                disclaimer
+                            }
                         }
+                        .frame(maxWidth: contentMaxWidth)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.bottom, 40)
+                        .onGeometryChange(for: CGFloat.self) { geo in
+                            geo.frame(in: .global).minY
+                        } action: { value in
+                            showScrollToTop = value < -200
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    .refreshable { await viewModel.loadData() }
 
-                        corridorCard
-
-                        priceRange
-
-                        rainbowCard
-
-                        mathSection
-
-                        educationSection
-
-                        disclaimer
+                    FloatingScrollToTopButton(isVisible: showScrollToTop) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("top", anchor: .top)
+                        }
                     }
                 }
-                .frame(maxWidth: contentMaxWidth)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, horizontalPadding)
-                .padding(.bottom, 40)
             }
-            .scrollIndicators(.hidden)
-            .refreshable { await viewModel.loadData() }
             .navigationTitle("Power Law")
             .navigationBarTitleDisplayMode(.inline)
         }

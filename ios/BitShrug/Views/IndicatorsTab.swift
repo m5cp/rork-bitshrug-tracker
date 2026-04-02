@@ -5,6 +5,13 @@ struct IndicatorsTab: View {
     let viewModel: BitcoinViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
 
+    @State private var showScrollToTop: Bool = false
+
+    private let sections: [SectionAnchor] = [
+        SectionAnchor(id: "sentiment", icon: "heart.text.square", label: "Sentiment"),
+        SectionAnchor(id: "indicators", icon: "gauge.with.dots.needle.bottom.50percent", label: "Indicators"),
+    ]
+
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
     private var horizontalPadding: CGFloat { isRegular ? 32 : 20 }
@@ -76,26 +83,50 @@ struct IndicatorsTab: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if viewModel.isLoading && viewModel.price == 0 {
-                        loadingView
-                    } else {
-                        sentimentCard
-                            .padding(.top, 8)
+            ZStack {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            Color.clear.frame(height: 0).id("top")
 
-                        indicatorsList
+                            if viewModel.isLoading && viewModel.price == 0 {
+                                loadingView
+                            } else {
+                                SectionJumpBar(sections: sections) { id in
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        proxy.scrollTo(id, anchor: .top)
+                                    }
+                                }
 
-                        disclaimer
+                                sentimentCard
+                                    .id("sentiment")
+
+                                indicatorsList
+                                    .id("indicators")
+
+                                disclaimer
+                            }
+                        }
+                        .frame(maxWidth: contentMaxWidth)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.bottom, 40)
+                        .onGeometryChange(for: CGFloat.self) { geo in
+                            geo.frame(in: .global).minY
+                        } action: { value in
+                            showScrollToTop = value < -200
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    .refreshable { await viewModel.loadData() }
+
+                    FloatingScrollToTopButton(isVisible: showScrollToTop) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("top", anchor: .top)
+                        }
                     }
                 }
-                .frame(maxWidth: contentMaxWidth)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, horizontalPadding)
-                .padding(.bottom, 40)
             }
-            .scrollIndicators(.hidden)
-            .refreshable { await viewModel.loadData() }
             .navigationTitle("Indicators")
             .navigationBarTitleDisplayMode(.inline)
         }

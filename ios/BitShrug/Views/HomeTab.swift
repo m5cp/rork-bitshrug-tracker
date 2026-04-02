@@ -11,6 +11,15 @@ struct HomeTab: View {
     @State private var animatedScore: Int = 0
     @State private var shareImage: UIImage?
     @State private var scoreHistory = ScoreHistoryManager.shared
+    @State private var showScrollToTop: Bool = false
+
+    private let sections: [SectionAnchor] = [
+        SectionAnchor(id: "price", icon: "chart.xyaxis.line", label: "Price"),
+        SectionAnchor(id: "insight", icon: "sparkle", label: "Insight"),
+        SectionAnchor(id: "breakdown", icon: "gauge.with.dots.needle.bottom.50percent", label: "Breakdown"),
+        SectionAnchor(id: "weekly", icon: "calendar", label: "Weekly"),
+        SectionAnchor(id: "context", icon: "globe", label: "Context"),
+    ]
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -18,48 +27,77 @@ struct HomeTab: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    if viewModel.isLoading && viewModel.price == 0 {
-                        loadingView
-                    } else {
-                        heroSection
-                            .padding(.bottom, 24)
+            ZStack {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            Color.clear.frame(height: 0).id("top")
 
-                        if viewModel.historicalPrices.count > 30 {
-                            chartSection
-                                .padding(.bottom, 20)
+                            if viewModel.isLoading && viewModel.price == 0 {
+                                loadingView
+                            } else {
+                                SectionJumpBar(sections: sections) { id in
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        proxy.scrollTo(id, anchor: .top)
+                                    }
+                                }
+                                .padding(.bottom, 16)
+
+                                heroSection
+                                    .padding(.bottom, 24)
+
+                                if viewModel.historicalPrices.count > 30 {
+                                    chartSection
+                                        .id("price")
+                                        .padding(.bottom, 20)
+                                }
+
+                                if scoreHistory.entries.count >= 2 {
+                                    ScoreHistoryChartView(entries: scoreHistory.entries)
+                                        .padding(.bottom, 20)
+                                        .opacity(appeared ? 1 : 0)
+                                        .offset(y: appeared ? 0 : 16)
+                                }
+
+                                insightSection
+                                    .id("insight")
+                                    .padding(.bottom, 20)
+
+                                driversSection
+                                    .id("breakdown")
+                                    .padding(.bottom, 20)
+
+                                weeklySummarySection
+                                    .id("weekly")
+                                    .padding(.bottom, 20)
+
+                                contextSection
+                                    .id("context")
+                                    .padding(.bottom, 20)
+
+                                disclaimer
+                            }
                         }
-
-                        if scoreHistory.entries.count >= 2 {
-                            ScoreHistoryChartView(entries: scoreHistory.entries)
-                                .padding(.bottom, 20)
-                                .opacity(appeared ? 1 : 0)
-                                .offset(y: appeared ? 0 : 16)
+                        .frame(maxWidth: contentMaxWidth)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.bottom, 40)
+                        .onGeometryChange(for: CGFloat.self) { geo in
+                            geo.frame(in: .global).minY
+                        } action: { value in
+                            showScrollToTop = value < -200
                         }
+                    }
+                    .scrollIndicators(.hidden)
+                    .refreshable { await viewModel.loadData() }
 
-                        insightSection
-                            .padding(.bottom, 20)
-
-                        driversSection
-                            .padding(.bottom, 20)
-
-                        weeklySummarySection
-                            .padding(.bottom, 20)
-
-                        contextSection
-                            .padding(.bottom, 20)
-
-                        disclaimer
+                    FloatingScrollToTopButton(isVisible: showScrollToTop) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("top", anchor: .top)
+                        }
                     }
                 }
-                .frame(maxWidth: contentMaxWidth)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, horizontalPadding)
-                .padding(.bottom, 40)
             }
-            .scrollIndicators(.hidden)
-            .refreshable { await viewModel.loadData() }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) { brandMark }

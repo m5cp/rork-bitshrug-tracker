@@ -4,6 +4,17 @@ struct CycleTab: View {
     let viewModel: BitcoinViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
 
+    @State private var showScrollToTop: Bool = false
+
+    private let sections: [SectionAnchor] = [
+        SectionAnchor(id: "verdict", icon: "hand.raised", label: "Verdict"),
+        SectionAnchor(id: "phases", icon: "list.bullet", label: "Phases"),
+        SectionAnchor(id: "concepts", icon: "book.closed", label: "Concepts"),
+        SectionAnchor(id: "history", icon: "clock.arrow.circlepath", label: "History"),
+        SectionAnchor(id: "why", icon: "questionmark.circle", label: "Why"),
+        SectionAnchor(id: "learn", icon: "lightbulb", label: "Learn"),
+    ]
+
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
     private var horizontalPadding: CGFloat { isRegular ? 32 : 20 }
@@ -25,44 +36,72 @@ struct CycleTab: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if viewModel.isLoading && viewModel.price == 0 {
-                        loadingPlaceholder
-                    } else {
-                        shrugVerdict
-                            .padding(.top, 8)
+            ZStack {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            Color.clear.frame(height: 0).id("top")
 
-                        cycleRing
+                            if viewModel.isLoading && viewModel.price == 0 {
+                                loadingPlaceholder
+                            } else {
+                                SectionJumpBar(sections: sections) { id in
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        proxy.scrollTo(id, anchor: .top)
+                                    }
+                                }
 
-                        phaseTimeline
+                                shrugVerdict
+                                    .id("verdict")
 
-                        halvingStats
+                                cycleRing
 
-                        conceptsExplainer
+                                phaseTimeline
+                                    .id("phases")
 
-                        historicalHalvings
+                                halvingStats
 
-                        historicalCycleReturns
+                                conceptsExplainer
+                                    .id("concepts")
 
-                        whyCyclesSection
+                                historicalHalvings
+                                    .id("history")
 
-                        couldCyclesEndSection
+                                historicalCycleReturns
 
-                        strategySection
+                                whyCyclesSection
+                                    .id("why")
 
-                        educationSection
+                                couldCyclesEndSection
 
-                        disclaimer
+                                strategySection
+
+                                educationSection
+                                    .id("learn")
+
+                                disclaimer
+                            }
+                        }
+                        .frame(maxWidth: contentMaxWidth)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, horizontalPadding)
+                        .padding(.bottom, 40)
+                        .onGeometryChange(for: CGFloat.self) { geo in
+                            geo.frame(in: .global).minY
+                        } action: { value in
+                            showScrollToTop = value < -200
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    .refreshable { await viewModel.loadData() }
+
+                    FloatingScrollToTopButton(isVisible: showScrollToTop) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("top", anchor: .top)
+                        }
                     }
                 }
-                .frame(maxWidth: contentMaxWidth)
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, horizontalPadding)
-                .padding(.bottom, 40)
             }
-            .scrollIndicators(.hidden)
-            .refreshable { await viewModel.loadData() }
             .navigationTitle("4-Year Cycle Theory")
             .navigationBarTitleDisplayMode(.inline)
         }
