@@ -24,79 +24,51 @@ struct ProfileView: View {
 
                 Section {
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Educational Purpose Only")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("BitShrug is a learning tool that explores historical Bitcoin models and theories. It does not provide financial, investment, tax, or legal advice.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("Educational Purpose Only")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "graduationcap.fill")
                             .foregroundStyle(.orange)
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Not Financial Advice")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("Nothing in this app constitutes a recommendation to buy, sell, or hold any asset. All indicators, scores, and labels are for informational and educational purposes only. Always do your own research and consult a licensed financial advisor before making investment decisions.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("Not Financial Advice")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundStyle(.orange)
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("No Guarantees")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("Past performance does not guarantee future results. Models like Power Law, Rainbow Chart, and cycle theory are historical observations — not predictions. Markets can behave differently than historical patterns suggest.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("Past Performance \u{2260} Future Results")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "chart.line.downtrend.xyaxis")
                             .foregroundStyle(.orange)
                     }
                 } header: {
-                    Text("Important Disclaimers")
+                    Text("Important")
+                } footer: {
+                    Text("All indicators, scores, and labels are for informational and educational purposes only. Always do your own research.")
                 }
 
                 Section {
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("No Personal Data Collected")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("BitShrug does not collect, store, or share any personal financial data. No trading or account access is required.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("No Personal Data Collected")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "lock.shield.fill")
                             .foregroundStyle(.orange)
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("No Tracking")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("No hidden tracking or third-party analytics. Data is used only to display market context within the app.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("No Tracking or Analytics")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "eye.slash.fill")
                             .foregroundStyle(.orange)
@@ -107,14 +79,13 @@ struct ProfileView: View {
 
                 Section {
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Price & Market Data")
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("CoinGecko")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("CoinGecko free API — price, market cap, volume, and 365-day historical data.")
+                            Text("Price, market cap, volume, history")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .foregroundStyle(.tertiary)
                         }
                     } icon: {
                         Image(systemName: "network")
@@ -122,14 +93,13 @@ struct ProfileView: View {
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Fear & Greed Index")
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Alternative.me")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("Alternative.me — a composite index of market sentiment based on volatility, volume, social media, and surveys.")
+                            Text("Fear & Greed Index")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .foregroundStyle(.tertiary)
                         }
                     } icon: {
                         Image(systemName: "heart.text.square")
@@ -137,14 +107,13 @@ struct ProfileView: View {
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Calculated Indicators")
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Calculated Locally")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("MVRV Z-Score, Puell Multiple, Power Law, Rainbow Chart, and cycle phases are calculated locally using mathematical models based on publicly available research. These are approximations, not exact on-chain metrics.")
+                            Text("MVRV, Puell, Power Law, Rainbow, Cycles")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .foregroundStyle(.tertiary)
                         }
                     } icon: {
                         Image(systemName: "function")
@@ -156,14 +125,13 @@ struct ProfileView: View {
 
                 Section {
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Refresh Frequency")
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Refresh")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("Data loads when you open the app and when you pull to refresh. There is no automatic background refresh. CoinGecko's free API may have a short delay from real-time prices.")
+                            Text("On launch and pull-to-refresh")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .foregroundStyle(.tertiary)
                         }
                     } icon: {
                         Image(systemName: "arrow.clockwise")
@@ -171,14 +139,13 @@ struct ProfileView: View {
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text("Accuracy")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("Some indicators (MVRV, Supply in Profit) use mathematical estimates rather than live blockchain data. Values are approximate and intended for educational context, not precision trading.")
+                            Text("Estimates from price data, not live blockchain")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .foregroundStyle(.tertiary)
                         }
                     } icon: {
                         Image(systemName: "info.circle")
@@ -193,32 +160,23 @@ struct ProfileView: View {
                         showNotificationSettings = true
                     } label: {
                         Label {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Notifications")
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                Text("Environment, signal, and indicator alerts")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                            Text("Notifications")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
                         } icon: {
                             Image(systemName: "bell.badge")
                                 .foregroundStyle(.orange)
                         }
                     }
                     .foregroundStyle(.primary)
-                        Button {
+
+                    Button {
                         showAbout = true
                     } label: {
                         Label {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("About BitShrug")
-                                    .font(.subheadline)
-                                    .fontWeight(.semibold)
-                                Text("How the Environment Score works")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                            Text("About BitShrug")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
                         } icon: {
                             Image(systemName: "info.circle")
                                 .foregroundStyle(.orange)
@@ -247,28 +205,14 @@ struct ProfileView: View {
                     }
 
                     Label {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Accessibility")
-                                .font(.subheadline)
-                            Text("BitShrug supports Dynamic Type, VoiceOver, and system accessibility settings.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                        Text("Accessibility")
+                            .font(.subheadline)
                     } icon: {
                         Image(systemName: "accessibility")
                             .foregroundStyle(.secondary)
                     }
                 } header: {
                     Text("Legal")
-                }
-
-                Section {
-                    Text("BitShrug is not affiliated with, endorsed by, or connected to Bitcoin, CoinGecko, or any financial institution. All trademarks belong to their respective owners.")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
                 }
             }
             .navigationTitle("About")

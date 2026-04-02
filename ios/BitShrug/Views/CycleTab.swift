@@ -81,7 +81,6 @@ struct CycleTab: View {
 
     private var shrugVerdict: some View {
         let info = viewModel.halvingInfo
-        let phase = info?.currentPhase ?? .accumulation
         let progress = info?.cycleProgress ?? 0
 
         let verdict: String
@@ -90,19 +89,19 @@ struct CycleTab: View {
 
         if progress > 0.1 && progress < 0.55 {
             verdict = "The cycle is playing out"
-            explanation = "Bitcoin is in the \(phase.label.lowercased()) phase, which historically aligns with the post-halving pattern. The 4-year cycle appears to be on track so far."
+            explanation = "Bitcoin is in the \(info?.currentPhase.label.lowercased() ?? "early") phase, aligning with the post-halving pattern."
             verdictColor = Color(red: 0.2, green: 0.85, blue: 0.5)
         } else if progress >= 0.55 && progress < 0.78 {
             verdict = "Too early to tell"
-            explanation = "Bitcoin is past the typical peak zone. Whether this cycle follows the historical pattern or breaks it remains to be seen. The theory is being tested."
+            explanation = "Past the typical peak zone. Whether the historical pattern holds remains to be seen."
             verdictColor = .orange
         } else if progress >= 0.78 {
             verdict = "The cycle is stretched"
-            explanation = "We're deep into the cycle timeline. Previous cycles had already completed their bear phases by now. This cycle may be different, or the theory may need updating."
+            explanation = "Deep into the cycle timeline. Previous cycles had completed their bear phases by now."
             verdictColor = Color(red: 0.95, green: 0.3, blue: 0.3)
         } else {
             verdict = "New cycle, fresh start"
-            explanation = "We're very early in this halving era. There isn't enough data yet to confirm or deny the cycle theory. Time will tell."
+            explanation = "Very early in this halving era. Not enough data yet to confirm or deny the theory."
             verdictColor = .blue
         }
 
@@ -127,17 +126,16 @@ struct CycleTab: View {
             Text(explanation)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .lineSpacing(3)
+                .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 Image(systemName: "info.circle")
-                    .font(.system(size: 11))
+                    .font(.system(size: 10))
                     .foregroundStyle(.tertiary)
-                Text("The 4-year cycle is a historical observation, not a guarantee. Sample size: 4 halvings.")
+                Text("Historical observation. Sample size: 4 halvings.")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
-                    .italic()
             }
         }
         .padding(16)
@@ -328,11 +326,9 @@ struct CycleTab: View {
                 halvingRow(era: 4, date: "Apr 2024", reward: "6.25 \u{2192} 3.125", peakApprox: "TBD", peakDate: "", isLast: true)
             }
 
-            Text("Bull market tops have formed approximately 12\u{2013}18 months after each halving. Bear market lows have followed approximately 12 months after each peak.")
+            Text("Peaks have formed ~12\u{2013}18 months post-halving. Bear lows ~12 months after each peak.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
-                .lineSpacing(2)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
         .background(Color.white.opacity(0.04))
@@ -400,11 +396,9 @@ struct CycleTab: View {
                 returnRow(cycle: "Cycle 4", bottom: "$15,500", top: "TBD", returnPct: "TBD", drawdown: "TBD", isLast: true)
             }
 
-            Text("Each cycle has delivered diminishing peak returns but higher absolute prices. Bear market drawdowns have ranged from 77\u{2013}87% from peak to trough.")
+            Text("Diminishing peak returns but higher absolute prices. Bear drawdowns: 77\u{2013}87%.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
-                .lineSpacing(2)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
         .background(Color.white.opacity(0.04))
@@ -449,28 +443,31 @@ struct CycleTab: View {
     // MARK: - Why Do Cycles Happen
 
     private var whyCyclesSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("WHY DO 4-YEAR CYCLES HAPPEN?")
                 .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.tertiary)
                 .tracking(1)
 
-            factorBlock(
+            CompactFactCard(
                 icon: "hammer.fill",
+                iconColor: .orange,
                 title: "Bitcoin Halvings",
-                body: "Approximately every 4 years, Bitcoin is programmed to cut its mining rewards in half. This reduces the rate of new BTC entering circulation \u{2014} a programmatic supply shock.\n\nIf the rate of new supply decreases but overall demand increases, basic economics suggest the price is more likely to go up. Each halving has historically coincided with the early stages of a new bull market. The next halving is projected for 2028."
+                content: "Every ~4 years, mining rewards are cut in half — a programmatic supply shock. Each halving has coincided with the early stages of a new bull market. Next halving: ~2028."
             )
 
-            factorBlock(
+            CompactFactCard(
                 icon: "building.columns.fill",
+                iconColor: .blue,
                 title: "Monetary Policy",
-                body: "Historically, crypto prices have tended to rise when the Fed cuts interest rates or injects new money into the economy. Bitcoin's 2020\u{2013}2021 bull market coincided with government stimulus during the pandemic.\n\nHowever, this correlation doesn't always hold. Bitcoin's price failed to rally when the Fed cut rates in December 2025, showing that macro conditions are one factor among many."
+                content: "Crypto prices have tended to rise when the Fed cuts rates or injects liquidity. However, this correlation doesn't always hold — Bitcoin didn't rally on the Dec 2025 rate cut."
             )
 
-            factorBlock(
+            CompactFactCard(
                 icon: "brain.head.profile",
+                iconColor: .purple,
                 title: "Investor Psychology",
-                body: "Once a new bull market gets going, the same boom-bust dynamics that drive most markets take over. Optimism, momentum, and greed drive prices up until they reach a top. Panic and fear send prices falling until they reach a bottom.\n\nThis psychological cycle \u{2014} from accumulation through euphoria to capitulation \u{2014} tends to play out over roughly 4-year intervals."
+                content: "The same boom-bust dynamics that drive most markets: optimism and greed push prices up, panic and fear push them down — playing out over roughly 4-year intervals."
             )
         }
         .padding(16)
@@ -478,64 +475,42 @@ struct CycleTab: View {
         .clipShape(.rect(cornerRadius: 18))
     }
 
-    private func factorBlock(icon: String, title: String, body: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.orange)
-                    .frame(width: 26, height: 26)
-                    .background(.orange.opacity(0.12))
-                    .clipShape(.rect(cornerRadius: 6))
-
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
-            }
-
-            Text(body)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
     // MARK: - Could Cycles End
 
     private var couldCyclesEndSection: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("COULD THE 4-YEAR CYCLES BE OVER?")
+            Text("COULD THE CYCLES BE OVER?")
                 .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.tertiary)
                 .tracking(1)
 
-            Text("During Bitcoin's 2023\u{2013}2025 bull run, some investors believed the 4-year cycles were likely over.")
-                .font(.subheadline)
-                .foregroundStyle(.primary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
-
-            VStack(alignment: .leading, spacing: 12) {
-                argumentBlock(
-                    label: "The Bull Case for \"No More Cycles\"",
-                    body: "Bitcoin has become increasingly mainstream, driven by institutional adoption, corporate treasuries, crypto-friendly regulations, and products like spot ETFs. Some believe any drops will be substantially less volatile than in the past \u{2014} not full-blown bear markets. Others proposed a \"supercycle\" where the bull market sustains for years.",
-                    color: Color(red: 0.2, green: 0.85, blue: 0.5)
+            HStack(spacing: 10) {
+                verdictPill(
+                    color: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    title: "Bull Case",
+                    points: [
+                        "Institutional adoption changes dynamics",
+                        "Spot ETFs absorb selling pressure",
+                        "Possible \"supercycle\" scenario"
+                    ]
                 )
 
-                argumentBlock(
-                    label: "The Bear Case for \"Cycles Continue\"",
-                    body: "As of early 2026, Bitcoin's drop from its October 2025 all-time high shows bear market-like price action. Previous bear markets saw 77%+ drawdowns from highs. While the current drop hasn't reached that magnitude, the pattern of lower highs and declining momentum is consistent with historical cycle behavior.",
-                    color: Color(red: 0.95, green: 0.3, blue: 0.3)
+                verdictPill(
+                    color: Color(red: 0.95, green: 0.3, blue: 0.3),
+                    title: "Bear Case",
+                    points: [
+                        "Oct 2025 ATH followed by bear-like action",
+                        "Pattern matches historical cycle behavior",
+                        "Psychology hasn't changed"
+                    ]
                 )
             }
 
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
                 Image(systemName: "questionmark.circle")
-                    .font(.system(size: 12))
+                    .font(.system(size: 11))
                     .foregroundStyle(.orange)
-                Text("The honest answer: we don't know yet. That's why it's a shrug.")
+                Text("The honest answer: we don't know yet.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .italic()
@@ -546,120 +521,95 @@ struct CycleTab: View {
         .clipShape(.rect(cornerRadius: 18))
     }
 
-    private func argumentBlock(label: String, body: String, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(color)
-                    .frame(width: 8, height: 8)
-                Text(label)
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundStyle(color)
-            }
-
-            Text(body)
+    private func verdictPill(color: Color, title: String, points: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
                 .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
+                .fontWeight(.bold)
+                .foregroundStyle(color)
+
+            VStack(alignment: .leading, spacing: 6) {
+                ForEach(points, id: \.self) { point in
+                    HStack(alignment: .top, spacing: 6) {
+                        Circle()
+                            .fill(color.opacity(0.5))
+                            .frame(width: 4, height: 4)
+                            .padding(.top, 5)
+                        Text(point)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(color.opacity(0.06))
+        .clipShape(.rect(cornerRadius: 12))
     }
 
     // MARK: - Strategy Considerations
 
     private var strategySection: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("USING CYCLES AS A REFERENCE")
                 .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(.tertiary)
                 .tracking(1)
 
-            Text("Assuming 4-year cycles continue, it may seem reasonable to build a strategy around them. However, investors may want to use them solely as one of many reference points.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
-
-            VStack(alignment: .leading, spacing: 10) {
-                cautionRow(icon: "clock", text: "Cycles are not precisely 4 years long \u{2014} they've varied in length each time")
-                cautionRow(icon: "exclamationmark.triangle", text: "If you planned to sell exactly 4 years from the last peak, you would have missed the top by months")
-                cautionRow(icon: "chart.line.downtrend.xyaxis", text: "There is no guarantee cycles will continue as they have in the past")
-                cautionRow(icon: "lightbulb", text: "Use cycle awareness as context for long-term positioning, not as a timing mechanism")
+            VStack(alignment: .leading, spacing: 8) {
+                KeyPointRow(icon: "clock", iconColor: .orange, text: "Cycles are not precisely 4 years — they've varied each time")
+                KeyPointRow(icon: "exclamationmark.triangle", iconColor: .orange, text: "Selling exactly 4 years from last peak would have missed the top")
+                KeyPointRow(icon: "chart.line.downtrend.xyaxis", iconColor: .orange, text: "No guarantee cycles will continue as before")
+                KeyPointRow(icon: "lightbulb", iconColor: .orange, text: "Use as context for positioning, not as a timing tool")
             }
 
-            Text("Crypto is for investors with a high risk tolerance. Given the ups and downs, only invest what you can afford to lose.")
+            Text("Crypto is high-risk. Only invest what you can afford to lose.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .italic()
-                .lineSpacing(2)
-                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
         .background(Color.white.opacity(0.04))
         .clipShape(.rect(cornerRadius: 18))
-    }
-
-    private func cautionRow(icon: String, text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(.orange)
-                .frame(width: 20)
-
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
     }
 
     // MARK: - Education
 
     private var educationSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("THE THEORY IN DETAIL")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.tertiary)
-                .tracking(1)
-
-            educationBlock(
+        VStack(spacing: 10) {
+            ExpandableInfoCard(
+                icon: "arrow.triangle.2.circlepath",
+                iconColor: .orange,
                 title: "What is the Halving?",
-                body: "Every 210,000 blocks (approximately every 4 years), the Bitcoin block reward is cut in half. This reduces the rate of new BTC entering circulation \u{2014} a programmatic supply shock.\n\nThe first halving in 2012 reduced the reward from 50 to 25 BTC per block. Each subsequent halving halves it again: 12.5, 6.25, 3.125, and so on until all 21 million BTC are mined (estimated ~2140)."
+                summary: "Block reward cut in half every 210,000 blocks (~4 years)",
+                detail: "Started at 50 BTC per block in 2009. Now 3.125 BTC. Halvings reduce new supply entering circulation — a programmatic scarcity mechanism that continues until all 21M BTC are mined (~2140)."
             )
 
-            educationBlock(
+            ExpandableInfoCard(
+                icon: "chart.line.uptrend.xyaxis",
+                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
                 title: "The Cycle Pattern",
-                body: "Since 2011, Bitcoin's price has moved in intervals of approximately 4 years:\n\n\u{2022} Bull market tops: Nov 2013, Dec 2017, Nov 2021 (each ~4 years apart)\n\u{2022} Bear market lows: Jan 2015, Dec 2018, Nov 2022 (each ~4 years apart)\n\nThe pattern suggests a repeating cycle of accumulation, expansion, euphoria, and correction \u{2014} driven by the halving's supply shock and human psychology."
+                summary: "Tops and bottoms ~4 years apart since 2011",
+                detail: "Bull tops: Nov 2013, Dec 2017, Nov 2021. Bear lows: Jan 2015, Dec 2018, Nov 2022. A repeating cycle of accumulation, expansion, euphoria, and correction — driven by supply shocks and human psychology."
             )
 
-            educationBlock(
-                title: "Is the Cycle Guaranteed?",
-                body: "No. The 4-year cycle is an observed historical pattern across only four halving events \u{2014} a very small sample size. As Bitcoin matures, factors like institutional adoption, regulation, macro conditions, and diminishing supply shocks may alter or dampen the cycle.\n\nIt's a useful framework for understanding Bitcoin's rhythms, but past patterns do not guarantee future behavior."
+            ExpandableInfoCard(
+                icon: "questionmark.diamond",
+                iconColor: .purple,
+                title: "Is It Guaranteed?",
+                summary: "No — only 4 halving events observed so far",
+                detail: "As Bitcoin matures, institutional adoption, regulation, macro conditions, and diminishing supply shocks may alter or dampen the cycle. Useful framework, but past patterns don't guarantee future behavior."
             )
 
-            educationBlock(
+            ExpandableInfoCard(
+                icon: "app.badge",
+                iconColor: .blue,
                 title: "How BitShrug Uses It",
-                body: "BitShrug uses the halving cycle as one lens for understanding where we are. The cycle phase is combined with on-chain indicators, momentum, and positioning to provide a more complete picture of the current environment.\n\nIt's a context tool \u{2014} not a timing tool."
+                summary: "One lens among many for understanding conditions",
+                detail: "The cycle phase is combined with momentum, trend, positioning, and volatility to create a composite picture. It's a context tool — not a timing tool."
             )
-        }
-        .padding(16)
-        .background(Color.white.opacity(0.04))
-        .clipShape(.rect(cornerRadius: 18))
-    }
-
-    private func educationBlock(title: String, body: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-
-            Text(body)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

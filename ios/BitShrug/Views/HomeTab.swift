@@ -313,12 +313,13 @@ struct HomeTab: View {
                 .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundStyle(.primary)
+                .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
             Text(viewModel.insightExpansion)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .lineSpacing(3)
+                .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
@@ -450,7 +451,7 @@ struct HomeTab: View {
             Text(viewModel.weeklyExplanation)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .lineSpacing(3)
+                .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
@@ -478,7 +479,7 @@ struct HomeTab: View {
             Text(viewModel.marketContext)
                 .font(.subheadline)
                 .foregroundStyle(.primary)
-                .lineSpacing(3)
+                .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
             if let phase = viewModel.halvingInfo?.currentPhase {
