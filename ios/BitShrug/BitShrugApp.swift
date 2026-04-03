@@ -7,6 +7,7 @@ import RevenueCat
 struct BitShrugApp: App {
     @AppStorage("bitshrug_onboarded") private var hasOnboarded: Bool = false
     @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
+    @State private var showOnboarding: Bool = false
 
     init() {
         #if DEBUG
@@ -30,12 +31,18 @@ struct BitShrugApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(colorScheme)
-                .fullScreenCover(isPresented: Binding(
-                    get: { !hasOnboarded },
-                    set: { newValue in if !newValue { hasOnboarded = true } }
-                )) {
-                    OnboardingView(onContinue: { hasOnboarded = true })
-                        .preferredColorScheme(colorScheme)
+                .fullScreenCover(isPresented: $showOnboarding) {
+                    OnboardingView(onContinue: {
+                        hasOnboarded = true
+                        showOnboarding = false
+                    })
+                    .interactiveDismissDisabled()
+                    .preferredColorScheme(colorScheme)
+                }
+                .onAppear {
+                    if !hasOnboarded {
+                        showOnboarding = true
+                    }
                 }
         }
     }
