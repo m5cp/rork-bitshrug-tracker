@@ -10,8 +10,8 @@ struct ContentView: View {
                 HomeTab(viewModel: viewModel)
             }
 
-            Tab("Indicators", systemImage: "gauge.with.dots.needle.bottom.50percent", value: .indicators) {
-                IndicatorsTab(viewModel: viewModel)
+            Tab("Learn", systemImage: "book.closed", value: .learn) {
+                LearnTab(viewModel: viewModel)
             }
 
             Tab("Power Law", systemImage: "chart.line.uptrend.xyaxis", value: .powerLaw) {
@@ -31,7 +31,7 @@ struct ContentView: View {
 
 enum AppTab: Hashable {
     case home
-    case indicators
+    case learn
     case powerLaw
     case cycle
 }

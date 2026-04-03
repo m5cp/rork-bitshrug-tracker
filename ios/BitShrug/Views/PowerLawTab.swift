@@ -11,7 +11,6 @@ struct PowerLawTab: View {
         SectionAnchor(id: "corridor", icon: "chart.line.uptrend.xyaxis", label: "Corridor"),
         SectionAnchor(id: "rainbow", icon: "rainbow", label: "Rainbow"),
         SectionAnchor(id: "math", icon: "function", label: "Formula"),
-        SectionAnchor(id: "learn", icon: "book.closed", label: "Learn"),
     ]
 
     private var isRegular: Bool { sizeClass == .regular }
@@ -53,9 +52,6 @@ struct PowerLawTab: View {
 
                             mathSection
                                 .id("math")
-
-                            educationSection
-                                .id("learn")
 
                             disclaimer
                         }
@@ -583,51 +579,6 @@ struct PowerLawTab: View {
             Text(value)
                 .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
-        }
-    }
-
-    // MARK: - Education
-
-    private var educationSection: some View {
-        VStack(spacing: 10) {
-            ExpandableInfoCard(
-                icon: "person.fill",
-                iconColor: .orange,
-                title: "Who Created It?",
-                summary: "Harold Christopher Burger (2019) and Giovanni Santostasi",
-                detail: "Burger observed Bitcoin's price follows a linear relationship on a log-log chart. Santostasi extended this to hash rate and addresses, showing the power law holds across multiple network metrics."
-            )
-
-            ExpandableInfoCard(
-                icon: "function",
-                iconColor: .blue,
-                title: "What is a Power Law?",
-                summary: "A relationship where one quantity scales as a power of another",
-                detail: "Price ∝ Time⁵·⁸² — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
-            )
-
-            ExpandableInfoCard(
-                icon: "chart.bar.fill",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "Reading the Corridor",
-                summary: "Below support, within corridor, or above resistance",
-                detail: "Below Support — historically the best long-term accumulation zone. Within Corridor — tracking the expected growth path. Above Resistance — historically coincides with cycle tops and euphoria."
-            )
-
-            ExpandableInfoCard(
-                icon: "rainbow",
-                iconColor: .purple,
-                title: "Rainbow Chart",
-                summary: "Colored bands from 'Fire Sale' to 'Maximum Bubble'",
-                detail: "Each band represents a standard deviation from the fair value regression line. It's a visual heuristic showing where price sits relative to its long-term trend — not a prediction."
-            )
-
-            Text("Based on historical patterns. Past behavior does not guarantee future results. Honest answer, we don't know. We hold.")
-                .font(.caption2)
-                .foregroundStyle(.quaternary)
-                .italic()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 4)
         }
     }
 
