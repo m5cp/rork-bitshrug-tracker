@@ -388,6 +388,9 @@ struct FunWithNumbersView: View {
 
     private var funDisclaimerBanner: some View {
         VStack(spacing: 8) {
+            ShrugBadge(size: .large, style: .hero)
+                .padding(.bottom, 2)
+
             HStack(spacing: 6) {
                 Image(systemName: "party.popper.fill")
                     .font(.system(size: 14, weight: .bold))
