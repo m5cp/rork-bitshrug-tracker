@@ -5,7 +5,7 @@ struct LearnTab: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var showScrollToTop: Bool = false
-    @State private var selectedCategory: LearnCategory = .powerLaw
+    @State private var selectedCategory: LearnCategory = .bitcoin
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -21,6 +21,8 @@ struct LearnTab: View {
                         categoryPicker
 
                         switch selectedCategory {
+                        case .bitcoin:
+                            bitcoinEducation
                         case .powerLaw:
                             powerLawEducation
                         case .cycles:
@@ -79,6 +81,115 @@ struct LearnTab: View {
                 .sensoryFeedback(.selection, trigger: selectedCategory)
             }
             Spacer()
+        }
+    }
+
+    // MARK: - What is Bitcoin
+
+    private var bitcoinEducation: some View {
+        VStack(spacing: 12) {
+            ExpandableInfoCard(
+                icon: "bitcoinsign.circle.fill",
+                iconColor: .orange,
+                title: "What is Bitcoin?",
+                summary: "Decentralized digital money without banks or intermediaries",
+                detail: "Bitcoin is a decentralized digital money system that allows people to send value directly to one another without a bank or intermediary. It operates on a global network with a fixed set of rules that anyone can verify."
+            )
+
+            ExpandableInfoCard(
+                icon: "person.fill.questionmark",
+                iconColor: .purple,
+                title: "Who Created Bitcoin?",
+                summary: "Satoshi Nakamoto — identity still unknown",
+                detail: "Bitcoin was created in 2008 by an individual or group using the name Satoshi Nakamoto. The identity of Satoshi remains unknown, and no central authority controls Bitcoin today."
+            )
+
+            ExpandableInfoCard(
+                icon: "lightbulb.fill",
+                iconColor: .yellow,
+                title: "Why Was Bitcoin Created?",
+                summary: "Peer-to-peer money without trusted intermediaries",
+                detail: "Bitcoin was created to enable peer-to-peer money that does not rely on trusted intermediaries. It allows transactions to be verified by a distributed network rather than a central institution."
+            )
+
+            ExpandableInfoCard(
+                icon: "building.columns",
+                iconColor: .blue,
+                title: "What Makes Bitcoin Different from Traditional Money?",
+                summary: "No central authority, fixed supply of 21 million",
+                detail: "Bitcoin operates without a central authority, meaning no government or company controls it. Its monetary policy is fixed, with a maximum supply of 21 million coins."
+            )
+
+            ExpandableInfoCard(
+                icon: "arrow.left.arrow.right",
+                iconColor: .cyan,
+                title: "How Is Bitcoin Different from Other Digital Payments?",
+                summary: "No banks or payment processors required",
+                detail: "Most digital payments rely on banks or payment processors. Bitcoin allows value to be transferred directly between users without requiring permission."
+            )
+
+            ExpandableInfoCard(
+                icon: "lock.shield.fill",
+                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                title: "How Does Bitcoin Stay Secure?",
+                summary: "Global network with strong cryptographic rules",
+                detail: "Bitcoin is secured by a global network of independent participants and strong cryptographic rules. Altering transaction history would require overwhelming network consensus."
+            )
+
+            ExpandableInfoCard(
+                icon: "hammer.fill",
+                iconColor: .orange,
+                title: "What Is Mining?",
+                summary: "Validates transactions and secures the network",
+                detail: "Mining is the process that validates transactions and secures the network. Participants contribute computing power and are rewarded with newly issued bitcoin."
+            )
+
+            ExpandableInfoCard(
+                icon: "diamond.fill",
+                iconColor: .mint,
+                title: "Why Is Bitcoin Scarce?",
+                summary: "Fixed supply of 21 million coins",
+                detail: "Bitcoin has a fixed supply of 21 million coins. New bitcoin is released on a predictable schedule that decreases over time."
+            )
+
+            ExpandableInfoCard(
+                icon: "chart.line.uptrend.xyaxis",
+                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                title: "What Gives Bitcoin Value?",
+                summary: "Scarcity, security, and global transferability",
+                detail: "Bitcoin's value comes from its scarcity, security, and ability to transfer value globally without intermediaries."
+            )
+
+            ExpandableInfoCard(
+                icon: "globe",
+                iconColor: .blue,
+                title: "Can Bitcoin Be Controlled?",
+                summary: "No single entity controls it",
+                detail: "No single entity controls Bitcoin. Changes require broad agreement across the network."
+            )
+
+            ExpandableInfoCard(
+                icon: "banknote.fill",
+                iconColor: .purple,
+                title: "Is Bitcoin Mainly for Trading?",
+                summary: "Payments, holding, or long-term monetary asset",
+                detail: "Bitcoin can be used for payments or long-term holding. Many focus on its role as a long-term monetary asset."
+            )
+
+            ExpandableInfoCard(
+                icon: "trophy.fill",
+                iconColor: .yellow,
+                title: "Why Do People Compare Bitcoin to Gold?",
+                summary: "Both are scarce and independent of central control",
+                detail: "Bitcoin is often compared to gold because both are scarce and independent of central control. Bitcoin can be transferred instantly worldwide."
+            )
+
+            Text("Understand Bitcoin clearly in under 2 minutes. No hype, just fundamentals.")
+                .font(.caption2)
+                .foregroundStyle(.quaternary)
+                .italic()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 4)
         }
     }
 
@@ -604,12 +715,14 @@ struct LearnTab: View {
 }
 
 enum LearnCategory: CaseIterable {
+    case bitcoin
     case powerLaw
     case cycles
     case indicators
 
     var label: String {
         switch self {
+        case .bitcoin: return "Bitcoin"
         case .powerLaw: return "Power Law"
         case .cycles: return "Cycles"
         case .indicators: return "Indicators"
@@ -618,6 +731,7 @@ enum LearnCategory: CaseIterable {
 
     var icon: String {
         switch self {
+        case .bitcoin: return "bitcoinsign.circle"
         case .powerLaw: return "chart.line.uptrend.xyaxis"
         case .cycles: return "arrow.triangle.2.circlepath"
         case .indicators: return "gauge.with.dots.needle.bottom.50percent"
