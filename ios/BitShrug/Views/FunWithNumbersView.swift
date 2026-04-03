@@ -113,6 +113,7 @@ struct FunWithNumbersView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
+                funDisclaimerBanner
                 resultCard
                 yearSliderSection
                 bandSliderSection
@@ -383,6 +384,39 @@ struct FunWithNumbersView: View {
             }
         }
         .premiumCard(.accent)
+    }
+
+    private var funDisclaimerBanner: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: "party.popper.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.orange)
+                Text("JUST FOR FUN")
+                    .font(.system(size: 11, weight: .heavy))
+                    .foregroundStyle(boldTextColor)
+                    .tracking(1.2)
+            }
+
+            Text("This is all playing with theory numbers and should not be confused with any financial advice. No financial decision should be made based on this and it is no indication that the price will go up or down.")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(faintTextColor)
+                .lineSpacing(2)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text("Rise or Fall, we hold.")
+                .font(.system(size: 12, weight: .heavy))
+                .foregroundStyle(.orange)
+                .padding(.top, 2)
+        }
+        .multilineTextAlignment(.center)
+        .padding(16)
+        .background(Color.orange.opacity(0.06))
+        .clipShape(.rect(cornerRadius: 14))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(Color.orange.opacity(0.15), lineWidth: 1)
+        )
     }
 
     private var disclaimerFooter: some View {

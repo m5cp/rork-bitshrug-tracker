@@ -72,6 +72,12 @@ struct PortfolioTab: View {
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
 
+            Text("We don't see your bitcoin. This isn't a wallet and all data is stored on your phone.")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.primary.opacity(0.5))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 8)
+
             Button {
                 isEditing = true
             } label: {
