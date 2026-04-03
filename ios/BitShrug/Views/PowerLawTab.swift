@@ -412,13 +412,21 @@ struct PowerLawTab: View {
                 }
             }
 
-            HStack(spacing: 6) {
-                Image(systemName: "info.circle")
+            VStack(spacing: 6) {
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.orange.opacity(0.6))
+                    Text("Projections based on power law regression. Not financial advice.")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+
+                Text("These values are theoretical estimates derived from a mathematical model. Bitcoin is a volatile asset and could decline significantly, including to zero. Past patterns do not guarantee future results. Do not make investment decisions based on these projections.")
                     .font(.system(size: 10))
-                    .foregroundStyle(.tertiary)
-                Text("Projections based on power law regression. Not financial advice.")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.quaternary)
+                    .lineSpacing(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
         .premiumCard(.highlighted)
