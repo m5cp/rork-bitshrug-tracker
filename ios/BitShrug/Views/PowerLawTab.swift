@@ -89,7 +89,8 @@ struct PowerLawTab: View {
                 .tint(.orange.opacity(0.5))
             Text("Loading")
                 .font(.caption)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary.opacity(0.5))
         }
         .frame(maxWidth: .infinity, minHeight: 400)
     }
@@ -135,7 +136,7 @@ struct PowerLawTab: View {
 
                 Text("IS THE POWER LAW VALID?")
                     .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .tracking(1.5)
                 Spacer()
             }
@@ -148,7 +149,8 @@ struct PowerLawTab: View {
 
                 Text(explanation)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -157,10 +159,11 @@ struct PowerLawTab: View {
             HStack(spacing: 6) {
                 Image(systemName: "info.circle")
                     .font(.system(size: 10))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.primary.opacity(0.5))
                 Text("Mathematical observation, not a guarantee.")
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary.opacity(0.5))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -197,7 +200,7 @@ struct PowerLawTab: View {
                 .frame(width: 6, height: 6)
             Text(label)
                 .font(.system(size: 9, weight: .bold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.primary)
         }
     }
 
@@ -225,7 +228,7 @@ struct PowerLawTab: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("POSITION")
                         .font(.system(size: 10, weight: .heavy))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .tracking(1.5)
 
                     Text(zoneName)
@@ -245,16 +248,16 @@ struct PowerLawTab: View {
 
             HStack {
                 Text("Support")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.green.opacity(0.7))
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.green)
                 Spacer()
                 Text("Midpoint")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.primary)
                 Spacer()
                 Text("Resistance")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(.red.opacity(0.7))
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.red)
             }
         }
         .premiumCard(.highlighted)
@@ -295,8 +298,8 @@ struct PowerLawTab: View {
 
             if let updated = viewModel.lastUpdated {
                 Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.quaternary)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.primary.opacity(0.5))
             }
 
             HStack(spacing: 12) {
@@ -320,7 +323,7 @@ struct PowerLawTab: View {
         VStack(spacing: 6) {
             Text(label)
                 .font(.system(size: 9, weight: .heavy))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
                 .tracking(1)
             Text(formatPrice(price))
                 .font(.system(.body, design: .monospaced, weight: .heavy))
@@ -336,7 +339,7 @@ struct PowerLawTab: View {
         VStack(spacing: 6) {
             Text(label)
                 .font(.system(size: 9, weight: .heavy))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
                 .tracking(1)
             Text(value)
                 .font(.system(.body, design: .monospaced, weight: .heavy))
@@ -351,8 +354,8 @@ struct PowerLawTab: View {
     private func priceColumn(label: String, price: Double, color: Color) -> some View {
         VStack(spacing: 5) {
             Text(label)
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 10, weight: .heavy))
+                .foregroundStyle(.primary)
             Text(formatPrice(price))
                 .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(color)
@@ -384,7 +387,7 @@ struct PowerLawTab: View {
                         .frame(width: 90, alignment: .trailing)
                 }
                 .font(.system(size: 9, weight: .heavy))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
                 .tracking(0.5)
                 .padding(.bottom, 10)
 
@@ -407,7 +410,7 @@ struct PowerLawTab: View {
                         Spacer()
                         Text(formatPrice(row.resistance))
                             .font(.system(.caption, design: .monospaced, weight: .bold))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.red)
                             .frame(width: 90, alignment: .trailing)
                     }
                     .padding(.vertical, 8)
@@ -425,12 +428,13 @@ struct PowerLawTab: View {
                         .foregroundStyle(.orange.opacity(0.6))
                     Text("Projections based on power law regression. Not financial advice.")
                         .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
                 }
 
                 Text("These values are theoretical estimates derived from a mathematical model. Bitcoin is a volatile asset and could decline significantly, including to zero. Past patterns do not guarantee future results. Do not make investment decisions based on these projections.")
-                    .font(.system(size: 10))
-                    .foregroundStyle(.quaternary)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.primary.opacity(0.6))
                     .lineSpacing(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -488,7 +492,8 @@ struct PowerLawTab: View {
 
             Text("Logarithmic regression divided into price bands corresponding to historical market conditions.")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .premiumCard(.highlighted)
     }
@@ -577,7 +582,8 @@ struct PowerLawTab: View {
                 .foregroundStyle(.orange)
             Text(value)
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
@@ -589,7 +595,7 @@ struct PowerLawTab: View {
         VStack(spacing: 3) {
             Text(label)
                 .font(.system(size: 9, weight: .bold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.primary)
             Text(value)
                 .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
@@ -610,11 +616,12 @@ struct PowerLawTab: View {
         VStack(spacing: 4) {
             Text("Numbers are not live. For educational purposes only.")
                 .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
             Text("This is not financial advice. Do not make financial decisions based on this app.")
                 .font(.caption2)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity)

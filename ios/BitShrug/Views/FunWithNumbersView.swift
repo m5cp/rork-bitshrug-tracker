@@ -59,11 +59,11 @@ struct FunWithNumbersView: View {
     }
 
     private var subtleTextColor: Color {
-        colorScheme == .light ? Color.black.opacity(0.55) : Color.white.opacity(0.35)
+        colorScheme == .light ? .black : Color.white.opacity(0.55)
     }
 
     private var faintTextColor: Color {
-        colorScheme == .light ? Color.black.opacity(0.4) : Color.white.opacity(0.2)
+        colorScheme == .light ? Color.black.opacity(0.7) : Color.white.opacity(0.35)
     }
 
     private var boldTextColor: Color {
@@ -140,7 +140,7 @@ struct FunWithNumbersView: View {
                     .foregroundStyle(subtleTextColor)
                     .tracking(1.5)
                 Spacer()
-                Text("\(Int(selectedYear))")
+                Text(String(format: "%d", Int(selectedYear)))
                     .font(.system(.caption, design: .monospaced, weight: .heavy))
                     .foregroundStyle(currentBandColor)
                     .padding(.horizontal, 10)
@@ -159,7 +159,7 @@ struct FunWithNumbersView: View {
                 VStack(spacing: 3) {
                     Text("Band")
                         .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(subtleTextColor)
+                        .foregroundStyle(boldTextColor)
                         .tracking(0.5)
                     Text(currentBandLabel)
                         .font(.system(size: 13, weight: .heavy))
@@ -173,7 +173,7 @@ struct FunWithNumbersView: View {
                 VStack(spacing: 3) {
                     Text("Support")
                         .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(subtleTextColor)
+                        .foregroundStyle(boldTextColor)
                         .tracking(0.5)
                     Text(formatCompactPrice(supportPrice))
                         .font(.system(.caption, design: .monospaced, weight: .bold))
@@ -187,7 +187,7 @@ struct FunWithNumbersView: View {
                 VStack(spacing: 3) {
                     Text("Resistance")
                         .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(subtleTextColor)
+                        .foregroundStyle(boldTextColor)
                         .tracking(0.5)
                     Text(formatCompactPrice(resistancePrice))
                         .font(.system(.caption, design: .monospaced, weight: .bold))
@@ -203,7 +203,7 @@ struct FunWithNumbersView: View {
             HStack {
                 SectionHeader(icon: "calendar", title: "YEAR")
                 Spacer()
-                Text("\(Int(selectedYear))")
+                Text(String(format: "%d", Int(selectedYear)))
                     .font(.system(.title3, design: .monospaced, weight: .black))
                     .foregroundStyle(boldTextColor)
             }
@@ -213,13 +213,13 @@ struct FunWithNumbersView: View {
                 .sensoryFeedback(.selection, trigger: Int(selectedYear))
 
             HStack {
-                Text("\(Int(minYear))")
-                    .font(.system(size: 11, weight: .bold, design: .monospaced))
-                    .foregroundStyle(subtleTextColor)
+                Text(String(format: "%d", Int(minYear)))
+                    .font(.system(size: 11, weight: .heavy, design: .monospaced))
+                    .foregroundStyle(boldTextColor)
                 Spacer()
-                Text("\(Int(maxYear))")
-                    .font(.system(size: 11, weight: .bold, design: .monospaced))
-                    .foregroundStyle(subtleTextColor)
+                Text(String(format: "%d", Int(maxYear)))
+                    .font(.system(size: 11, weight: .heavy, design: .monospaced))
+                    .foregroundStyle(boldTextColor)
             }
         }
         .premiumCard(.highlighted)
@@ -346,7 +346,7 @@ struct FunWithNumbersView: View {
                         .foregroundStyle(.orange)
                     Text("BTC")
                         .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(subtleTextColor)
+                        .foregroundStyle(boldTextColor)
                         .tracking(1)
                 }
             }
@@ -361,7 +361,7 @@ struct FunWithNumbersView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Projected P&L")
                             .font(.system(size: 9, weight: .heavy))
-                            .foregroundStyle(subtleTextColor)
+                            .foregroundStyle(boldTextColor)
                             .tracking(0.5)
                         Text("\(isPositive ? "+" : "")\(formatLargePrice(pl))")
                             .font(.system(.caption, design: .monospaced, weight: .bold))
@@ -371,7 +371,7 @@ struct FunWithNumbersView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Return")
                             .font(.system(size: 9, weight: .heavy))
-                            .foregroundStyle(subtleTextColor)
+                            .foregroundStyle(boldTextColor)
                             .tracking(0.5)
                         Text("\(isPositive ? "+" : "")\(formatPercent(plPct))")
                             .font(.system(.caption, design: .monospaced, weight: .bold))
@@ -392,12 +392,12 @@ struct FunWithNumbersView: View {
                     .font(.system(size: 10))
                     .foregroundStyle(.orange.opacity(0.7))
                 Text("For entertainment only. Not financial advice.")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(subtleTextColor)
+                    .font(.system(size: 11, weight: .heavy))
+                    .foregroundStyle(boldTextColor)
             }
 
             Text("These projections are based on a theoretical mathematical model (Power Law regression). Bitcoin is extremely volatile and could decline to zero. Past patterns do not guarantee future results. Do not make investment decisions based on these numbers.")
-                .font(.system(size: 10, weight: .medium))
+                .font(.system(size: 10, weight: .bold))
                 .foregroundStyle(faintTextColor)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)

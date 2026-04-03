@@ -101,7 +101,7 @@ struct SectionHeader: View {
 
             Text(title)
                 .font(.system(size: 10, weight: .heavy))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
                 .tracking(1.5)
 
             Spacer()

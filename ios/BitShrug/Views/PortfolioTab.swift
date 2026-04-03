@@ -70,7 +70,8 @@ struct PortfolioTab: View {
 
             Text("Add your Bitcoin holdings to\ntrack value and P&L over time.")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
 
             Button {
@@ -97,7 +98,7 @@ struct PortfolioTab: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("HOLDINGS")
                         .font(.system(size: 10, weight: .heavy))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .tracking(1.5)
 
                     Text(formatUSD(portfolio.currentValue(at: viewModel.price)))
@@ -115,7 +116,7 @@ struct PortfolioTab: View {
 
                     Text("BTC")
                         .font(.system(size: 10, weight: .heavy))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .tracking(1)
                 }
             }
@@ -128,8 +129,8 @@ struct PortfolioTab: View {
 
             if let updated = viewModel.lastUpdated {
                 Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.quaternary)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.primary.opacity(0.5))
             }
         }
         .premiumCard(.accent)
@@ -162,20 +163,20 @@ struct PortfolioTab: View {
             HStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Cost Basis")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(.tertiary)
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.primary)
                     Text(formatUSD(portfolio.costBasis))
-                        .font(.system(.caption, design: .monospaced, weight: .semibold))
-                        .foregroundStyle(.secondary)
+                        .font(.system(.caption, design: .monospaced, weight: .bold))
+                        .foregroundStyle(.primary)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Total Invested")
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(.tertiary)
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.primary)
                     Text(formatUSD(portfolio.totalCost()))
-                        .font(.system(.caption, design: .monospaced, weight: .semibold))
-                        .foregroundStyle(.secondary)
+                        .font(.system(.caption, design: .monospaced, weight: .bold))
+                        .foregroundStyle(.primary)
                 }
 
                 Spacer()
@@ -228,8 +229,8 @@ struct PortfolioTab: View {
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(.orange)
                 Text(label)
-                    .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
             }
 
@@ -288,18 +289,19 @@ struct PortfolioTab: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .fontWeight(.bold)
                     .foregroundStyle(.primary)
                 Text(subtitle)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(.primary)
         }
         .padding(.vertical, 4)
     }
@@ -307,11 +309,11 @@ struct PortfolioTab: View {
     private func metricPill(label: String, value: String) -> some View {
         HStack(spacing: 4) {
             Text(label)
-                .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(.primary.opacity(0.5))
             Text(value)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                .foregroundStyle(.primary)
         }
     }
 

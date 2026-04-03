@@ -33,13 +33,15 @@ struct ExpandableInfoCard: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(title)
                             .font(.subheadline)
-                            .fontWeight(.bold)
+                            .fontWeight(.heavy)
                             .foregroundStyle(.primary)
 
                         Text(summary)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(isExpanded ? nil : 1)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.primary)
+                            .lineLimit(isExpanded ? nil : 2)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
 
                     Spacer(minLength: 0)
@@ -57,7 +59,8 @@ struct ExpandableInfoCard: View {
 
                     Text(detail)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
                         .lineSpacing(4)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 46)
@@ -99,7 +102,8 @@ struct KeyPointRow: View {
 
             Text(text)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .fontWeight(.medium)
+                .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -129,13 +133,14 @@ struct CompactFactCard: View {
 
                 Text(title)
                     .font(.subheadline)
-                    .fontWeight(.bold)
+                    .fontWeight(.heavy)
                     .foregroundStyle(.primary)
             }
 
             Text(content)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }

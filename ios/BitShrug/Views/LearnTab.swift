@@ -159,7 +159,8 @@ struct LearnTab: View {
 
                     Text(subtitle)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -220,8 +221,8 @@ struct LearnTab: View {
                     .lineLimit(1)
 
                 Text(subtitle)
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.primary)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -429,7 +430,8 @@ struct LearnTab: View {
 
                 Text("Based on historical patterns. Past behavior does not guarantee future results. Rise or Fall, we hold.")
                     .font(.caption2)
-                    .foregroundStyle(.quaternary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
                     .italic()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 4)
@@ -555,7 +557,8 @@ struct LearnTab: View {
 
             Text("These three terms are often used interchangeably, but they describe distinct concepts.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
                 .lineSpacing(3)
 
             conceptCard(
@@ -784,7 +787,8 @@ struct LearnTab: View {
                 ShrugBadge(size: .small, style: .inline)
                 Text("Rise or Fall, we hold.")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.primary)
                     .italic()
             }
         }
@@ -836,7 +840,8 @@ struct LearnTab: View {
 
             Text("Crypto is high-risk. This is educational context, not a recommendation.")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
                 .italic()
         }
         .premiumCard()
@@ -1082,7 +1087,8 @@ struct LearnTab: View {
 
             Text(subtitle)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity)
@@ -1117,11 +1123,12 @@ struct LearnTab: View {
         VStack(spacing: 4) {
             Text("For educational purposes only.")
                 .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
             Text("This is not financial advice. Do not make financial decisions based on this app.")
                 .font(.caption2)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity)
@@ -1242,18 +1249,20 @@ struct MythBusterCard: View {
 
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 6) {
-                            Text("MYTH")
+            Text("MYTH")
                                 .font(.system(size: 9, weight: .heavy))
                                 .foregroundStyle(.red)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
                                 .background(Color.red.opacity(0.1))
                                 .clipShape(Capsule())
+                                .fixedSize()
                             Text(myth)
                                 .font(.caption)
-                                .fontWeight(.semibold)
+                                .fontWeight(.heavy)
                                 .foregroundStyle(.primary)
-                                .lineLimit(1)
+                                .lineLimit(2)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
 
                         HStack(spacing: 6) {
@@ -1264,10 +1273,13 @@ struct MythBusterCard: View {
                                 .padding(.vertical, 2)
                                 .background(Color.green.opacity(0.1))
                                 .clipShape(Capsule())
+                                .fixedSize()
                             Text(reality)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                                .lineLimit(2)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
 

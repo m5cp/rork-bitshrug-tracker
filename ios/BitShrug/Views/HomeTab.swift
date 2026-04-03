@@ -179,7 +179,8 @@ struct HomeTab: View {
                 .tint(.orange.opacity(0.5))
             Text("Loading market data...")
                 .font(.caption)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary.opacity(0.5))
         }
         .frame(maxWidth: .infinity)
         .frame(minHeight: 400)
@@ -236,8 +237,8 @@ struct HomeTab: View {
 
             if let updated = viewModel.lastUpdated {
                 Text("Updated \(updated.formatted(.relative(presentation: .named)))")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(.quaternary)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundStyle(.primary.opacity(0.5))
             }
         }
         .padding(.top, 8)
@@ -246,11 +247,11 @@ struct HomeTab: View {
     private func metricPill(label: String, value: String) -> some View {
         HStack(spacing: 4) {
             Text(label)
-                .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(.tertiary)
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(.primary.opacity(0.5))
             Text(value)
-                .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                .foregroundStyle(.secondary)
+                .font(.system(size: 11, weight: .bold, design: .monospaced))
+                .foregroundStyle(.primary)
         }
     }
 
@@ -268,7 +269,7 @@ struct HomeTab: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("ENVIRONMENT")
                     .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .tracking(1.5)
 
                 Text(signal.label)
@@ -278,7 +279,8 @@ struct HomeTab: View {
 
                 Text(viewModel.environmentMessage)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -320,14 +322,15 @@ struct HomeTab: View {
 
             Text(viewModel.insightHeadline)
                 .font(.subheadline)
-                .fontWeight(.semibold)
+                .fontWeight(.bold)
                 .foregroundStyle(.primary)
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
             Text(viewModel.insightExpansion)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -370,7 +373,7 @@ struct HomeTab: View {
                     HStack(spacing: 8) {
                         Text(name)
                             .font(.subheadline)
-                            .fontWeight(.semibold)
+                            .fontWeight(.bold)
                             .foregroundStyle(.primary)
 
                         Text(status.label)
@@ -384,15 +387,17 @@ struct HomeTab: View {
 
                     Text(explanation)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
                 Spacer(minLength: 0)
 
                 Text("\(score)/\(maxScore)")
                     .font(.system(.caption, design: .monospaced, weight: .bold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
             }
             .padding(.vertical, 10)
 
@@ -437,6 +442,7 @@ struct HomeTab: View {
 
             Text(viewModel.marketContext)
                 .font(.subheadline)
+                .fontWeight(.semibold)
                 .foregroundStyle(.primary)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
@@ -452,8 +458,8 @@ struct HomeTab: View {
 
                     Text("Cycle: \(phase.label)")
                         .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
 
                     Spacer()
 
@@ -619,8 +625,8 @@ struct HomeTab: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Fear & Greed")
                         .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
                     Text(level.label)
                         .font(.system(size: 11, weight: .heavy))
                         .foregroundStyle(level.color)
@@ -648,7 +654,7 @@ struct HomeTab: View {
                 HStack(spacing: 8) {
                     Text("THIS WEEK")
                         .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(.primary)
                         .tracking(1)
                     Text(dir)
                         .font(.system(.caption, design: .monospaced, weight: .bold))
@@ -679,8 +685,8 @@ struct HomeTab: View {
                     .font(.system(size: 9, weight: .bold))
                     .foregroundStyle(.orange)
                 Text(title)
-                    .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
             }
 
@@ -723,11 +729,12 @@ struct HomeTab: View {
         VStack(spacing: 4) {
             Text("Numbers are not live. For educational purposes only.")
                 .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
             Text("This is not financial advice. Do not make financial decisions based on this app.")
                 .font(.caption2)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity)

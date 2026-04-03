@@ -21,9 +21,9 @@ struct SectionJumpBar: View {
                             Image(systemName: section.icon)
                                 .font(.system(size: 10, weight: .bold))
                             Text(section.label)
-                                .font(.system(size: 11, weight: .semibold))
+                                .font(.system(size: 11, weight: .bold))
                         }
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 8)
                         .background(.ultraThinMaterial)

@@ -97,7 +97,8 @@ struct CycleTab: View {
                 .tint(.orange.opacity(0.5))
             Text("Loading")
                 .font(.caption)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary.opacity(0.5))
         }
         .frame(maxWidth: .infinity, minHeight: 400)
     }
@@ -148,7 +149,7 @@ struct CycleTab: View {
 
                 Text("IS THE 4-YEAR CYCLE VALID?")
                     .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.primary)
                     .tracking(1.5)
                 Spacer()
             }
@@ -161,7 +162,8 @@ struct CycleTab: View {
 
                 Text(explanation)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -170,10 +172,11 @@ struct CycleTab: View {
             HStack(spacing: 6) {
                 Image(systemName: "info.circle")
                     .font(.system(size: 10))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.primary.opacity(0.5))
                 Text("Historical observation. Sample size: 4 halvings.")
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary.opacity(0.5))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -219,12 +222,12 @@ struct CycleTab: View {
 
                     Text("\(Int((info?.cycleProgress ?? 0) * 100))% complete")
                         .font(.system(.caption, design: .monospaced, weight: .bold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
 
                     if let info {
                         Text("Era \(info.currentEra)")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(.primary)
                     }
                 }
             }
@@ -233,7 +236,8 @@ struct CycleTab: View {
             if let info {
                 Text(info.currentPhase.description)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
@@ -265,10 +269,10 @@ struct CycleTab: View {
         VStack(spacing: 5) {
             Text(label)
                 .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(.primary)
             Text(value)
                 .font(.system(.footnote, design: .monospaced, weight: .bold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
         }
     }
 
@@ -287,7 +291,8 @@ struct CycleTab: View {
 
             Text("Peaks have formed ~12–18 months post-halving. Bear lows ~12 months after each peak.")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .premiumCard(.highlighted)
     }
@@ -307,8 +312,8 @@ struct CycleTab: View {
                             .fontWeight(.semibold)
                             .foregroundStyle(.primary)
                         Text(reward)
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(.tertiary)
+                            .font(.system(.caption, design: .monospaced, weight: .semibold))
+                            .foregroundStyle(.primary)
                     }
                 }
 
@@ -317,14 +322,14 @@ struct CycleTab: View {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("Cycle Peak")
                         .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(.primary)
                     Text(peakApprox)
                         .font(.system(.caption, design: .monospaced, weight: .bold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.primary)
                     if !peakDate.isEmpty {
                         Text(peakDate)
-                            .font(.system(size: 9))
-                            .foregroundStyle(.quaternary)
+                            .font(.system(size: 9, weight: .semibold))
+                            .foregroundStyle(.primary.opacity(0.5))
                     }
                 }
             }
@@ -352,7 +357,8 @@ struct CycleTab: View {
 
             Text("Diminishing peak returns but higher absolute prices. Bear drawdowns: 77–87%.")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .premiumCard()
     }
@@ -367,8 +373,8 @@ struct CycleTab: View {
                     .frame(width: 64, alignment: .leading)
 
                 Text("\(bottom) → \(top)")
-                    .font(.system(.caption, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                    .font(.system(.caption, design: .monospaced, weight: .semibold))
+                    .foregroundStyle(.primary)
 
                 Spacer()
 
@@ -396,16 +402,17 @@ struct CycleTab: View {
         VStack(spacing: 4) {
             if let updated = viewModel.lastUpdated {
                 Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(.quaternary)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.primary.opacity(0.5))
             }
             Text("Numbers are not live. For educational purposes only.")
                 .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.tertiary)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
             Text("This is not financial advice. Do not make financial decisions based on this app.")
                 .font(.caption2)
-                .foregroundStyle(.quaternary)
+                .fontWeight(.semibold)
+                .foregroundStyle(.primary)
         }
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity)
