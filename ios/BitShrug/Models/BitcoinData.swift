@@ -262,16 +262,16 @@ nonisolated enum RainbowBand: Int, CaseIterable, Sendable {
 
     var color: Color {
         switch self {
-        case .fireZone: return Color(red: 0.1, green: 0.1, blue: 0.6)
-        case .deepValue: return Color(red: 0.1, green: 0.3, blue: 0.8)
-        case .accumulation: return Color(red: 0.0, green: 0.6, blue: 0.5)
-        case .cheap: return Color(red: 0.0, green: 0.7, blue: 0.2)
-        case .neutral: return Color(red: 0.4, green: 0.8, blue: 0.0)
-        case .hold: return Color(red: 0.8, green: 0.8, blue: 0.0)
-        case .caution: return Color(red: 1.0, green: 0.6, blue: 0.0)
-        case .fomo: return Color(red: 1.0, green: 0.4, blue: 0.0)
-        case .bubble: return Color(red: 1.0, green: 0.2, blue: 0.0)
-        case .maxBubble: return Color(red: 0.8, green: 0.0, blue: 0.0)
+        case .fireZone: return Color(red: 0.15, green: 0.0, blue: 0.85)
+        case .deepValue: return Color(red: 0.0, green: 0.2, blue: 1.0)
+        case .accumulation: return Color(red: 0.0, green: 0.75, blue: 0.65)
+        case .cheap: return Color(red: 0.0, green: 0.85, blue: 0.15)
+        case .neutral: return Color(red: 0.5, green: 0.95, blue: 0.0)
+        case .hold: return Color(red: 1.0, green: 0.9, blue: 0.0)
+        case .caution: return Color(red: 1.0, green: 0.55, blue: 0.0)
+        case .fomo: return Color(red: 1.0, green: 0.3, blue: 0.0)
+        case .bubble: return Color(red: 1.0, green: 0.1, blue: 0.0)
+        case .maxBubble: return Color(red: 0.9, green: 0.0, blue: 0.0)
         }
     }
 

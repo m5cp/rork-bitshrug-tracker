@@ -6,7 +6,7 @@ struct PortfolioTab: View {
     @State private var portfolio = PortfolioManager.shared
     @State private var isEditing: Bool = false
     @State private var showPriceAlerts: Bool = false
-    @State private var showReversalTracker: Bool = false
+    @State private var showFunWithNumbers: Bool = false
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -50,15 +50,8 @@ struct PortfolioTab: View {
             .sheet(isPresented: $showPriceAlerts) {
                 PriceAlertsView(viewModel: viewModel)
             }
-            .navigationDestination(isPresented: $showReversalTracker) {
-                ScrollView {
-                    ReversalTrackerView(viewModel: viewModel)
-                        .padding(.horizontal, horizontalPadding)
-                        .padding(.bottom, 40)
-                }
-                .scrollIndicators(.hidden)
-                .navigationTitle("Reversal Tracker")
-                .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(isPresented: $showFunWithNumbers) {
+                FunWithNumbersView(viewModel: viewModel)
             }
         }
     }
@@ -251,18 +244,6 @@ struct PortfolioTab: View {
             SectionHeader(icon: "wrench.and.screwdriver", title: "TOOLS")
 
             Button {
-                showReversalTracker = true
-            } label: {
-                toolRow(
-                    icon: "arrow.triangle.2.circlepath.circle.fill",
-                    iconColor: .orange,
-                    title: "Reversal Tracker",
-                    subtitle: "Bull & bear signal analysis"
-                )
-            }
-            .buttonStyle(.plain)
-
-            Button {
                 showPriceAlerts = true
             } label: {
                 toolRow(
@@ -270,6 +251,18 @@ struct PortfolioTab: View {
                     iconColor: .orange,
                     title: "Price Alerts",
                     subtitle: "Custom targets & Power Law alerts"
+                )
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showFunWithNumbers = true
+            } label: {
+                toolRow(
+                    icon: "sparkles",
+                    iconColor: .purple,
+                    title: "Fun with Numbers",
+                    subtitle: "Explore future Power Law projections"
                 )
             }
             .buttonStyle(.plain)
