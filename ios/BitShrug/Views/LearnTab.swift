@@ -237,7 +237,7 @@ struct LearnTab: View {
 
             formulaCard
 
-            Text("Based on historical patterns. Past behavior does not guarantee future results. Honest answer, we don't know. We hold.")
+            Text("Based on historical patterns. Past behavior does not guarantee future results. Rise or Fall, we hold.")
                 .font(.caption2)
                 .foregroundStyle(.quaternary)
                 .italic()
@@ -580,7 +580,7 @@ struct LearnTab: View {
 
             HStack(spacing: 8) {
                 ShrugBadge(size: .small, style: .inline)
-                Text("Honest answer, we don't know. We hold.")
+                Text("Rise or Fall, we hold.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .italic()

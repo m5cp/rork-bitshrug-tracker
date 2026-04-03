@@ -54,7 +54,7 @@ struct DisclaimerRisksView: View {
 
                     HStack(spacing: 8) {
                         ShrugBadge(size: .small, style: .inline)
-                        Text("Honest answer, we don't know. We hold.")
+                        Text("Rise or Fall, we hold.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .italic()
