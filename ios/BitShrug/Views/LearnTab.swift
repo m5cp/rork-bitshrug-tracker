@@ -29,6 +29,10 @@ struct LearnTab: View {
                             cycleEducation
                         case .indicators:
                             indicatorEducation
+                        case .misconceptions:
+                            misconceptionsEducation
+                        case .btcVsDollars:
+                            btcVsDollarsEducation
                         }
 
                         disclaimer
@@ -58,7 +62,8 @@ struct LearnTab: View {
     }
 
     private var categoryPicker: some View {
-        HStack(spacing: 8) {
+        ScrollView(.horizontal, showsIndicators: false) {
+          HStack(spacing: 8) {
             ForEach(LearnCategory.allCases, id: \.self) { category in
                 let isSelected = selectedCategory == category
                 Button {
@@ -80,8 +85,9 @@ struct LearnTab: View {
                 }
                 .sensoryFeedback(.selection, trigger: selectedCategory)
             }
-            Spacer()
+          }
         }
+        .contentMargins(.horizontal, 0)
     }
 
     // MARK: - What is Bitcoin
@@ -696,6 +702,198 @@ struct LearnTab: View {
         }
     }
 
+    // MARK: - Common Misconceptions
+
+    private var misconceptionsEducation: some View {
+        VStack(spacing: 12) {
+            ExpandableInfoCard(
+                icon: "eye.slash.fill",
+                iconColor: .purple,
+                title: "Is Bitcoin Anonymous?",
+                summary: "Pseudonymous, not anonymous",
+                detail: "Bitcoin is not fully anonymous. Transactions are publicly visible, but identities are not directly attached. This makes Bitcoin pseudonymous."
+            )
+
+            ExpandableInfoCard(
+                icon: "exclamationmark.shield.fill",
+                iconColor: .red,
+                title: "Is Bitcoin Mainly Used for Illegal Activity?",
+                summary: "Most activity today is legitimate",
+                detail: "Most Bitcoin activity today is legitimate. It is widely used for trading, payments, and long-term holding."
+            )
+
+            ExpandableInfoCard(
+                icon: "lock.trianglebadge.exclamationmark.fill",
+                iconColor: .orange,
+                title: "Can Bitcoin Be Hacked?",
+                summary: "The network itself has never been hacked",
+                detail: "The Bitcoin network itself has never been hacked. However, individual accounts or platforms can be compromised if not secured properly."
+            )
+
+            ExpandableInfoCard(
+                icon: "chart.line.downtrend.xyaxis",
+                iconColor: .cyan,
+                title: "Is Bitcoin Just a Bubble?",
+                summary: "Multiple cycles of growth and decline",
+                detail: "Bitcoin has gone through multiple cycles of growth and decline. It has continued operating and gaining adoption over time."
+            )
+
+            ExpandableInfoCard(
+                icon: "questionmark.diamond.fill",
+                iconColor: .yellow,
+                title: "Is Bitcoin Backed by Anything?",
+                summary: "Value from scarcity, security, and adoption",
+                detail: "Bitcoin is not backed by a physical asset or government. Its value comes from scarcity, security, and user adoption."
+            )
+
+            ExpandableInfoCard(
+                icon: "building.columns.fill",
+                iconColor: .blue,
+                title: "Can Governments Shut Bitcoin Down?",
+                summary: "No single point of control",
+                detail: "Bitcoin runs on a global decentralized network. There is no single point of control, making shutdown difficult."
+            )
+
+            ExpandableInfoCard(
+                icon: "leaf.fill",
+                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                title: "Is Bitcoin Bad for the Environment?",
+                summary: "Energy use varies by source",
+                detail: "Bitcoin uses energy, but impact varies by source. A growing share uses renewable or otherwise unused energy."
+            )
+
+            Text("Clearing up common myths with facts, not hype.")
+                .font(.caption2)
+                .foregroundStyle(.quaternary)
+                .italic()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 4)
+        }
+    }
+
+    // MARK: - Bitcoin vs Dollars
+
+    private var btcVsDollarsEducation: some View {
+        VStack(spacing: 12) {
+            comparisonCard(
+                icon: "person.2.fill",
+                iconColor: .orange,
+                title: "Who Controls It?",
+                btcPoint: "No central authority",
+                usdPoint: "Issued and managed by central banks"
+            )
+
+            comparisonCard(
+                icon: "number.circle.fill",
+                iconColor: .purple,
+                title: "Supply",
+                btcPoint: "Fixed supply of 21 million",
+                usdPoint: "Supply can expand over time"
+            )
+
+            comparisonCard(
+                icon: "arrow.left.arrow.right",
+                iconColor: .cyan,
+                title: "Transfer",
+                btcPoint: "Peer-to-peer, global",
+                usdPoint: "Typically requires intermediaries"
+            )
+
+            comparisonCard(
+                icon: "globe",
+                iconColor: .blue,
+                title: "Accessibility",
+                btcPoint: "Accessible with internet",
+                usdPoint: "Depends on banking access"
+            )
+
+            comparisonCard(
+                icon: "checkmark.seal.fill",
+                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                title: "Settlement",
+                btcPoint: "Final settlement on network",
+                usdPoint: "Often involves delays and intermediaries"
+            )
+
+            comparisonCard(
+                icon: "eye.fill",
+                iconColor: .yellow,
+                title: "Transparency",
+                btcPoint: "Public and verifiable",
+                usdPoint: "Centrally managed"
+            )
+
+            comparisonCard(
+                icon: "waveform.path.ecg",
+                iconColor: .red,
+                title: "Volatility",
+                btcPoint: "Can fluctuate significantly",
+                usdPoint: "More stable short-term"
+            )
+
+            Text("A side-by-side look at two different monetary systems.")
+                .font(.caption2)
+                .foregroundStyle(.quaternary)
+                .italic()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 4)
+        }
+    }
+
+    private func comparisonCard(icon: String, iconColor: Color, title: String, btcPoint: String, usdPoint: String) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(iconColor)
+                    .frame(width: 32, height: 32)
+                    .background(iconColor.opacity(0.12))
+                    .clipShape(.rect(cornerRadius: 8))
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.heavy)
+                    .foregroundStyle(.primary)
+            }
+
+            HStack(alignment: .top, spacing: 10) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("BTC")
+                        .font(.system(.caption2, design: .monospaced, weight: .heavy))
+                        .foregroundStyle(.orange)
+                    Text(btcPoint)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(10)
+                .background(Color.orange.opacity(0.06))
+                .clipShape(.rect(cornerRadius: 10))
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("USD")
+                        .font(.system(.caption2, design: .monospaced, weight: .heavy))
+                        .foregroundStyle(.green)
+                    Text(usdPoint)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(10)
+                .background(Color.green.opacity(0.06))
+                .clipShape(.rect(cornerRadius: 10))
+            }
+        }
+        .padding(14)
+        .background(Color.white.opacity(0.04))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18)
+                .strokeBorder(Color.white.opacity(0.06), lineWidth: 1)
+        )
+        .clipShape(.rect(cornerRadius: 18))
+    }
+
     // MARK: - Disclaimer
 
     private var disclaimer: some View {
@@ -716,6 +914,8 @@ struct LearnTab: View {
 
 enum LearnCategory: CaseIterable {
     case bitcoin
+    case misconceptions
+    case btcVsDollars
     case powerLaw
     case cycles
     case indicators
@@ -723,6 +923,8 @@ enum LearnCategory: CaseIterable {
     var label: String {
         switch self {
         case .bitcoin: return "Bitcoin"
+        case .misconceptions: return "Myths"
+        case .btcVsDollars: return "BTC vs $"
         case .powerLaw: return "Power Law"
         case .cycles: return "Cycles"
         case .indicators: return "Indicators"
@@ -732,6 +934,8 @@ enum LearnCategory: CaseIterable {
     var icon: String {
         switch self {
         case .bitcoin: return "bitcoinsign.circle"
+        case .misconceptions: return "questionmark.bubble"
+        case .btcVsDollars: return "arrow.left.arrow.right.circle"
         case .powerLaw: return "chart.line.uptrend.xyaxis"
         case .cycles: return "arrow.triangle.2.circlepath"
         case .indicators: return "gauge.with.dots.needle.bottom.50percent"
