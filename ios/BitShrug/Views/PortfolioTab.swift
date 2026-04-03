@@ -125,6 +125,12 @@ struct PortfolioTab: View {
                 metricPill(label: "24h", value: viewModel.formattedChange)
                 Spacer()
             }
+
+            if let updated = viewModel.lastUpdated {
+                Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.quaternary)
+            }
         }
         .premiumCard(.accent)
     }

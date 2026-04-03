@@ -173,7 +173,7 @@ struct PriceChartView: View {
                         .padding(.vertical, 7)
                         .background(
                             selectedRange == range
-                                ? Color.white.opacity(0.12)
+                                ? Color.primary.opacity(0.12)
                                 : Color.clear
                         )
                         .clipShape(.rect(cornerRadius: 8))
@@ -182,7 +182,7 @@ struct PriceChartView: View {
             }
         }
         .padding(3)
-        .background(Color.white.opacity(0.05))
+        .background(Color.primary.opacity(0.05))
         .clipShape(.rect(cornerRadius: 10))
         .sensoryFeedback(.selection, trigger: selectedRange)
     }

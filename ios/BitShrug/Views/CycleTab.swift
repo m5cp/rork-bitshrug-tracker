@@ -332,7 +332,7 @@ struct CycleTab: View {
 
             if !isLast {
                 Divider()
-                    .overlay(Color.white.opacity(0.04))
+                    .overlay(Color.primary.opacity(0.04))
             }
         }
     }
@@ -385,7 +385,7 @@ struct CycleTab: View {
 
             if !isLast {
                 Divider()
-                    .overlay(Color.white.opacity(0.04))
+                    .overlay(Color.primary.opacity(0.04))
             }
         }
     }
@@ -394,6 +394,11 @@ struct CycleTab: View {
 
     private var disclaimer: some View {
         VStack(spacing: 4) {
+            if let updated = viewModel.lastUpdated {
+                Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.quaternary)
+            }
             Text("Numbers are not live. For educational purposes only.")
                 .font(.caption2)
                 .fontWeight(.semibold)

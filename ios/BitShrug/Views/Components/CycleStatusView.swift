@@ -60,7 +60,7 @@ struct CycleStatusView: View {
                     RoundedRectangle(cornerRadius: 3)
                         .fill(i < score.matching
                             ? Color(red: 0.2, green: 0.85, blue: 0.5)
-                            : Color.white.opacity(0.1)
+                            : Color.primary.opacity(0.1)
                         )
                         .frame(height: 6)
                 }
@@ -158,7 +158,7 @@ struct CycleStatusView: View {
         .background(
             check.matches
                 ? Color(red: 0.2, green: 0.85, blue: 0.5).opacity(0.04)
-                : Color.white.opacity(0.02)
+                : Color.primary.opacity(0.02)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)

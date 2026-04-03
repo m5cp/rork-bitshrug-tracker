@@ -39,7 +39,7 @@ struct HistoricalCycleComparisonView: View {
             headerCell("DRAWDOWN", width: 72)
         }
         .padding(.vertical, 10)
-        .background(Color.white.opacity(0.04))
+        .background(Color.primary.opacity(0.04))
         .clipShape(.rect(cornerRadius: 8))
     }
 
@@ -147,7 +147,7 @@ struct HistoricalCycleComparisonView: View {
         .background(epoch.isCurrent ? Color.orange.opacity(0.04) : .clear)
         .overlay(alignment: .bottom) {
             if epoch.id < 4 {
-                Divider().overlay(Color.white.opacity(0.04))
+                Divider().overlay(Color.primary.opacity(0.04))
             }
         }
     }

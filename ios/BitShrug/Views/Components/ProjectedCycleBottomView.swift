@@ -140,7 +140,7 @@ struct ProjectedCycleBottomView: View {
 
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.white.opacity(0.06))
+                        .fill(Color.primary.opacity(0.06))
 
                     RoundedRectangle(cornerRadius: 4)
                         .fill(
@@ -179,7 +179,7 @@ struct ProjectedCycleBottomView: View {
 
     private func drawdownMarker(at fraction: Double, totalWidth: CGFloat, label: String) -> some View {
         Rectangle()
-            .fill(Color.white.opacity(0.6))
+            .fill(Color.primary.opacity(0.6))
             .frame(width: 2, height: 12)
             .offset(x: totalWidth * min(fraction, 1.0))
     }
@@ -201,10 +201,10 @@ struct ProjectedCycleBottomView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 10)
-        .background(Color.white.opacity(0.03))
+        .background(Color(.tertiarySystemGroupedBackground))
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(Color.white.opacity(0.05), lineWidth: 1)
+                .strokeBorder(Color.primary.opacity(0.05), lineWidth: 1)
         )
         .clipShape(.rect(cornerRadius: 10))
     }

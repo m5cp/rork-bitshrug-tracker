@@ -68,7 +68,7 @@ struct ReversalTrackerView: View {
             tabButton(.bull)
             tabButton(.bear)
         }
-        .background(Color.white.opacity(0.06))
+        .background(Color.primary.opacity(0.06))
         .clipShape(.rect(cornerRadius: 12))
     }
 
@@ -192,7 +192,7 @@ struct ReversalTrackerView: View {
     private func signalCard(_ signal: ReversalSignal) -> some View {
         let borderColor: Color = signal.isActive
             ? (selectedTab == .bull ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
-            : Color.white.opacity(0.06)
+            : Color.primary.opacity(0.06)
 
         return VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top, spacing: 10) {
@@ -200,7 +200,7 @@ struct ReversalTrackerView: View {
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(signal.isActive
                         ? (selectedTab == .bull ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
-                        : Color.white.opacity(0.3)
+                        : Color.primary.opacity(0.3)
                     )
                     .frame(width: 20)
 
@@ -256,7 +256,7 @@ struct ReversalTrackerView: View {
         .background(
             signal.isActive
                 ? (selectedTab == .bull ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3)).opacity(0.04)
-                : Color.white.opacity(0.03)
+                : Color(.tertiarySystemGroupedBackground)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14)
@@ -270,7 +270,7 @@ struct ReversalTrackerView: View {
     private func sequenceSection(title: String, subtitle: String, steps: [SequenceStep]) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             Divider()
-                .overlay(Color.white.opacity(0.06))
+                .overlay(Color.primary.opacity(0.06))
 
             Text(title)
                 .font(.system(size: 10, weight: .heavy))

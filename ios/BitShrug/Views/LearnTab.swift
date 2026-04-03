@@ -3,9 +3,10 @@ import SwiftUI
 struct LearnTab: View {
     let viewModel: BitcoinViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @Environment(\.colorScheme) private var colorScheme
 
     @State private var showScrollToTop: Bool = false
-    @State private var selectedCategory: LearnCategory = .bitcoin
+    @State private var selectedTopic: LearnTopic?
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -18,21 +19,11 @@ struct LearnTab: View {
                     VStack(spacing: 20) {
                         Color.clear.frame(height: 0).id("top")
 
-                        categoryPicker
-
-                        switch selectedCategory {
-                        case .bitcoin:
-                            bitcoinEducation
-                        case .powerLaw:
-                            powerLawEducation
-                        case .cycles:
-                            cycleEducation
-                        case .indicators:
-                            indicatorEducation
-                        case .misconceptions:
-                            misconceptionsEducation
-                        case .btcVsDollars:
-                            btcVsDollarsEducation
+                        if let topic = selectedTopic {
+                            backButton
+                            topicDetail(topic)
+                        } else {
+                            topicGrid
                         }
 
                         disclaimer
@@ -61,189 +52,390 @@ struct LearnTab: View {
         }
     }
 
-    private var categoryPicker: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-          HStack(spacing: 8) {
-            ForEach(LearnCategory.allCases, id: \.self) { category in
-                let isSelected = selectedCategory == category
-                Button {
-                    withAnimation(.spring(duration: 0.3)) {
-                        selectedCategory = category
-                    }
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: category.icon)
-                            .font(.system(size: 11, weight: .bold))
-                        Text(category.label)
-                            .font(.system(size: 12, weight: .heavy))
-                    }
-                    .foregroundStyle(isSelected ? .white : .secondary)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .background(isSelected ? Color.orange : Color.white.opacity(0.06))
-                    .clipShape(Capsule())
+    private var backButton: some View {
+        HStack {
+            Button {
+                withAnimation(.spring(duration: 0.35)) {
+                    selectedTopic = nil
                 }
-                .sensoryFeedback(.selection, trigger: selectedCategory)
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("All Topics")
+                        .font(.system(size: 13, weight: .semibold))
+                }
+                .foregroundStyle(.orange)
             }
-          }
+            Spacer()
         }
-        .contentMargins(.horizontal, 0)
+    }
+
+    // MARK: - Topic Grid
+
+    private var topicGrid: some View {
+        VStack(spacing: 16) {
+            heroTopicCard(
+                topic: .bitcoin,
+                icon: "bitcoinsign.circle.fill",
+                color: .orange,
+                title: "What is Bitcoin?",
+                subtitle: "Start here — understand the fundamentals in under 2 minutes",
+                lessonCount: 12
+            )
+
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                topicCard(
+                    topic: .powerLaw,
+                    icon: "chart.line.uptrend.xyaxis",
+                    color: .blue,
+                    title: "Power Law",
+                    subtitle: "The mathematical model",
+                    lessonCount: 5
+                )
+
+                topicCard(
+                    topic: .cycles,
+                    icon: "arrow.triangle.2.circlepath",
+                    color: .purple,
+                    title: "4-Year Cycles",
+                    subtitle: "Halvings & market patterns",
+                    lessonCount: 7
+                )
+
+                topicCard(
+                    topic: .indicators,
+                    icon: "gauge.with.dots.needle.bottom.50percent",
+                    color: .cyan,
+                    title: "Indicators",
+                    subtitle: "On-chain & market signals",
+                    lessonCount: 7
+                )
+
+                topicCard(
+                    topic: .misconceptions,
+                    icon: "questionmark.bubble.fill",
+                    color: .red,
+                    title: "Myth Busters",
+                    subtitle: "Common myths debunked",
+                    lessonCount: 7
+                )
+            }
+
+            heroTopicCard(
+                topic: .btcVsDollars,
+                icon: "arrow.left.arrow.right.circle.fill",
+                color: Color(red: 0.2, green: 0.85, blue: 0.5),
+                title: "Bitcoin vs Dollars",
+                subtitle: "A side-by-side comparison of two monetary systems",
+                lessonCount: 7
+            )
+        }
+        .transition(.opacity)
+    }
+
+    private func heroTopicCard(topic: LearnTopic, icon: String, color: Color, title: String, subtitle: String, lessonCount: Int) -> some View {
+        Button {
+            withAnimation(.spring(duration: 0.35)) {
+                selectedTopic = topic
+            }
+        } label: {
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 6) {
+                        Text("\(lessonCount) lessons")
+                            .font(.system(size: 10, weight: .heavy))
+                            .foregroundStyle(color)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(color.opacity(0.12))
+                            .clipShape(Capsule())
+                    }
+
+                    Text(title)
+                        .font(.title3)
+                        .fontWeight(.heavy)
+                        .foregroundStyle(.primary)
+
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer(minLength: 0)
+
+                Image(systemName: icon)
+                    .font(.system(size: 38, weight: .semibold))
+                    .foregroundStyle(color.opacity(0.8))
+                    .frame(width: 60, height: 60)
+                    .background(color.opacity(0.1))
+                    .clipShape(.rect(cornerRadius: 16))
+            }
+            .padding(18)
+            .background(
+                LinearGradient(
+                    colors: [color.opacity(0.08), color.opacity(0.02)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(.rect(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(color.opacity(0.15), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.impact(flexibility: .soft), trigger: selectedTopic)
+    }
+
+    private func topicCard(topic: LearnTopic, icon: String, color: Color, title: String, subtitle: String, lessonCount: Int) -> some View {
+        Button {
+            withAnimation(.spring(duration: 0.35)) {
+                selectedTopic = topic
+            }
+        } label: {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Image(systemName: icon)
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(color)
+                        .frame(width: 40, height: 40)
+                        .background(color.opacity(0.1))
+                        .clipShape(.rect(cornerRadius: 12))
+
+                    Spacer()
+
+                    Text("\(lessonCount)")
+                        .font(.system(size: 10, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(.tertiary)
+                }
+
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.heavy)
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                Text(subtitle)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(.rect(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Topic Detail
+
+    @ViewBuilder
+    private func topicDetail(_ topic: LearnTopic) -> some View {
+        switch topic {
+        case .bitcoin:
+            bitcoinEducation
+        case .powerLaw:
+            powerLawEducation
+        case .cycles:
+            cycleEducation
+        case .indicators:
+            indicatorEducation
+        case .misconceptions:
+            misconceptionsEducation
+        case .btcVsDollars:
+            btcVsDollarsEducation
+        }
     }
 
     // MARK: - What is Bitcoin
 
     private var bitcoinEducation: some View {
-        VStack(spacing: 12) {
-            ExpandableInfoCard(
+        VStack(spacing: 0) {
+            topicHeader(
                 icon: "bitcoinsign.circle.fill",
-                iconColor: .orange,
+                color: .orange,
                 title: "What is Bitcoin?",
-                summary: "Decentralized digital money without banks or intermediaries",
-                detail: "Bitcoin is a decentralized digital money system that allows people to send value directly to one another without a bank or intermediary. It operates on a global network with a fixed set of rules that anyone can verify."
+                subtitle: "No hype, just fundamentals."
             )
 
-            ExpandableInfoCard(
-                icon: "person.fill.questionmark",
-                iconColor: .purple,
-                title: "Who Created Bitcoin?",
-                summary: "Satoshi Nakamoto — identity still unknown",
-                detail: "Bitcoin was created in 2008 by an individual or group using the name Satoshi Nakamoto. The identity of Satoshi remains unknown, and no central authority controls Bitcoin today."
-            )
+            VStack(spacing: 12) {
+                numberedLesson(
+                    number: 1,
+                    color: .orange,
+                    icon: "bitcoinsign.circle.fill",
+                    title: "What is Bitcoin?",
+                    summary: "Decentralized digital money without banks or intermediaries",
+                    detail: "Bitcoin is a decentralized digital money system that allows people to send value directly to one another without a bank or intermediary. It operates on a global network with a fixed set of rules that anyone can verify."
+                )
 
-            ExpandableInfoCard(
-                icon: "lightbulb.fill",
-                iconColor: .yellow,
-                title: "Why Was Bitcoin Created?",
-                summary: "Peer-to-peer money without trusted intermediaries",
-                detail: "Bitcoin was created to enable peer-to-peer money that does not rely on trusted intermediaries. It allows transactions to be verified by a distributed network rather than a central institution."
-            )
+                numberedLesson(
+                    number: 2,
+                    color: .purple,
+                    icon: "person.fill.questionmark",
+                    title: "Who Created Bitcoin?",
+                    summary: "Satoshi Nakamoto — identity still unknown",
+                    detail: "Bitcoin was created in 2008 by an individual or group using the name Satoshi Nakamoto. The identity of Satoshi remains unknown, and no central authority controls Bitcoin today."
+                )
 
-            ExpandableInfoCard(
-                icon: "building.columns",
-                iconColor: .blue,
-                title: "What Makes Bitcoin Different from Traditional Money?",
-                summary: "No central authority, fixed supply of 21 million",
-                detail: "Bitcoin operates without a central authority, meaning no government or company controls it. Its monetary policy is fixed, with a maximum supply of 21 million coins."
-            )
+                numberedLesson(
+                    number: 3,
+                    color: .yellow,
+                    icon: "lightbulb.fill",
+                    title: "Why Was Bitcoin Created?",
+                    summary: "Peer-to-peer money without trusted intermediaries",
+                    detail: "Bitcoin was created to enable peer-to-peer money that does not rely on trusted intermediaries. It allows transactions to be verified by a distributed network rather than a central institution."
+                )
 
-            ExpandableInfoCard(
-                icon: "arrow.left.arrow.right",
-                iconColor: .cyan,
-                title: "How Is Bitcoin Different from Other Digital Payments?",
-                summary: "No banks or payment processors required",
-                detail: "Most digital payments rely on banks or payment processors. Bitcoin allows value to be transferred directly between users without requiring permission."
-            )
+                numberedLesson(
+                    number: 4,
+                    color: .blue,
+                    icon: "building.columns",
+                    title: "Different from Traditional Money?",
+                    summary: "No central authority, fixed supply of 21 million",
+                    detail: "Bitcoin operates without a central authority, meaning no government or company controls it. Its monetary policy is fixed, with a maximum supply of 21 million coins."
+                )
 
-            ExpandableInfoCard(
-                icon: "lock.shield.fill",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "How Does Bitcoin Stay Secure?",
-                summary: "Global network with strong cryptographic rules",
-                detail: "Bitcoin is secured by a global network of independent participants and strong cryptographic rules. Altering transaction history would require overwhelming network consensus."
-            )
+                numberedLesson(
+                    number: 5,
+                    color: .cyan,
+                    icon: "arrow.left.arrow.right",
+                    title: "Different from Digital Payments?",
+                    summary: "No banks or payment processors required",
+                    detail: "Most digital payments rely on banks or payment processors. Bitcoin allows value to be transferred directly between users without requiring permission."
+                )
 
-            ExpandableInfoCard(
-                icon: "hammer.fill",
-                iconColor: .orange,
-                title: "What Is Mining?",
-                summary: "Validates transactions and secures the network",
-                detail: "Mining is the process that validates transactions and secures the network. Participants contribute computing power and are rewarded with newly issued bitcoin."
-            )
+                numberedLesson(
+                    number: 6,
+                    color: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    icon: "lock.shield.fill",
+                    title: "How Does Bitcoin Stay Secure?",
+                    summary: "Global network with strong cryptographic rules",
+                    detail: "Bitcoin is secured by a global network of independent participants and strong cryptographic rules. Altering transaction history would require overwhelming network consensus."
+                )
 
-            ExpandableInfoCard(
-                icon: "diamond.fill",
-                iconColor: .mint,
-                title: "Why Is Bitcoin Scarce?",
-                summary: "Fixed supply of 21 million coins",
-                detail: "Bitcoin has a fixed supply of 21 million coins. New bitcoin is released on a predictable schedule that decreases over time."
-            )
+                numberedLesson(
+                    number: 7,
+                    color: .orange,
+                    icon: "hammer.fill",
+                    title: "What Is Mining?",
+                    summary: "Validates transactions and secures the network",
+                    detail: "Mining is the process that validates transactions and secures the network. Participants contribute computing power and are rewarded with newly issued bitcoin."
+                )
 
-            ExpandableInfoCard(
-                icon: "chart.line.uptrend.xyaxis",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "What Gives Bitcoin Value?",
-                summary: "Scarcity, security, and global transferability",
-                detail: "Bitcoin's value comes from its scarcity, security, and ability to transfer value globally without intermediaries."
-            )
+                numberedLesson(
+                    number: 8,
+                    color: .mint,
+                    icon: "diamond.fill",
+                    title: "Why Is Bitcoin Scarce?",
+                    summary: "Fixed supply of 21 million coins",
+                    detail: "Bitcoin has a fixed supply of 21 million coins. New bitcoin is released on a predictable schedule that decreases over time."
+                )
 
-            ExpandableInfoCard(
-                icon: "globe",
-                iconColor: .blue,
-                title: "Can Bitcoin Be Controlled?",
-                summary: "No single entity controls it",
-                detail: "No single entity controls Bitcoin. Changes require broad agreement across the network."
-            )
+                numberedLesson(
+                    number: 9,
+                    color: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    icon: "chart.line.uptrend.xyaxis",
+                    title: "What Gives Bitcoin Value?",
+                    summary: "Scarcity, security, and global transferability",
+                    detail: "Bitcoin's value comes from its scarcity, security, and ability to transfer value globally without intermediaries."
+                )
 
-            ExpandableInfoCard(
-                icon: "banknote.fill",
-                iconColor: .purple,
-                title: "Is Bitcoin Mainly for Trading?",
-                summary: "Payments, holding, or long-term monetary asset",
-                detail: "Bitcoin can be used for payments or long-term holding. Many focus on its role as a long-term monetary asset."
-            )
+                numberedLesson(
+                    number: 10,
+                    color: .blue,
+                    icon: "globe",
+                    title: "Can Bitcoin Be Controlled?",
+                    summary: "No single entity controls it",
+                    detail: "No single entity controls Bitcoin. Changes require broad agreement across the network."
+                )
 
-            ExpandableInfoCard(
-                icon: "trophy.fill",
-                iconColor: .yellow,
-                title: "Why Do People Compare Bitcoin to Gold?",
-                summary: "Both are scarce and independent of central control",
-                detail: "Bitcoin is often compared to gold because both are scarce and independent of central control. Bitcoin can be transferred instantly worldwide."
-            )
+                numberedLesson(
+                    number: 11,
+                    color: .purple,
+                    icon: "banknote.fill",
+                    title: "Is Bitcoin Mainly for Trading?",
+                    summary: "Payments, holding, or long-term monetary asset",
+                    detail: "Bitcoin can be used for payments or long-term holding. Many focus on its role as a long-term monetary asset."
+                )
 
-            Text("Understand Bitcoin clearly in under 2 minutes. No hype, just fundamentals.")
-                .font(.caption2)
-                .foregroundStyle(.quaternary)
-                .italic()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 4)
+                numberedLesson(
+                    number: 12,
+                    color: .yellow,
+                    icon: "trophy.fill",
+                    title: "Bitcoin vs Gold",
+                    summary: "Both are scarce and independent of central control",
+                    detail: "Bitcoin is often compared to gold because both are scarce and independent of central control. Bitcoin can be transferred instantly worldwide."
+                )
+            }
         }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
     // MARK: - Power Law Education
 
     private var powerLawEducation: some View {
-        VStack(spacing: 12) {
-            ExpandableInfoCard(
-                icon: "person.fill",
-                iconColor: .orange,
-                title: "Who Created It?",
-                summary: "Harold Christopher Burger (2019) and Giovanni Santostasi",
-                detail: "Burger observed Bitcoin's price follows a linear relationship on a log-log chart. Santostasi extended this to hash rate and addresses, showing the power law holds across multiple network metrics."
+        VStack(spacing: 0) {
+            topicHeader(
+                icon: "chart.line.uptrend.xyaxis",
+                color: .blue,
+                title: "The Power Law",
+                subtitle: "A mathematical model for Bitcoin's growth."
             )
 
-            ExpandableInfoCard(
-                icon: "function",
-                iconColor: .blue,
-                title: "What is a Power Law?",
-                summary: "A relationship where one quantity scales as a power of another",
-                detail: "Price ∝ Time⁵·⁸² — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
-            )
+            VStack(spacing: 12) {
+                ExpandableInfoCard(
+                    icon: "person.fill",
+                    iconColor: .orange,
+                    title: "Who Created It?",
+                    summary: "Harold Christopher Burger (2019) and Giovanni Santostasi",
+                    detail: "Burger observed Bitcoin's price follows a linear relationship on a log-log chart. Santostasi extended this to hash rate and addresses, showing the power law holds across multiple network metrics."
+                )
 
-            ExpandableInfoCard(
-                icon: "chart.bar.fill",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "Reading the Corridor",
-                summary: "Below support, within corridor, or above resistance",
-                detail: "Below Support — historically the best long-term accumulation zone. Within Corridor — tracking the expected growth path. Above Resistance — historically coincides with cycle tops and euphoria."
-            )
+                ExpandableInfoCard(
+                    icon: "function",
+                    iconColor: .blue,
+                    title: "What is a Power Law?",
+                    summary: "A relationship where one quantity scales as a power of another",
+                    detail: "Price ∝ Time⁵·⁸² — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
+                )
 
-            ExpandableInfoCard(
-                icon: "rainbow",
-                iconColor: .purple,
-                title: "Rainbow Chart",
-                summary: "Colored bands from 'Fire Sale' to 'Maximum Bubble'",
-                detail: "Each band represents a standard deviation from the fair value regression line. It's a visual heuristic showing where price sits relative to its long-term trend — not a prediction."
-            )
+                ExpandableInfoCard(
+                    icon: "chart.bar.fill",
+                    iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    title: "Reading the Corridor",
+                    summary: "Below support, within corridor, or above resistance",
+                    detail: "Below Support — historically the best long-term accumulation zone. Within Corridor — tracking the expected growth path. Above Resistance — historically coincides with cycle tops and euphoria."
+                )
 
-            formulaCard
+                ExpandableInfoCard(
+                    icon: "rainbow",
+                    iconColor: .purple,
+                    title: "Rainbow Chart",
+                    summary: "Colored bands from 'Fire Sale' to 'Maximum Bubble'",
+                    detail: "Each band represents a standard deviation from the fair value regression line. It's a visual heuristic showing where price sits relative to its long-term trend — not a prediction."
+                )
 
-            Text("Based on historical patterns. Past behavior does not guarantee future results. Rise or Fall, we hold.")
-                .font(.caption2)
-                .foregroundStyle(.quaternary)
-                .italic()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 4)
+                formulaCard
+
+                Text("Based on historical patterns. Past behavior does not guarantee future results. Rise or Fall, we hold.")
+                    .font(.caption2)
+                    .foregroundStyle(.quaternary)
+                    .italic()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 4)
+            }
         }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
     private var formulaCard: some View {
@@ -297,54 +489,64 @@ struct LearnTab: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .background(Color.white.opacity(0.03))
+        .background(Color(.tertiarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 10))
     }
 
     // MARK: - Cycle Education
 
     private var cycleEducation: some View {
-        VStack(spacing: 12) {
-            conceptsExplainer
-
-            whyCyclesSection
-
-            couldCyclesEndSection
-
-            strategySection
-
-            ExpandableInfoCard(
+        VStack(spacing: 0) {
+            topicHeader(
                 icon: "arrow.triangle.2.circlepath",
-                iconColor: .orange,
-                title: "What is the Halving?",
-                summary: "Block reward cut in half every 210,000 blocks (~4 years)",
-                detail: "Started at 50 BTC per block in 2009. Now 3.125 BTC. Halvings reduce new supply entering circulation — a programmatic scarcity mechanism that continues until all 21M BTC are mined (~2140)."
+                color: .purple,
+                title: "4-Year Cycles",
+                subtitle: "Halvings, epochs, and the market pattern theory."
             )
 
-            ExpandableInfoCard(
-                icon: "chart.line.uptrend.xyaxis",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "The Cycle Pattern",
-                summary: "Tops and bottoms ~4 years apart since 2011",
-                detail: "Bull tops: Nov 2013, Dec 2017, Nov 2021. Bear lows: Jan 2015, Dec 2018, Nov 2022. A repeating cycle of accumulation, expansion, euphoria, and correction — driven by supply shocks and human psychology."
-            )
+            VStack(spacing: 12) {
+                conceptsExplainer
 
-            ExpandableInfoCard(
-                icon: "questionmark.diamond",
-                iconColor: .purple,
-                title: "Is It Guaranteed?",
-                summary: "No — only 4 halving events observed so far",
-                detail: "As Bitcoin matures, institutional adoption, regulation, macro conditions, and diminishing supply shocks may alter or dampen the cycle. Useful framework, but past patterns don't guarantee future behavior."
-            )
+                whyCyclesSection
 
-            ExpandableInfoCard(
-                icon: "app.badge",
-                iconColor: .blue,
-                title: "How BitShrug Uses It",
-                summary: "One lens among many for understanding conditions",
-                detail: "The cycle phase is combined with momentum, trend, positioning, and volatility to create a composite picture. It's a context tool — not a timing tool."
-            )
+                couldCyclesEndSection
+
+                strategySection
+
+                ExpandableInfoCard(
+                    icon: "arrow.triangle.2.circlepath",
+                    iconColor: .orange,
+                    title: "What is the Halving?",
+                    summary: "Block reward cut in half every 210,000 blocks (~4 years)",
+                    detail: "Started at 50 BTC per block in 2009. Now 3.125 BTC. Halvings reduce new supply entering circulation — a programmatic scarcity mechanism that continues until all 21M BTC are mined (~2140)."
+                )
+
+                ExpandableInfoCard(
+                    icon: "chart.line.uptrend.xyaxis",
+                    iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    title: "The Cycle Pattern",
+                    summary: "Tops and bottoms ~4 years apart since 2011",
+                    detail: "Bull tops: Nov 2013, Dec 2017, Nov 2021. Bear lows: Jan 2015, Dec 2018, Nov 2022. A repeating cycle of accumulation, expansion, euphoria, and correction — driven by supply shocks and human psychology."
+                )
+
+                ExpandableInfoCard(
+                    icon: "questionmark.diamond",
+                    iconColor: .purple,
+                    title: "Is It Guaranteed?",
+                    summary: "No — only 4 halving events observed so far",
+                    detail: "As Bitcoin matures, institutional adoption, regulation, macro conditions, and diminishing supply shocks may alter or dampen the cycle. Useful framework, but past patterns don't guarantee future behavior."
+                )
+
+                ExpandableInfoCard(
+                    icon: "app.badge",
+                    iconColor: .blue,
+                    title: "How BitShrug Uses It",
+                    summary: "One lens among many for understanding conditions",
+                    detail: "The cycle phase is combined with momentum, trend, positioning, and volatility to create a composite picture. It's a context tool — not a timing tool."
+                )
+            }
         }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
     private var conceptsExplainer: some View {
@@ -643,201 +845,169 @@ struct LearnTab: View {
     // MARK: - Indicator Education
 
     private var indicatorEducation: some View {
-        VStack(spacing: 12) {
-            ExpandableInfoCard(
-                icon: "heart.text.square",
-                iconColor: .orange,
-                title: "Fear & Greed Index",
-                summary: "Measures market sentiment from 0 (Extreme Fear) to 100 (Extreme Greed)",
-                detail: "Aggregates volatility, market volume, social media, dominance, and trends. Extreme fear can signal buying opportunities; extreme greed can signal overextension. It's a contrarian indicator — be fearful when others are greedy."
+        VStack(spacing: 0) {
+            topicHeader(
+                icon: "gauge.with.dots.needle.bottom.50percent",
+                color: .cyan,
+                title: "Indicators",
+                subtitle: "On-chain and market signals explained."
             )
 
-            ExpandableInfoCard(
-                icon: "chart.xyaxis.line",
-                iconColor: .blue,
-                title: "200-Day EMA",
-                summary: "Exponential moving average of the last 200 days",
-                detail: "Gives more weight to recent prices than a simple moving average. When price is above the 200-Day EMA, the trend is considered bullish. Below it, bearish. It's the most widely watched long-term trend indicator."
-            )
+            VStack(spacing: 12) {
+                ExpandableInfoCard(
+                    icon: "heart.text.square",
+                    iconColor: .orange,
+                    title: "Fear & Greed Index",
+                    summary: "Measures market sentiment from 0 (Extreme Fear) to 100 (Extreme Greed)",
+                    detail: "Aggregates volatility, market volume, social media, dominance, and trends. Extreme fear can signal buying opportunities; extreme greed can signal overextension. It's a contrarian indicator — be fearful when others are greedy."
+                )
 
-            ExpandableInfoCard(
-                icon: "chart.line.flattrend.xyaxis",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "200-Week MA",
-                summary: "The long-term price floor Bitcoin has never closed below",
-                detail: "Calculated from ~1,400 days of price history. Historically, Bitcoin has bounced off this level during every bear market. It represents the deepest value zone for long-term holders."
-            )
+                ExpandableInfoCard(
+                    icon: "chart.xyaxis.line",
+                    iconColor: .blue,
+                    title: "200-Day EMA",
+                    summary: "Exponential moving average of the last 200 days",
+                    detail: "Gives more weight to recent prices than a simple moving average. When price is above the 200-Day EMA, the trend is considered bullish. Below it, bearish. It's the most widely watched long-term trend indicator."
+                )
 
-            ExpandableInfoCard(
-                icon: "waveform.path.ecg",
-                iconColor: .purple,
-                title: "MVRV Z-Score",
-                summary: "Market Value to Realized Value ratio",
-                detail: "Compares Bitcoin's market cap to its 'realized cap' (average cost basis of all coins). Z-Score above 7 has historically marked cycle tops. Below 0.1 has marked generational bottoms. Currently used to gauge overvaluation or undervaluation."
-            )
+                ExpandableInfoCard(
+                    icon: "chart.line.flattrend.xyaxis",
+                    iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    title: "200-Week MA",
+                    summary: "The long-term price floor Bitcoin has never closed below",
+                    detail: "Calculated from ~1,400 days of price history. Historically, Bitcoin has bounced off this level during every bear market. It represents the deepest value zone for long-term holders."
+                )
 
-            ExpandableInfoCard(
-                icon: "pickaxe",
-                iconColor: .cyan,
-                title: "Puell Multiple",
-                summary: "Daily miner revenue vs 365-day average",
-                detail: "When miners earn much more than usual (Puell > 4), it often signals a top — miners sell to lock in profits. When miners earn much less (Puell < 0.5), it signals capitulation and potential bottoms."
-            )
+                ExpandableInfoCard(
+                    icon: "waveform.path.ecg",
+                    iconColor: .purple,
+                    title: "MVRV Z-Score",
+                    summary: "Market Value to Realized Value ratio",
+                    detail: "Compares Bitcoin's market cap to its 'realized cap' (average cost basis of all coins). Z-Score above 7 has historically marked cycle tops. Below 0.1 has marked generational bottoms. Currently used to gauge overvaluation or undervaluation."
+                )
 
-            ExpandableInfoCard(
-                icon: "cube.box",
-                iconColor: .yellow,
-                title: "Stock-to-Flow",
-                summary: "Scarcity model comparing existing supply to new production",
-                detail: "S2F = Existing Supply / Annual Production. Higher ratio = more scarce. After each halving, S2F doubles as production is cut in half. The model predicts higher prices with increasing scarcity, though it has faced criticism for oversimplification."
-            )
+                ExpandableInfoCard(
+                    icon: "pickaxe",
+                    iconColor: .cyan,
+                    title: "Puell Multiple",
+                    summary: "Daily miner revenue vs 365-day average",
+                    detail: "When miners earn much more than usual (Puell > 4), it often signals a top — miners sell to lock in profits. When miners earn much less (Puell < 0.5), it signals capitulation and potential bottoms."
+                )
 
-            ExpandableInfoCard(
-                icon: "chart.pie",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "Supply in Profit",
-                summary: "Percentage of Bitcoin supply currently worth more than when last moved",
-                detail: "When >95% of supply is in profit, it historically signals overheated conditions. When <50% is in profit, it signals deep bear territory and potential accumulation zones. Estimated from MVRV ratio."
-            )
+                ExpandableInfoCard(
+                    icon: "cube.box",
+                    iconColor: .yellow,
+                    title: "Stock-to-Flow",
+                    summary: "Scarcity model comparing existing supply to new production",
+                    detail: "S2F = Existing Supply / Annual Production. Higher ratio = more scarce. After each halving, S2F doubles as production is cut in half. The model predicts higher prices with increasing scarcity, though it has faced criticism for oversimplification."
+                )
+
+                ExpandableInfoCard(
+                    icon: "chart.pie",
+                    iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    title: "Supply in Profit",
+                    summary: "Percentage of Bitcoin supply currently worth more than when last moved",
+                    detail: "When >95% of supply is in profit, it historically signals overheated conditions. When <50% is in profit, it signals deep bear territory and potential accumulation zones. Estimated from MVRV ratio."
+                )
+            }
         }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
     // MARK: - Common Misconceptions
 
     private var misconceptionsEducation: some View {
-        VStack(spacing: 12) {
-            ExpandableInfoCard(
-                icon: "eye.slash.fill",
-                iconColor: .purple,
-                title: "Is Bitcoin Anonymous?",
-                summary: "Pseudonymous, not anonymous",
-                detail: "Bitcoin is not fully anonymous. Transactions are publicly visible, but identities are not directly attached. This makes Bitcoin pseudonymous."
+        VStack(spacing: 0) {
+            topicHeader(
+                icon: "questionmark.bubble.fill",
+                color: .red,
+                title: "Myth Busters",
+                subtitle: "Clearing up common myths with facts, not hype."
             )
 
-            ExpandableInfoCard(
-                icon: "exclamationmark.shield.fill",
-                iconColor: .red,
-                title: "Is Bitcoin Mainly Used for Illegal Activity?",
-                summary: "Most activity today is legitimate",
-                detail: "Most Bitcoin activity today is legitimate. It is widely used for trading, payments, and long-term holding."
-            )
+            VStack(spacing: 12) {
+                mythCard(
+                    icon: "eye.slash.fill",
+                    iconColor: .purple,
+                    myth: "Bitcoin is anonymous",
+                    reality: "Pseudonymous, not anonymous",
+                    detail: "Transactions are publicly visible, but identities are not directly attached. This makes Bitcoin pseudonymous."
+                )
 
-            ExpandableInfoCard(
-                icon: "lock.trianglebadge.exclamationmark.fill",
-                iconColor: .orange,
-                title: "Can Bitcoin Be Hacked?",
-                summary: "The network itself has never been hacked",
-                detail: "The Bitcoin network itself has never been hacked. However, individual accounts or platforms can be compromised if not secured properly."
-            )
+                mythCard(
+                    icon: "exclamationmark.shield.fill",
+                    iconColor: .red,
+                    myth: "Bitcoin is mainly for illegal activity",
+                    reality: "Most activity today is legitimate",
+                    detail: "Most Bitcoin activity today is legitimate. It is widely used for trading, payments, and long-term holding."
+                )
 
-            ExpandableInfoCard(
-                icon: "chart.line.downtrend.xyaxis",
-                iconColor: .cyan,
-                title: "Is Bitcoin Just a Bubble?",
-                summary: "Multiple cycles of growth and decline",
-                detail: "Bitcoin has gone through multiple cycles of growth and decline. It has continued operating and gaining adoption over time."
-            )
+                mythCard(
+                    icon: "lock.trianglebadge.exclamationmark.fill",
+                    iconColor: .orange,
+                    myth: "Bitcoin can be hacked",
+                    reality: "The network itself has never been hacked",
+                    detail: "The Bitcoin network itself has never been hacked. However, individual accounts or platforms can be compromised if not secured properly."
+                )
 
-            ExpandableInfoCard(
-                icon: "questionmark.diamond.fill",
-                iconColor: .yellow,
-                title: "Is Bitcoin Backed by Anything?",
-                summary: "Value from scarcity, security, and adoption",
-                detail: "Bitcoin is not backed by a physical asset or government. Its value comes from scarcity, security, and user adoption."
-            )
+                mythCard(
+                    icon: "chart.line.downtrend.xyaxis",
+                    iconColor: .cyan,
+                    myth: "Bitcoin is just a bubble",
+                    reality: "Multiple cycles of growth and decline",
+                    detail: "Bitcoin has gone through multiple cycles of growth and decline. It has continued operating and gaining adoption over time."
+                )
 
-            ExpandableInfoCard(
-                icon: "building.columns.fill",
-                iconColor: .blue,
-                title: "Can Governments Shut Bitcoin Down?",
-                summary: "No single point of control",
-                detail: "Bitcoin runs on a global decentralized network. There is no single point of control, making shutdown difficult."
-            )
+                mythCard(
+                    icon: "questionmark.diamond.fill",
+                    iconColor: .yellow,
+                    myth: "Bitcoin isn't backed by anything",
+                    reality: "Value from scarcity, security, and adoption",
+                    detail: "Bitcoin is not backed by a physical asset or government. Its value comes from scarcity, security, and user adoption."
+                )
 
-            ExpandableInfoCard(
-                icon: "leaf.fill",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "Is Bitcoin Bad for the Environment?",
-                summary: "Energy use varies by source",
-                detail: "Bitcoin uses energy, but impact varies by source. A growing share uses renewable or otherwise unused energy."
-            )
+                mythCard(
+                    icon: "building.columns.fill",
+                    iconColor: .blue,
+                    myth: "Governments can shut Bitcoin down",
+                    reality: "No single point of control",
+                    detail: "Bitcoin runs on a global decentralized network. There is no single point of control, making shutdown difficult."
+                )
 
-            Text("Clearing up common myths with facts, not hype.")
-                .font(.caption2)
-                .foregroundStyle(.quaternary)
-                .italic()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 4)
+                mythCard(
+                    icon: "leaf.fill",
+                    iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
+                    myth: "Bitcoin is bad for the environment",
+                    reality: "Energy use varies by source",
+                    detail: "Bitcoin uses energy, but impact varies by source. A growing share uses renewable or otherwise unused energy."
+                )
+            }
         }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
     // MARK: - Bitcoin vs Dollars
 
     private var btcVsDollarsEducation: some View {
-        VStack(spacing: 12) {
-            comparisonCard(
-                icon: "person.2.fill",
-                iconColor: .orange,
-                title: "Who Controls It?",
-                btcPoint: "No central authority",
-                usdPoint: "Issued and managed by central banks"
+        VStack(spacing: 0) {
+            topicHeader(
+                icon: "arrow.left.arrow.right.circle.fill",
+                color: Color(red: 0.2, green: 0.85, blue: 0.5),
+                title: "Bitcoin vs Dollars",
+                subtitle: "A side-by-side look at two monetary systems."
             )
 
-            comparisonCard(
-                icon: "number.circle.fill",
-                iconColor: .purple,
-                title: "Supply",
-                btcPoint: "Fixed supply of 21 million",
-                usdPoint: "Supply can expand over time"
-            )
-
-            comparisonCard(
-                icon: "arrow.left.arrow.right",
-                iconColor: .cyan,
-                title: "Transfer",
-                btcPoint: "Peer-to-peer, global",
-                usdPoint: "Typically requires intermediaries"
-            )
-
-            comparisonCard(
-                icon: "globe",
-                iconColor: .blue,
-                title: "Accessibility",
-                btcPoint: "Accessible with internet",
-                usdPoint: "Depends on banking access"
-            )
-
-            comparisonCard(
-                icon: "checkmark.seal.fill",
-                iconColor: Color(red: 0.2, green: 0.85, blue: 0.5),
-                title: "Settlement",
-                btcPoint: "Final settlement on network",
-                usdPoint: "Often involves delays and intermediaries"
-            )
-
-            comparisonCard(
-                icon: "eye.fill",
-                iconColor: .yellow,
-                title: "Transparency",
-                btcPoint: "Public and verifiable",
-                usdPoint: "Centrally managed"
-            )
-
-            comparisonCard(
-                icon: "waveform.path.ecg",
-                iconColor: .red,
-                title: "Volatility",
-                btcPoint: "Can fluctuate significantly",
-                usdPoint: "More stable short-term"
-            )
-
-            Text("A side-by-side look at two different monetary systems.")
-                .font(.caption2)
-                .foregroundStyle(.quaternary)
-                .italic()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 4)
+            VStack(spacing: 12) {
+                comparisonCard(icon: "person.2.fill", iconColor: .orange, title: "Who Controls It?", btcPoint: "No central authority", usdPoint: "Issued and managed by central banks")
+                comparisonCard(icon: "number.circle.fill", iconColor: .purple, title: "Supply", btcPoint: "Fixed supply of 21 million", usdPoint: "Supply can expand over time")
+                comparisonCard(icon: "arrow.left.arrow.right", iconColor: .cyan, title: "Transfer", btcPoint: "Peer-to-peer, global", usdPoint: "Typically requires intermediaries")
+                comparisonCard(icon: "globe", iconColor: .blue, title: "Accessibility", btcPoint: "Accessible with internet", usdPoint: "Depends on banking access")
+                comparisonCard(icon: "checkmark.seal.fill", iconColor: Color(red: 0.2, green: 0.85, blue: 0.5), title: "Settlement", btcPoint: "Final settlement on network", usdPoint: "Often involves delays and intermediaries")
+                comparisonCard(icon: "eye.fill", iconColor: .yellow, title: "Transparency", btcPoint: "Public and verifiable", usdPoint: "Centrally managed")
+                comparisonCard(icon: "waveform.path.ecg", iconColor: .red, title: "Volatility", btcPoint: "Can fluctuate significantly", usdPoint: "More stable short-term")
+            }
         }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
     private func comparisonCard(icon: String, iconColor: Color, title: String, btcPoint: String, usdPoint: String) -> some View {
@@ -886,12 +1056,59 @@ struct LearnTab: View {
             }
         }
         .padding(14)
-        .background(Color.white.opacity(0.04))
+        .background(Color(.secondarySystemGroupedBackground))
         .overlay(
             RoundedRectangle(cornerRadius: 18)
-                .strokeBorder(Color.white.opacity(0.06), lineWidth: 1)
+                .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
         )
         .clipShape(.rect(cornerRadius: 18))
+    }
+
+    // MARK: - Shared Components
+
+    private func topicHeader(icon: String, color: Color, title: String, subtitle: String) -> some View {
+        VStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 36, weight: .semibold))
+                .foregroundStyle(color)
+                .frame(width: 64, height: 64)
+                .background(color.opacity(0.1))
+                .clipShape(.rect(cornerRadius: 18))
+
+            Text(title)
+                .font(.title2)
+                .fontWeight(.heavy)
+                .foregroundStyle(.primary)
+
+            Text(subtitle)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .padding(.bottom, 8)
+    }
+
+    private func numberedLesson(number: Int, color: Color, icon: String, title: String, summary: String, detail: String) -> some View {
+        NumberedLessonCard(
+            number: number,
+            color: color,
+            icon: icon,
+            title: title,
+            summary: summary,
+            detail: detail
+        )
+    }
+
+    private func mythCard(icon: String, iconColor: Color, myth: String, reality: String, detail: String) -> some View {
+        MythBusterCard(
+            icon: icon,
+            iconColor: iconColor,
+            myth: myth,
+            reality: reality,
+            detail: detail
+        )
     }
 
     // MARK: - Disclaimer
@@ -912,33 +1129,179 @@ struct LearnTab: View {
     }
 }
 
-enum LearnCategory: CaseIterable {
+// MARK: - Learn Topic Enum
+
+enum LearnTopic: Hashable {
     case bitcoin
     case misconceptions
     case btcVsDollars
     case powerLaw
     case cycles
     case indicators
+}
 
-    var label: String {
-        switch self {
-        case .bitcoin: return "Bitcoin"
-        case .misconceptions: return "Myths"
-        case .btcVsDollars: return "BTC vs $"
-        case .powerLaw: return "Power Law"
-        case .cycles: return "Cycles"
-        case .indicators: return "Indicators"
+// MARK: - Numbered Lesson Card
+
+struct NumberedLessonCard: View {
+    let number: Int
+    let color: Color
+    let icon: String
+    let title: String
+    let summary: String
+    let detail: String
+
+    @State private var isExpanded: Bool = false
+
+    var body: some View {
+        Button {
+            withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                isExpanded.toggle()
+            }
+        } label: {
+            HStack(alignment: .top, spacing: 14) {
+                Text("\(number)")
+                    .font(.system(size: 12, weight: .heavy, design: .monospaced))
+                    .foregroundStyle(.white)
+                    .frame(width: 28, height: 28)
+                    .background(color)
+                    .clipShape(Circle())
+
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 8) {
+                        Image(systemName: icon)
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(color)
+                        Text(title)
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.tertiary)
+                            .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                    }
+
+                    Text(summary)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(isExpanded ? nil : 1)
+
+                    if isExpanded {
+                        Divider()
+                            .overlay(Color.primary.opacity(0.06))
+                            .padding(.vertical, 8)
+
+                        Text(detail)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineSpacing(4)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
+                    }
+                }
+            }
+            .padding(16)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(.rect(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .strokeBorder(isExpanded ? color.opacity(0.2) : Color.primary.opacity(0.06), lineWidth: 1)
+            )
         }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.impact(flexibility: .soft), trigger: isExpanded)
     }
+}
 
-    var icon: String {
-        switch self {
-        case .bitcoin: return "bitcoinsign.circle"
-        case .misconceptions: return "questionmark.bubble"
-        case .btcVsDollars: return "arrow.left.arrow.right.circle"
-        case .powerLaw: return "chart.line.uptrend.xyaxis"
-        case .cycles: return "arrow.triangle.2.circlepath"
-        case .indicators: return "gauge.with.dots.needle.bottom.50percent"
+// MARK: - Myth Buster Card
+
+struct MythBusterCard: View {
+    let icon: String
+    let iconColor: Color
+    let myth: String
+    let reality: String
+    let detail: String
+
+    @State private var isExpanded: Bool = false
+
+    var body: some View {
+        Button {
+            withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                isExpanded.toggle()
+            }
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 12) {
+                    Image(systemName: icon)
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(iconColor)
+                        .frame(width: 34, height: 34)
+                        .background(iconColor.opacity(0.12))
+                        .clipShape(.rect(cornerRadius: 9))
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 6) {
+                            Text("MYTH")
+                                .font(.system(size: 9, weight: .heavy))
+                                .foregroundStyle(.red)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.red.opacity(0.1))
+                                .clipShape(Capsule())
+                            Text(myth)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+                        }
+
+                        HStack(spacing: 6) {
+                            Text("FACT")
+                                .font(.system(size: 9, weight: .heavy))
+                                .foregroundStyle(Color(red: 0.2, green: 0.85, blue: 0.5))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.green.opacity(0.1))
+                                .clipShape(Capsule())
+                            Text(reality)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(.tertiary)
+                        .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                }
+
+                if isExpanded {
+                    Divider()
+                        .overlay(Color.primary.opacity(0.06))
+                        .padding(.vertical, 12)
+
+                    Text(detail)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .lineSpacing(4)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.leading, 46)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                }
+            }
+            .padding(16)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(.rect(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
+            )
         }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.impact(flexibility: .soft), trigger: isExpanded)
     }
 }

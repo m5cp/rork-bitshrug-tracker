@@ -149,7 +149,7 @@ struct AboutView: View {
         }
         .padding(.vertical, 6)
         .padding(.horizontal, 10)
-        .background(Color.white.opacity(0.03))
+        .background(Color(.tertiarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 8))
     }
 
@@ -218,7 +218,7 @@ struct AboutView: View {
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.secondary)
                     .frame(width: 34, height: 34)
-                    .background(Color.white.opacity(0.06))
+                    .background(Color.primary.opacity(0.06))
                     .clipShape(.rect(cornerRadius: 9))
 
                 Text("Data Sources")

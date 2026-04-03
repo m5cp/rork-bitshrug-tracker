@@ -293,6 +293,12 @@ struct PowerLawTab: View {
                 priceBox(label: "FAIR VALUE", price: viewModel.powerLawFairValue, color: .yellow)
             }
 
+            if let updated = viewModel.lastUpdated {
+                Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
+                    .font(.system(size: 9, weight: .medium))
+                    .foregroundStyle(.quaternary)
+            }
+
             HStack(spacing: 12) {
                 statBox(label: "DAYS SINCE GENESIS", value: "\(daysSinceGenesis)", color: .primary)
                 statBox(label: "MODEL R²", value: "0.952", color: Color(red: 0.2, green: 0.85, blue: 0.5))
@@ -322,7 +328,7 @@ struct PowerLawTab: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .background(Color.white.opacity(0.03))
+        .background(Color(.tertiarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 12))
     }
 
@@ -338,7 +344,7 @@ struct PowerLawTab: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .background(Color.white.opacity(0.03))
+        .background(Color(.tertiarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 12))
     }
 
@@ -558,7 +564,7 @@ struct PowerLawTab: View {
                 mathStat(label: "Slope", value: "5.82")
             }
             .padding(12)
-            .background(Color.white.opacity(0.03))
+            .background(Color(.tertiarySystemGroupedBackground))
             .clipShape(.rect(cornerRadius: 12))
         }
         .premiumCard(.highlighted)
@@ -575,7 +581,7 @@ struct PowerLawTab: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .background(Color.white.opacity(0.03))
+        .background(Color(.tertiarySystemGroupedBackground))
         .clipShape(.rect(cornerRadius: 10))
     }
 
