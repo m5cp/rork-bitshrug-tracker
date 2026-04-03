@@ -637,7 +637,7 @@ struct CycleTab: View {
 
             HStack(spacing: 8) {
                 ShrugBadge(size: .small, style: .inline)
-                Text("The honest answer: we don't know yet.")
+                Text("Honest answer, we don't care. We DCA and hold.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .italic()
@@ -686,12 +686,12 @@ struct CycleTab: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 KeyPointRow(icon: "clock", iconColor: .orange, text: "Cycles are not precisely 4 years — they've varied each time")
-                KeyPointRow(icon: "exclamationmark.triangle", iconColor: .orange, text: "Selling exactly 4 years from last peak would have missed the top")
-                KeyPointRow(icon: "chart.line.downtrend.xyaxis", iconColor: .orange, text: "No guarantee cycles will continue as before")
-                KeyPointRow(icon: "lightbulb", iconColor: .orange, text: "Use as context for positioning, not as a timing tool")
+                KeyPointRow(icon: "exclamationmark.triangle", iconColor: .orange, text: "No guarantee cycles will continue as before")
+                KeyPointRow(icon: "chart.line.downtrend.xyaxis", iconColor: .orange, text: "Past patterns don't predict future behavior")
+                KeyPointRow(icon: "lightbulb", iconColor: .orange, text: "Use as educational context, not as a timing tool")
             }
 
-            Text("Crypto is high-risk. Only invest what you can afford to lose.")
+            Text("Crypto is high-risk. This is educational context, not a recommendation.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .italic()
@@ -745,7 +745,7 @@ struct CycleTab: View {
                 .font(.caption2)
                 .fontWeight(.semibold)
                 .foregroundStyle(.tertiary)
-            Text("Not financial advice. Do not trade based on this app.")
+            Text("This is not financial advice. Do not make financial decisions based on this app.")
                 .font(.caption2)
                 .foregroundStyle(.quaternary)
         }

@@ -4,7 +4,6 @@ import Charts
 struct HomeTab: View {
     let viewModel: BitcoinViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
-    @State private var showAbout: Bool = false
     @State private var showSettings: Bool = false
     @State private var shareItem: ShareImageItem?
     @State private var appeared: Bool = false
@@ -106,20 +105,14 @@ struct HomeTab: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                ToolbarItemGroup(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button { shareEnvironmentScore() } label: {
                         Image(systemName: "square.and.arrow.up")
                             .font(.body)
                             .foregroundStyle(.secondary)
                     }
-                    Button { showAbout = true } label: {
-                        Image(systemName: "info.circle")
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                    }
                 }
             }
-            .sheet(isPresented: $showAbout) { AboutView() }
             .sheet(isPresented: $showSettings) { ProfileView() }
             .sheet(item: $shareItem) { item in
                 ShareSheetView(image: item.image)
@@ -510,7 +503,7 @@ struct HomeTab: View {
                 .font(.caption2)
                 .fontWeight(.semibold)
                 .foregroundStyle(.tertiary)
-            Text("Not financial advice. Do not trade based on this app.")
+            Text("This is not financial advice. Do not make financial decisions based on this app.")
                 .font(.caption2)
                 .foregroundStyle(.quaternary)
         }

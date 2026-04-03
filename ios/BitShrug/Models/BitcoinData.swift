@@ -194,11 +194,11 @@ nonisolated enum FearGreedLevel: Sendable {
 
     var signalDescription: String {
         switch self {
-        case .extremeFear: return "Historically a strong buying signal"
-        case .fear: return "Market uncertainty — accumulation zone"
+        case .extremeFear: return "Maximum fear — historically a period of opportunity"
+        case .fear: return "Market uncertainty — patience is key"
         case .neutral: return "Market indecision"
-        case .greed: return "Caution — market heating up"
-        case .extremeGreed: return "Historically signals cycle tops"
+        case .greed: return "Market heating up — stay aware"
+        case .extremeGreed: return "Historically signals cycle peaks"
         }
     }
 }
@@ -218,7 +218,7 @@ nonisolated enum PowerLawPosition: Sendable {
 
     var description: String {
         switch self {
-        case .belowSupport: return "Price is below the long-term power law support — historically a strong buy zone."
+        case .belowSupport: return "Price is below the long-term power law support — historically a zone of opportunity."
         case .withinCorridor: return "Price is within the expected power law corridor — on track with the long-term trend."
         case .aboveResistance: return "Price is above the power law ceiling — historically signals overheated conditions."
         }
@@ -235,12 +235,12 @@ nonisolated enum PowerLawPosition: Sendable {
 
 nonisolated enum RainbowBand: Int, CaseIterable, Sendable {
     case fireZone = 0
-    case buy
-    case accumulate
+    case deepValue
+    case accumulation
     case cheap
-    case holdBuy
+    case neutral
     case hold
-    case holdSell
+    case caution
     case fomo
     case bubble
     case maxBubble
@@ -248,12 +248,12 @@ nonisolated enum RainbowBand: Int, CaseIterable, Sendable {
     var label: String {
         switch self {
         case .fireZone: return "Fire Sale"
-        case .buy: return "Buy"
-        case .accumulate: return "Accumulate"
+        case .deepValue: return "Deep Value"
+        case .accumulation: return "Accumulation"
         case .cheap: return "Still Cheap"
-        case .holdBuy: return "Hold / Buy"
+        case .neutral: return "Neutral"
         case .hold: return "Hold"
-        case .holdSell: return "Hold / Sell"
+        case .caution: return "Caution"
         case .fomo: return "FOMO Intensifies"
         case .bubble: return "Bubble Territory"
         case .maxBubble: return "Maximum Bubble"
@@ -263,12 +263,12 @@ nonisolated enum RainbowBand: Int, CaseIterable, Sendable {
     var color: Color {
         switch self {
         case .fireZone: return Color(red: 0.1, green: 0.1, blue: 0.6)
-        case .buy: return Color(red: 0.1, green: 0.3, blue: 0.8)
-        case .accumulate: return Color(red: 0.0, green: 0.6, blue: 0.5)
+        case .deepValue: return Color(red: 0.1, green: 0.3, blue: 0.8)
+        case .accumulation: return Color(red: 0.0, green: 0.6, blue: 0.5)
         case .cheap: return Color(red: 0.0, green: 0.7, blue: 0.2)
-        case .holdBuy: return Color(red: 0.4, green: 0.8, blue: 0.0)
+        case .neutral: return Color(red: 0.4, green: 0.8, blue: 0.0)
         case .hold: return Color(red: 0.8, green: 0.8, blue: 0.0)
-        case .holdSell: return Color(red: 1.0, green: 0.6, blue: 0.0)
+        case .caution: return Color(red: 1.0, green: 0.6, blue: 0.0)
         case .fomo: return Color(red: 1.0, green: 0.4, blue: 0.0)
         case .bubble: return Color(red: 1.0, green: 0.2, blue: 0.0)
         case .maxBubble: return Color(red: 0.8, green: 0.0, blue: 0.0)
@@ -277,9 +277,9 @@ nonisolated enum RainbowBand: Int, CaseIterable, Sendable {
 
     var signalType: String {
         switch self {
-        case .fireZone, .buy, .accumulate, .cheap: return "Bullish"
-        case .holdBuy, .hold: return "Neutral"
-        case .holdSell, .fomo, .bubble, .maxBubble: return "Bearish"
+        case .fireZone, .deepValue, .accumulation, .cheap: return "Bullish"
+        case .neutral, .hold: return "Neutral"
+        case .caution, .fomo, .bubble, .maxBubble: return "Bearish"
         }
     }
 }
@@ -327,8 +327,8 @@ nonisolated enum MVRVZone: Sendable {
 
     var description: String {
         switch self {
-        case .deepValue: return "Below aggregate cost basis — generational buy"
-        case .undervalued: return "Price near holder cost basis — accumulation zone"
+        case .deepValue: return "Below aggregate cost basis — historically rare zone"
+        case .undervalued: return "Price near holder cost basis — historically an accumulation period"
         case .fairValue: return "Healthy valuation range"
         case .warming: return "Market heating up — exercise caution"
         case .overheated: return "Significantly above cost basis — risk rising"
@@ -376,8 +376,8 @@ nonisolated enum PuellZone: Sendable {
 
     var description: String {
         switch self {
-        case .minerCapitulation: return "Miners under extreme stress — historically signals bottoms"
-        case .lowRevenue: return "Below-average miner revenue — accumulation zone"
+        case .minerCapitulation: return "Miners under extreme stress — historically signals cycle lows"
+        case .lowRevenue: return "Below-average miner revenue — historically a quiet period"
         case .normal: return "Miner revenue within normal range"
         case .highRevenue: return "Above-average miner profits — caution"
         case .minerEuphoria: return "Extreme miner profits — historically signals tops"
@@ -557,8 +557,8 @@ nonisolated enum SupplyProfitZone: Sendable {
 
     var description: String {
         switch self {
-        case .deepLoss: return "Less than 30% in profit — historically strong buy signal"
-        case .majority_loss: return "More holders underwater — accumulation territory"
+        case .deepLoss: return "Less than 30% in profit — historically a rare zone"
+        case .majority_loss: return "More holders underwater — historically a quiet period"
         case .mixed: return "Market at inflection point"
         case .majority_profit: return "Most holders profitable — distribution may begin"
         case .nearlyAll: return "Nearly all supply in profit — historically signals tops"

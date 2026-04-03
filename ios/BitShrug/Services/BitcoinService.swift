@@ -354,12 +354,12 @@ nonisolated class BitcoinService: Sendable {
 
         switch deviation {
         case ..<(-4.5): return .fireZone
-        case ..<(-3.5): return .buy
-        case ..<(-2.5): return .accumulate
+        case ..<(-3.5): return .deepValue
+        case ..<(-2.5): return .accumulation
         case ..<(-1.5): return .cheap
-        case ..<(-0.5): return .holdBuy
+        case ..<(-0.5): return .neutral
         case ..<0.5: return .hold
-        case ..<1.5: return .holdSell
+        case ..<1.5: return .caution
         case ..<2.5: return .fomo
         case ..<3.5: return .bubble
         default: return .maxBubble

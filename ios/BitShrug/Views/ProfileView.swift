@@ -4,6 +4,11 @@ struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showNotificationSettings: Bool = false
     @State private var showAbout: Bool = false
+    @State private var showPrivacyPolicy: Bool = false
+    @State private var showTermsOfUse: Bool = false
+    @State private var showEULA: Bool = false
+    @State private var showAccessibility: Bool = false
+    @State private var showDisclaimer: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -12,7 +17,7 @@ struct ProfileView: View {
                     VStack(spacing: 6) {
                         Text("BitShrug")
                             .font(.system(.title3, design: .monospaced, weight: .bold))
-                        Text("Bitcoin Market Context")
+                        Text("Understanding Bitcoin")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -52,29 +57,7 @@ struct ProfileView: View {
                 } header: {
                     Text("Important")
                 } footer: {
-                    Text("All indicators, scores, and labels are for informational and educational purposes only. Always do your own research.")
-                }
-
-                Section {
-                    Label {
-                        Text("No Personal Data Collected")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                    } icon: {
-                        Image(systemName: "lock.shield.fill")
-                            .foregroundStyle(.orange)
-                    }
-
-                    Label {
-                        Text("No Tracking or Analytics")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                    } icon: {
-                        Image(systemName: "eye.slash.fill")
-                            .foregroundStyle(.orange)
-                    }
-                } header: {
-                    Text("Privacy")
+                    Text("All indicators, scores, and labels are for educational purposes only. This app does not recommend any action. Always do your own research.")
                 }
 
                 Section {
@@ -119,7 +102,7 @@ struct ProfileView: View {
                             Text("Not Financial Advice")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("Do not trade or make financial decisions based on this app")
+                            Text("Do not make financial decisions based on this app")
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
                         }
@@ -144,7 +127,7 @@ struct ProfileView: View {
                 } header: {
                     Text("How It Works")
                 } footer: {
-                    Text("Numbers shown are not live. Nobody should view this as financial advice or trade based on this app. For educational purposes only.")
+                    Text("Numbers shown are not live. Nobody should view this as financial advice or make financial decisions based on this app. For educational purposes only.")
                 }
 
                 Section {
@@ -180,29 +163,70 @@ struct ProfileView: View {
                 }
 
                 Section {
-                    Label {
-                        Text("Terms of Use")
-                            .font(.subheadline)
-                    } icon: {
-                        Image(systemName: "doc.text")
-                            .foregroundStyle(.secondary)
+                    Button {
+                        showDisclaimer = true
+                    } label: {
+                        Label {
+                            Text("Disclaimer & Risks")
+                                .font(.subheadline)
+                        } icon: {
+                            Image(systemName: "exclamationmark.shield.fill")
+                                .foregroundStyle(.red)
+                        }
                     }
+                    .foregroundStyle(.primary)
 
-                    Label {
-                        Text("Privacy Policy")
-                            .font(.subheadline)
-                    } icon: {
-                        Image(systemName: "hand.raised.fill")
-                            .foregroundStyle(.secondary)
+                    Button {
+                        showPrivacyPolicy = true
+                    } label: {
+                        Label {
+                            Text("Privacy Policy")
+                                .font(.subheadline)
+                        } icon: {
+                            Image(systemName: "hand.raised.fill")
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                    .foregroundStyle(.primary)
 
-                    Label {
-                        Text("Accessibility")
-                            .font(.subheadline)
-                    } icon: {
-                        Image(systemName: "accessibility")
-                            .foregroundStyle(.secondary)
+                    Button {
+                        showTermsOfUse = true
+                    } label: {
+                        Label {
+                            Text("Terms of Use")
+                                .font(.subheadline)
+                        } icon: {
+                            Image(systemName: "doc.text")
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                    .foregroundStyle(.primary)
+
+                    Button {
+                        showEULA = true
+                    } label: {
+                        Label {
+                            Text("Apple Licensed Application EULA")
+                                .font(.subheadline)
+                        } icon: {
+                            Image(systemName: "apple.logo")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+
+                    Button {
+                        showAccessibility = true
+                    } label: {
+                        Label {
+                            Text("Accessibility")
+                                .font(.subheadline)
+                        } icon: {
+                            Image(systemName: "accessibility")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .foregroundStyle(.primary)
                 } header: {
                     Text("Legal")
                 }
@@ -223,6 +247,21 @@ struct ProfileView: View {
         }
         .sheet(isPresented: $showAbout) {
             AboutView()
+        }
+        .sheet(isPresented: $showPrivacyPolicy) {
+            PrivacyPolicyView()
+        }
+        .sheet(isPresented: $showTermsOfUse) {
+            TermsOfUseView()
+        }
+        .sheet(isPresented: $showEULA) {
+            EULAView()
+        }
+        .sheet(isPresented: $showAccessibility) {
+            AccessibilityStatementView()
+        }
+        .sheet(isPresented: $showDisclaimer) {
+            DisclaimerRisksView()
         }
     }
 }

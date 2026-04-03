@@ -229,12 +229,18 @@ struct IndicatorsTab: View {
     }
 
     private var disclaimer: some View {
-        Text("BitShrug provides general market context for informational purposes only. It does not provide financial advice or predict future price movements.")
-            .font(.caption2)
-            .foregroundStyle(.quaternary)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
+        VStack(spacing: 4) {
+            Text("Numbers are not live. For educational purposes only.")
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .foregroundStyle(.tertiary)
+            Text("This is not financial advice. Do not make financial decisions based on this app.")
+                .font(.caption2)
+                .foregroundStyle(.quaternary)
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
     }
 
     private func formatPrice(_ value: Double) -> String {

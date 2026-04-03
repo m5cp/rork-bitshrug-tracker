@@ -251,9 +251,6 @@ class BitcoinViewModel {
 
     var marketContext: String {
         let phase = halvingInfo?.currentPhase ?? .accumulation
-        let phaseName = phase.label.lowercased()
-        let envLabel = environmentScoreLabel.lowercased()
-        let score = environmentScore
 
         let positioningFragment: String = {
             switch powerLawPosition {
@@ -318,13 +315,13 @@ class BitcoinViewModel {
     var environmentMessage: String {
         switch environmentStatus {
         case .strong:
-            return "Conditions suggest a favorable environment."
+            return "Conditions appear favorable. Honest answer, we don't care. We DCA and hold."
         case .moderate:
-            return "Conditions are mixed with no strong bias."
+            return "Conditions are mixed. Honest answer, we don't care. We DCA and hold."
         case .weak:
-            return "Conditions are weakening — stay aware."
+            return "Conditions are weakening. Honest answer, we don't care. We DCA and hold."
         case .highRisk:
-            return "Conditions suggest elevated risk."
+            return "Conditions suggest elevated risk. Honest answer, we don't care. We DCA and hold."
         }
     }
 

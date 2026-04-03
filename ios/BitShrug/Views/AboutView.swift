@@ -80,7 +80,7 @@ struct AboutView: View {
                     .fontWeight(.bold)
             }
 
-            Text("Understand the Bitcoin macro environment — without the noise. Focus on where we are in the cycle, how conditions are shifting, and whether the environment supports long-term positioning.")
+            Text("Understand the Bitcoin macro environment — without the noise. This is an educational tool to help you learn about Bitcoin's cycle, conditions, and historical patterns. Not financial advice.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .lineSpacing(3)
@@ -181,7 +181,7 @@ struct AboutView: View {
                 rangeRow(range: "0–34", label: "High Risk", color: Color(red: 0.95, green: 0.3, blue: 0.3))
             }
 
-            Text("For long-term positioning, not short-term trading.")
+            Text("For educational context only. Honest answer, we don't care. We DCA and hold.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .italic()
@@ -284,7 +284,7 @@ struct AboutView: View {
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text("This is not financial advice. BitShrug is for educational and informational purposes only. Nobody should trade or make financial decisions based on this app. Past performance does not guarantee future results.")
+            Text("This is not financial advice. BitShrug is for educational purposes only. Nobody should make financial decisions based on this app. We do not recommend purchasing Bitcoin or any cryptocurrency. Bitcoin is a volatile asset and you could lose all of your money. Past performance does not guarantee future results.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineSpacing(3)
