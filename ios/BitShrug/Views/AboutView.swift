@@ -227,10 +227,22 @@ struct AboutView: View {
             }
 
             VStack(alignment: .leading, spacing: 10) {
-                sourceRow(name: "CoinGecko", detail: "Price, market cap, volume, history")
+                sourceRow(name: "Finnhub", detail: "BTC price & 24h change")
+                sourceRow(name: "CryptoCompare", detail: "Market cap, volume, supply, price history")
                 sourceRow(name: "Alternative.me", detail: "Fear & Greed Index")
-                sourceRow(name: "Local Models", detail: "All indicators calculated from price data")
+                sourceRow(name: "Blockchain.info", detail: "Hash rate, block height")
+                sourceRow(name: "Calculated Locally", detail: "MVRV, Puell, Power Law, Rainbow, Cycles")
             }
+
+            HStack(spacing: 6) {
+                Image(systemName: "clock.badge.exclamationmark")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.orange)
+                Text("Data is not real-time. Fetched on launch and pull-to-refresh.")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.top, 4)
         }
         .premiumCard()
     }
@@ -255,29 +267,35 @@ struct AboutView: View {
     }
 
     private var disclaimerCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 6) {
-                Image(systemName: "exclamationmark.triangle")
+                Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.red)
                 Text("Disclaimer")
                     .font(.caption)
                     .fontWeight(.heavy)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
             }
 
-            Text("BitShrug provides general market context for informational purposes only. It does not provide financial advice or predict future price movements. Past performance does not guarantee future results.")
+            Text("Numbers are not live. Prices and indicators are delayed estimates, not real-time market data.")
                 .font(.caption)
-                .foregroundStyle(.quaternary)
+                .foregroundStyle(.secondary)
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text("This is not financial advice. BitShrug is for educational and informational purposes only. Nobody should trade or make financial decisions based on this app. Past performance does not guarantee future results.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
-        .background(Color.white.opacity(0.03))
+        .background(Color.red.opacity(0.06))
         .clipShape(.rect(cornerRadius: 16))
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .strokeBorder(Color.white.opacity(0.04), lineWidth: 1)
+                .strokeBorder(Color.red.opacity(0.15), lineWidth: 1)
         )
     }
 }

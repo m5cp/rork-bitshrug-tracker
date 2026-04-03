@@ -6,10 +6,9 @@ struct HomeTab: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showAbout: Bool = false
     @State private var showSettings: Bool = false
-    @State private var showShareSheet: Bool = false
+    @State private var shareItem: ShareImageItem?
     @State private var appeared: Bool = false
     @State private var animatedScore: Int = 0
-    @State private var shareImage: UIImage?
     @State private var scoreHistory = ScoreHistoryManager.shared
     @State private var showScrollToTop: Bool = false
 
@@ -122,10 +121,8 @@ struct HomeTab: View {
             }
             .sheet(isPresented: $showAbout) { AboutView() }
             .sheet(isPresented: $showSettings) { ProfileView() }
-            .sheet(isPresented: $showShareSheet) {
-                if let image = shareImage {
-                    ShareSheetView(image: image)
-                }
+            .sheet(item: $shareItem) { item in
+                ShareSheetView(image: item.image)
             }
         }
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
@@ -161,16 +158,14 @@ struct HomeTab: View {
     }
 
     private func shareEnvironmentScore() {
-        shareImage = ShareCardRenderer.render(
+        guard let image = ShareCardRenderer.render(
             score: viewModel.environmentScore,
             label: viewModel.environmentScoreLabel,
             price: viewModel.formattedPrice,
             change: viewModel.formattedChange,
             isPositive: viewModel.change24h >= 0
-        )
-        if shareImage != nil {
-            showShareSheet = true
-        }
+        ) else { return }
+        shareItem = ShareImageItem(image: image)
     }
 
     private var brandMark: some View {
@@ -510,12 +505,18 @@ struct HomeTab: View {
     }
 
     private var disclaimer: some View {
-        Text("BitShrug provides general market context for informational purposes only. It does not provide financial advice or predict future price movements.")
-            .font(.caption2)
-            .foregroundStyle(.quaternary)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
+        VStack(spacing: 4) {
+            Text("Numbers are not live. For educational purposes only.")
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .foregroundStyle(.tertiary)
+            Text("Not financial advice. Do not trade based on this app.")
+                .font(.caption2)
+                .foregroundStyle(.quaternary)
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
     }
 }
 

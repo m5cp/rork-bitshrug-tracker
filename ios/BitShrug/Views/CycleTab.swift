@@ -8,7 +8,6 @@ struct CycleTab: View {
 
     private let sections: [SectionAnchor] = [
         SectionAnchor(id: "verdict", icon: "hand.raised", label: "Verdict"),
-        SectionAnchor(id: "phases", icon: "list.bullet", label: "Phases"),
         SectionAnchor(id: "concepts", icon: "book.closed", label: "Concepts"),
         SectionAnchor(id: "history", icon: "clock.arrow.circlepath", label: "History"),
         SectionAnchor(id: "why", icon: "questionmark.circle", label: "Why"),
@@ -19,20 +18,6 @@ struct CycleTab: View {
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
     private var horizontalPadding: CGFloat { isRegular ? 32 : 20 }
 
-    private let phases: [SimpleCyclePhase] = [
-        SimpleCyclePhase(name: "Accumulation", keys: [.accumulation]),
-        SimpleCyclePhase(name: "Early Bull", keys: [.earlyBull]),
-        SimpleCyclePhase(name: "Acceleration", keys: [.acceleration]),
-        SimpleCyclePhase(name: "Euphoria", keys: [.euphoria]),
-        SimpleCyclePhase(name: "Distribution", keys: [.distribution]),
-        SimpleCyclePhase(name: "Bear", keys: [.earlyBear, .capitulation]),
-        SimpleCyclePhase(name: "Recovery", keys: [.recovery])
-    ]
-
-    private var currentSimpleIndex: Int {
-        guard let info = viewModel.halvingInfo else { return 0 }
-        return phases.firstIndex { $0.keys.contains(info.currentPhase) } ?? 0
-    }
 
     var body: some View {
         NavigationStack {
@@ -54,9 +39,6 @@ struct CycleTab: View {
                                 .id("verdict")
 
                             cycleRing
-
-                            phaseTimeline
-                                .id("phases")
 
                             halvingStats
 
@@ -124,26 +106,38 @@ struct CycleTab: View {
     private var shrugVerdict: some View {
         let info = viewModel.halvingInfo
         let progress = info?.cycleProgress ?? 0
+        let phase = info?.currentPhase ?? .accumulation
 
         let verdict: String
         let explanation: String
         let verdictColor: Color
 
-        if progress > 0.1 && progress < 0.55 {
-            verdict = "The cycle is playing out"
-            explanation = "Bitcoin is in the \(info?.currentPhase.label.lowercased() ?? "early") phase, aligning with the post-halving pattern."
-            verdictColor = Color(red: 0.2, green: 0.85, blue: 0.5)
-        } else if progress >= 0.55 && progress < 0.78 {
-            verdict = "Too early to tell"
-            explanation = "Past the typical peak zone. Whether the historical pattern holds remains to be seen."
-            verdictColor = .orange
-        } else if progress >= 0.78 {
-            verdict = "The cycle is stretched"
-            explanation = "Deep into the cycle timeline. Previous cycles had completed their bear phases by now."
+        switch phase {
+        case .earlyBear, .capitulation:
+            verdict = "The cycle has turned"
+            explanation = "Bitcoin has pulled back significantly from the cycle high. Historical patterns suggest a cooling period is underway."
             verdictColor = Color(red: 0.95, green: 0.3, blue: 0.3)
-        } else {
-            verdict = "New cycle, fresh start"
-            explanation = "Very early in this halving era. Not enough data yet to confirm or deny the theory."
+        case .distribution:
+            verdict = "Distribution phase"
+            explanation = "Bitcoin has retreated from the cycle high. Long-term holders may be taking profits as the market digests prior gains."
+            verdictColor = .orange
+        case .euphoria:
+            verdict = "The cycle is playing out"
+            explanation = "Bitcoin is in the \(phase.label.lowercased()) phase, aligning with the post-halving pattern."
+            verdictColor = Color(red: 0.2, green: 0.85, blue: 0.5)
+        case .accumulation, .earlyBull, .acceleration:
+            if progress > 0.1 {
+                verdict = "The cycle is playing out"
+                explanation = "Bitcoin is in the \(phase.label.lowercased()) phase, aligning with the post-halving pattern."
+                verdictColor = Color(red: 0.2, green: 0.85, blue: 0.5)
+            } else {
+                verdict = "New cycle, fresh start"
+                explanation = "Very early in this halving era. Not enough data yet to confirm or deny the theory."
+                verdictColor = .blue
+            }
+        case .recovery:
+            verdict = "Recovery underway"
+            explanation = "Deep into the cycle timeline. The market is healing as the next halving approaches."
             verdictColor = .blue
         }
 
@@ -247,68 +241,6 @@ struct CycleTab: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
-    }
-
-    // MARK: - Phase Timeline
-
-    private var phaseTimeline: some View {
-        VStack(spacing: 14) {
-            SectionHeader(icon: "list.bullet", title: "CYCLE PHASES")
-
-            VStack(spacing: 0) {
-                ForEach(Array(phases.enumerated()), id: \.element.name) { index, phase in
-                    let isCurrent = index == currentSimpleIndex
-                    let isPast = index < currentSimpleIndex
-
-                    HStack(spacing: 14) {
-                        ZStack {
-                            Circle()
-                                .fill(isCurrent ? .orange : isPast ? .orange.opacity(0.3) : Color.white.opacity(0.08))
-                                .frame(width: 30, height: 30)
-
-                            if isCurrent {
-                                Circle()
-                                    .fill(.orange)
-                                    .frame(width: 10, height: 10)
-                                    .shadow(color: .orange.opacity(0.5), radius: 4)
-                            } else if isPast {
-                                Image(systemName: "checkmark")
-                                    .font(.system(size: 10, weight: .bold))
-                                    .foregroundStyle(.orange.opacity(0.6))
-                            }
-                        }
-
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(phase.name)
-                                .font(.subheadline)
-                                .fontWeight(isCurrent ? .heavy : .medium)
-                                .foregroundStyle(isCurrent ? .primary : isPast ? .secondary : .tertiary)
-
-                            if isCurrent {
-                                Text("Current phase")
-                                    .font(.caption2)
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(.orange)
-                            }
-                        }
-
-                        Spacer()
-                    }
-                    .padding(.vertical, 6)
-
-                    if index < phases.count - 1 {
-                        HStack(spacing: 14) {
-                            Rectangle()
-                                .fill(isPast ? .orange.opacity(0.3) : Color.white.opacity(0.06))
-                                .frame(width: 2, height: 14)
-                                .padding(.leading, 14)
-                            Spacer()
-                        }
-                    }
-                }
-            }
-        }
-        .premiumCard(.highlighted)
     }
 
     // MARK: - Halving Stats
@@ -808,16 +740,19 @@ struct CycleTab: View {
     // MARK: - Disclaimer
 
     private var disclaimer: some View {
-        Text("BitShrug provides general market context for informational purposes only. It does not provide financial advice or predict future price movements.")
-            .font(.caption2)
-            .foregroundStyle(.quaternary)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
+        VStack(spacing: 4) {
+            Text("Numbers are not live. For educational purposes only.")
+                .font(.caption2)
+                .fontWeight(.semibold)
+                .foregroundStyle(.tertiary)
+            Text("Not financial advice. Do not trade based on this app.")
+                .font(.caption2)
+                .foregroundStyle(.quaternary)
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
     }
 }
 
-struct SimpleCyclePhase: Sendable {
-    let name: String
-    let keys: [CyclePhase]
-}
+

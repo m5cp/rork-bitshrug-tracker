@@ -419,6 +419,35 @@ nonisolated enum CyclePhase: Sendable, Equatable {
         }
     }
 
+    init(progress: Double, drawdownPercent: Double) {
+        if drawdownPercent >= 40 {
+            if progress >= 0.60 {
+                self = .capitulation
+            } else {
+                self = .earlyBear
+            }
+        } else if drawdownPercent >= 25 {
+            if progress >= 0.55 {
+                self = .earlyBear
+            } else {
+                self = .distribution
+            }
+        } else if drawdownPercent >= 15 {
+            self = .distribution
+        } else {
+            switch progress {
+            case 0..<0.15: self = .accumulation
+            case 0.15..<0.30: self = .earlyBull
+            case 0.30..<0.45: self = .acceleration
+            case 0.45..<0.55: self = .euphoria
+            case 0.55..<0.65: self = .distribution
+            case 0.65..<0.78: self = .earlyBear
+            case 0.78..<0.90: self = .capitulation
+            default: self = .recovery
+            }
+        }
+    }
+
     var label: String {
         switch self {
         case .accumulation: return "Accumulation"

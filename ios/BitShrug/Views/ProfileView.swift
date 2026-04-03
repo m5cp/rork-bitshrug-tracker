@@ -78,46 +78,22 @@ struct ProfileView: View {
                 }
 
                 Section {
-                    Label {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("CoinGecko")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("Price, market cap, volume, history")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
+                    NavigationLink {
+                        DataSourcesDetailView()
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("View Data Sources")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Text("Finnhub, CryptoCompare, Alternative.me, Blockchain.info")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        } icon: {
+                            Image(systemName: "server.rack")
+                                .foregroundStyle(.orange)
                         }
-                    } icon: {
-                        Image(systemName: "network")
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Label {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Alternative.me")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("Fear & Greed Index")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
-                    } icon: {
-                        Image(systemName: "heart.text.square")
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Label {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Calculated Locally")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            Text("MVRV, Puell, Power Law, Rainbow, Cycles")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
-                    } icon: {
-                        Image(systemName: "function")
-                            .foregroundStyle(.secondary)
                     }
                 } header: {
                     Text("Data Sources")
@@ -126,33 +102,49 @@ struct ProfileView: View {
                 Section {
                     Label {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Refresh")
+                            Text("Not Real-Time")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("On launch and pull-to-refresh")
+                            Text("Prices and indicators are delayed estimates, not live data")
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
                         }
                     } icon: {
-                        Image(systemName: "arrow.clockwise")
-                            .foregroundStyle(.secondary)
+                        Image(systemName: "clock.badge.exclamationmark")
+                            .foregroundStyle(.orange)
                     }
 
                     Label {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Accuracy")
+                            Text("Not Financial Advice")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("Estimates from price data, not live blockchain")
+                            Text("Do not trade or make financial decisions based on this app")
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
                         }
                     } icon: {
-                        Image(systemName: "info.circle")
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                    }
+
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Calculated Locally")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            Text("Indicators estimated from price data, not live blockchain")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    } icon: {
+                        Image(systemName: "function")
                             .foregroundStyle(.secondary)
                     }
                 } header: {
                     Text("How It Works")
+                } footer: {
+                    Text("Numbers shown are not live. Nobody should view this as financial advice or trade based on this app. For educational purposes only.")
                 }
 
                 Section {

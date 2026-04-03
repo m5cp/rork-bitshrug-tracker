@@ -383,6 +383,8 @@ class BitcoinViewModel {
         }
 
         if price > 0 {
+            halvingInfo = service.halvingInfo(currentPrice: price, historicalPrices: historicalPrices)
+
             mvrvZScore = service.calculateMVRVZScore(price: price)
             stockToFlowRatio = service.calculateStockToFlow(currentPrice: price, currentSupply: currentSupply)
 

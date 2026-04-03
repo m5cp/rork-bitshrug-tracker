@@ -1,5 +1,10 @@
 import SwiftUI
 
+struct ShareImageItem: Identifiable {
+    let id = UUID()
+    let image: UIImage
+}
+
 struct ShareCardView: View {
     let score: Int
     let label: String

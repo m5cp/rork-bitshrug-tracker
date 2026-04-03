@@ -366,7 +366,7 @@ nonisolated class BitcoinService: Sendable {
         }
     }
 
-    func halvingInfo() -> HalvingInfo {
+    func halvingInfo(currentPrice: Double = 0, historicalPrices: [PricePoint] = []) -> HalvingInfo {
         let halvings: [(date: Date, era: Int, reward: Double)] = [
             (date(2012, 11, 28), 2, 25),
             (date(2016, 7, 9), 3, 12.5),
@@ -384,6 +384,15 @@ nonisolated class BitcoinService: Sendable {
         let progress = Double(daysSinceLast) / Double(totalCycleDays)
         let clampedProgress = min(max(progress, 0), 1)
 
+        let phase: CyclePhase
+        if currentPrice > 0 && !historicalPrices.isEmpty {
+            let cycleHigh = historicalPrices.map(\.price).max() ?? currentPrice
+            let drawdown = cycleHigh > 0 ? (1.0 - currentPrice / cycleHigh) * 100 : 0
+            phase = CyclePhase(progress: clampedProgress, drawdownPercent: drawdown)
+        } else {
+            phase = CyclePhase(progress: clampedProgress)
+        }
+
         return HalvingInfo(
             lastHalvingDate: lastHalving.date,
             nextHalvingDate: estimatedNextHalving,
@@ -391,7 +400,7 @@ nonisolated class BitcoinService: Sendable {
             daysUntilNext: max(daysUntilNext, 0),
             daysSinceLast: max(daysSinceLast, 0),
             currentEra: lastHalving.era,
-            currentPhase: CyclePhase(progress: clampedProgress),
+            currentPhase: phase,
             blockReward: lastHalving.reward
         )
     }
