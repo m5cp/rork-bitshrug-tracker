@@ -14,7 +14,7 @@ struct OnboardingView: View {
                 .font(.system(size: 36, weight: .heavy))
                 .foregroundStyle(.primary)
 
-            Text("Rise or fall, we DCA and hold.")
+            Text("Rise or fall, we don't know. We hold.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 

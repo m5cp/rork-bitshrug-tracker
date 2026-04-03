@@ -485,7 +485,7 @@ struct PowerLawTab: View {
                 detail: "Each band represents a standard deviation from the fair value regression line. It's a visual heuristic showing where price sits relative to its long-term trend — not a prediction."
             )
 
-            Text("Based on historical patterns. Past behavior does not guarantee future results. Honest answer, we don't care. We DCA and hold.")
+            Text("Based on historical patterns. Past behavior does not guarantee future results. Honest answer, we don't know. We hold.")
                 .font(.caption2)
                 .foregroundStyle(.quaternary)
                 .italic()
