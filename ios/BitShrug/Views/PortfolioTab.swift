@@ -60,15 +60,13 @@ struct PortfolioTab: View {
         VStack(spacing: 16) {
             Spacer().frame(height: 60)
 
-            Image(systemName: "bitcoinsign.circle")
-                .font(.system(size: 56))
-                .foregroundStyle(.tertiary)
+            ShrugBadge(size: .hero, style: .hero)
 
             Text("Track Your Holdings")
                 .font(.title3)
                 .fontWeight(.bold)
 
-            Text("Add your Bitcoin holdings to\ntrack value and P&L over time.")
+            Text("Or don't. It's up to you.")
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundStyle(.primary)
