@@ -8,7 +8,7 @@ struct FunWithNumbersView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private let minYear: Double = 2026
-    private let maxYear: Double = 2200
+    private let maxYear: Double = 2040
 
     private var genesisDate: Date {
         var components = DateComponents()
