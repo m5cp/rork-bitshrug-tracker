@@ -46,6 +46,8 @@ struct PowerLawTab: View {
 
                             priceRange
 
+                            projectionsTable
+
                             rainbowCard
                                 .id("rainbow")
 
@@ -174,9 +176,10 @@ struct PowerLawTab: View {
     private var corridorChart: some View {
         VStack(alignment: .leading, spacing: 12) {
             SectionHeader(icon: "chart.line.uptrend.xyaxis", title: "POWER LAW CORRIDOR") {
-                HStack(spacing: 12) {
+                HStack(spacing: 10) {
                     legendDot(color: .orange, label: "Price")
                     legendDot(color: .green.opacity(0.5), label: "Support")
+                    legendDot(color: .yellow.opacity(0.5), label: "Fair Value")
                     legendDot(color: .red.opacity(0.5), label: "Resistance")
                 }
             }
@@ -288,14 +291,59 @@ struct PowerLawTab: View {
     // MARK: - Price Range
 
     private var priceRange: some View {
-        HStack {
-            priceColumn(label: "Support", price: viewModel.powerLawSupport, color: Color(red: 0.2, green: 0.85, blue: 0.5))
-            Spacer()
-            priceColumn(label: "Current", price: viewModel.price, color: .primary)
-            Spacer()
-            priceColumn(label: "Resistance", price: viewModel.powerLawResistance, color: Color(red: 0.95, green: 0.3, blue: 0.3))
+        VStack(spacing: 14) {
+            HStack(spacing: 12) {
+                priceBox(label: "CURRENT PRICE", price: viewModel.price, color: .primary)
+                priceBox(label: "FAIR VALUE", price: viewModel.powerLawFairValue, color: .yellow)
+            }
+
+            HStack(spacing: 12) {
+                statBox(label: "DAYS SINCE GENESIS", value: "\(daysSinceGenesis)", color: .primary)
+                statBox(label: "MODEL R²", value: "0.952", color: Color(red: 0.2, green: 0.85, blue: 0.5))
+            }
+
+            HStack {
+                priceColumn(label: "Support", price: viewModel.powerLawSupport, color: Color(red: 0.2, green: 0.85, blue: 0.5))
+                Spacer()
+                priceColumn(label: "Fair Value", price: viewModel.powerLawFairValue, color: .yellow)
+                Spacer()
+                priceColumn(label: "Resistance", price: viewModel.powerLawResistance, color: Color(red: 0.95, green: 0.3, blue: 0.3))
+            }
+            .padding(.top, 4)
         }
         .premiumCard()
+    }
+
+    private func priceBox(label: String, price: Double, color: Color) -> some View {
+        VStack(spacing: 6) {
+            Text(label)
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundStyle(.secondary)
+                .tracking(1)
+            Text(formatPrice(price))
+                .font(.system(.body, design: .monospaced, weight: .heavy))
+                .foregroundStyle(color)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 14)
+        .background(Color.white.opacity(0.03))
+        .clipShape(.rect(cornerRadius: 12))
+    }
+
+    private func statBox(label: String, value: String, color: Color) -> some View {
+        VStack(spacing: 6) {
+            Text(label)
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundStyle(.secondary)
+                .tracking(1)
+            Text(value)
+                .font(.system(.body, design: .monospaced, weight: .heavy))
+                .foregroundStyle(color)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 14)
+        .background(Color.white.opacity(0.03))
+        .clipShape(.rect(cornerRadius: 12))
     }
 
     private func priceColumn(label: String, price: Double, color: Color) -> some View {
@@ -306,6 +354,95 @@ struct PowerLawTab: View {
             Text(formatPrice(price))
                 .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(color)
+        }
+    }
+
+    private var daysSinceGenesis: Int {
+        Calendar.current.dateComponents([.day], from: genesisDate(), to: Date()).day ?? 0
+    }
+
+    // MARK: - Projections Table
+
+    private var projectionsTable: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            SectionHeader(icon: "chart.bar.xaxis", title: "POWER LAW PROJECTIONS")
+
+            VStack(spacing: 0) {
+                HStack {
+                    Text("YEAR")
+                        .frame(width: 50, alignment: .leading)
+                    Spacer()
+                    Text("SUPPORT")
+                        .frame(width: 80, alignment: .trailing)
+                    Spacer()
+                    Text("FAIR VALUE")
+                        .frame(width: 90, alignment: .trailing)
+                    Spacer()
+                    Text("RESISTANCE")
+                        .frame(width: 90, alignment: .trailing)
+                }
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundStyle(.secondary)
+                .tracking(0.5)
+                .padding(.bottom, 10)
+
+                ForEach(projectionYears, id: \.year) { row in
+                    HStack {
+                        Text("\(row.year)")
+                            .font(.system(.footnote, design: .monospaced, weight: .heavy))
+                            .foregroundStyle(.primary)
+                            .frame(width: 50, alignment: .leading)
+                        Spacer()
+                        Text(formatPrice(row.support))
+                            .font(.system(.caption, design: .monospaced, weight: .bold))
+                            .foregroundStyle(Color(red: 0.2, green: 0.85, blue: 0.5))
+                            .frame(width: 80, alignment: .trailing)
+                        Spacer()
+                        Text(formatPrice(row.fairValue))
+                            .font(.system(.caption, design: .monospaced, weight: .bold))
+                            .foregroundStyle(.yellow)
+                            .frame(width: 90, alignment: .trailing)
+                        Spacer()
+                        Text(formatPrice(row.resistance))
+                            .font(.system(.caption, design: .monospaced, weight: .bold))
+                            .foregroundStyle(.secondary)
+                            .frame(width: 90, alignment: .trailing)
+                    }
+                    .padding(.vertical, 8)
+
+                    if row.year != projectionYears.last?.year {
+                        Divider().opacity(0.15)
+                    }
+                }
+            }
+
+            HStack(spacing: 6) {
+                Image(systemName: "info.circle")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.tertiary)
+                Text("Projections based on power law regression. Not financial advice.")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .premiumCard(.highlighted)
+    }
+
+    private var projectionYears: [(year: Int, support: Double, fairValue: Double, resistance: Double)] {
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let genesis = genesisDate()
+        return (currentYear...(currentYear + 5)).map { year in
+            var components = DateComponents()
+            components.year = year
+            components.month = 7
+            components.day = 1
+            let midYear = Calendar.current.date(from: components) ?? Date()
+            let days = Double(max(Calendar.current.dateComponents([.day], from: genesis, to: midYear).day ?? 1, 1))
+            let logDays = log10(days)
+            let support = pow(10, 5.82 * logDays - 17.47)
+            let fairValue = pow(10, 5.82 * logDays - 17.01)
+            let resistance = pow(10, 5.82 * logDays - 16.61)
+            return (year, support, fairValue, resistance)
         }
     }
 
@@ -381,7 +518,7 @@ struct PowerLawTab: View {
         VStack(alignment: .leading, spacing: 16) {
             SectionHeader(icon: "function", title: "THE FORMULA")
 
-            Text("log₁₀(price) = 5.71 × log₁₀(days) − k")
+            Text("log₁₀(price) = 5.82 × log₁₀(days) − k")
                 .font(.system(.body, design: .monospaced, weight: .bold))
                 .foregroundStyle(
                     LinearGradient(
@@ -402,7 +539,7 @@ struct PowerLawTab: View {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 mathTile(label: "price", value: "BTC price in USD")
                 mathTile(label: "days", value: "Since genesis block")
-                mathTile(label: "5.71", value: "Power law exponent")
+                mathTile(label: "5.82", value: "Power law exponent")
                 mathTile(label: "k", value: "Support/resistance offset")
             }
 
@@ -414,7 +551,7 @@ struct PowerLawTab: View {
                 Spacer()
                 mathStat(label: "log₁₀(days)", value: String(format: "%.3f", logDays))
                 Spacer()
-                mathStat(label: "Slope", value: "5.71")
+                mathStat(label: "Slope", value: "5.82")
             }
             .padding(12)
             .background(Color.white.opacity(0.03))
@@ -466,7 +603,7 @@ struct PowerLawTab: View {
                 iconColor: .blue,
                 title: "What is a Power Law?",
                 summary: "A relationship where one quantity scales as a power of another",
-                detail: "Price ∝ Time⁵·⁷¹ — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
+                detail: "Price ∝ Time⁵·⁸² — fundamentally different from exponential growth. The rate of growth slows over time but never stops. Many natural phenomena follow power laws: earthquake magnitudes, city sizes, and network effects."
             )
 
             ExpandableInfoCard(

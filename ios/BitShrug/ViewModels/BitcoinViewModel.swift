@@ -12,6 +12,7 @@ class BitcoinViewModel {
     var powerLawPosition: PowerLawPosition = .withinCorridor
     var powerLawPercent: Double = 0.5
     var powerLawSupport: Double = 0
+    var powerLawFairValue: Double = 0
     var powerLawResistance: Double = 0
     var halvingInfo: HalvingInfo?
     var rainbowBand: RainbowBand = .hold
@@ -389,6 +390,7 @@ class BitcoinViewModel {
             powerLawPosition = powerLaw.position
             powerLawPercent = powerLaw.percentInCorridor
             powerLawSupport = powerLaw.supportPrice
+            powerLawFairValue = powerLaw.fairValuePrice
             powerLawResistance = powerLaw.resistancePrice
 
             rainbowBand = service.calculateRainbowBand(price: price)

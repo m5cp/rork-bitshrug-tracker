@@ -14,22 +14,24 @@ struct PowerLawChartView: View {
             let daysSinceGenesis = Calendar.current.dateComponents([.day], from: genesisDate(), to: point.date).day ?? 1
             let days = Double(max(daysSinceGenesis, 1))
             let logDays = log10(days)
-            let logSupport = 5.71 * logDays - 17.01
-            let logResistance = 5.71 * logDays - 15.51
+            let logSupport = 5.82 * logDays - 17.47
+            let logFairValue = 5.82 * logDays - 17.01
+            let logResistance = 5.82 * logDays - 16.61
             return PowerLawPoint(
                 date: point.date,
                 price: point.price,
                 support: pow(10, logSupport),
+                fairValue: pow(10, logFairValue),
                 resistance: pow(10, logResistance)
             )
         }
     }
 
     private var yRange: ClosedRange<Double> {
-        guard !chartData.isEmpty else { return 10000...200000 }
+        guard !chartData.isEmpty else { return 1000...500000 }
         let allValues = chartData.flatMap { [$0.price, $0.support, $0.resistance] }
-        let mn = (allValues.min() ?? 10000) * 0.9
-        let mx = (allValues.max() ?? 200000) * 1.1
+        let mn = max((allValues.min() ?? 1000) * 0.5, 1)
+        let mx = (allValues.max() ?? 500000) * 1.5
         return mn...mx
     }
 
@@ -57,8 +59,19 @@ struct PowerLawChartView: View {
                     y: .value("Support", point.support),
                     series: .value("Series", "Support")
                 )
-                .foregroundStyle(.green.opacity(0.4))
+                .foregroundStyle(.green.opacity(0.5))
                 .lineStyle(StrokeStyle(lineWidth: 1))
+                .interpolationMethod(.catmullRom)
+            }
+
+            ForEach(chartData, id: \.date) { point in
+                LineMark(
+                    x: .value("Date", point.date),
+                    y: .value("FairValue", point.fairValue),
+                    series: .value("Series", "FairValue")
+                )
+                .foregroundStyle(.yellow.opacity(0.4))
+                .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
                 .interpolationMethod(.catmullRom)
             }
 
@@ -68,7 +81,7 @@ struct PowerLawChartView: View {
                     y: .value("Resistance", point.resistance),
                     series: .value("Series", "Resistance")
                 )
-                .foregroundStyle(.red.opacity(0.4))
+                .foregroundStyle(.red.opacity(0.5))
                 .lineStyle(StrokeStyle(lineWidth: 1))
                 .interpolationMethod(.catmullRom)
             }
@@ -84,7 +97,7 @@ struct PowerLawChartView: View {
                 .interpolationMethod(.catmullRom)
             }
         }
-        .chartYScale(domain: yRange)
+        .chartYScale(domain: yRange, type: .log)
         .chartXAxis {
             AxisMarks(values: .automatic(desiredCount: 4)) { value in
                 AxisValueLabel {
@@ -97,10 +110,12 @@ struct PowerLawChartView: View {
             }
         }
         .chartYAxis {
-            AxisMarks(position: .trailing, values: .automatic(desiredCount: 4)) { value in
+            AxisMarks(position: .trailing, values: .automatic(desiredCount: 5)) { value in
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.3))
+                    .foregroundStyle(.quaternary)
                 AxisValueLabel {
                     if let price = value.as(Double.self) {
-                        Text("$\(Int(price / 1000))k")
+                        Text(formatAxisPrice(price))
                             .font(.system(size: 9, design: .monospaced))
                             .foregroundStyle(.tertiary)
                     }
@@ -108,7 +123,17 @@ struct PowerLawChartView: View {
             }
         }
         .chartLegend(.hidden)
-        .frame(height: 200)
+        .frame(height: 220)
+    }
+
+    private func formatAxisPrice(_ price: Double) -> String {
+        if price >= 1_000_000 {
+            return "$\(String(format: "%.1fM", price / 1_000_000))"
+        } else if price >= 1000 {
+            return "$\(Int(price / 1000))k"
+        } else {
+            return "$\(Int(price))"
+        }
     }
 
     private func genesisDate() -> Date {
@@ -120,9 +145,10 @@ struct PowerLawChartView: View {
     }
 }
 
-struct PowerLawPoint: Sendable {
+nonisolated struct PowerLawPoint: Sendable {
     let date: Date
     let price: Double
     let support: Double
+    let fairValue: Double
     let resistance: Double
 }

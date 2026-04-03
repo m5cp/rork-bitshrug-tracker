@@ -229,7 +229,7 @@ nonisolated class BitcoinService: Sendable {
     func estimate200WeekMA() -> Double {
         let days = Double(daysSince(genesisDate()))
         let logDays = log10(days)
-        let log200WMA = 5.71 * logDays - 17.51
+        let log200WMA = 5.82 * logDays - 17.97
         return pow(10, log200WMA)
     }
 
@@ -316,12 +316,13 @@ nonisolated class BitcoinService: Sendable {
         return SupplyProfitData(estimatedPercent: clamped, zone: SupplyProfitZone(percent: clamped))
     }
 
-    func calculatePowerLaw(price: Double) -> (position: PowerLawPosition, percentInCorridor: Double, supportPrice: Double, resistancePrice: Double) {
+    func calculatePowerLaw(price: Double) -> (position: PowerLawPosition, percentInCorridor: Double, supportPrice: Double, fairValuePrice: Double, resistancePrice: Double) {
         let days = Double(daysSince(genesisDate()))
         let logDays = log10(days)
 
-        let logSupport = 5.71 * logDays - 17.01
-        let logResistance = 5.71 * logDays - 15.51
+        let logSupport = 5.82 * logDays - 17.47
+        let logFairValue = 5.82 * logDays - 17.01
+        let logResistance = 5.82 * logDays - 16.61
         let logPrice = log10(price)
 
         let corridorWidth = logResistance - logSupport
@@ -337,9 +338,10 @@ nonisolated class BitcoinService: Sendable {
         }
 
         let supportPrice = pow(10, logSupport)
+        let fairValuePrice = pow(10, logFairValue)
         let resistancePrice = pow(10, logResistance)
 
-        return (position, min(max(positionInCorridor, 0), 1), supportPrice, resistancePrice)
+        return (position, min(max(positionInCorridor, 0), 1), supportPrice, fairValuePrice, resistancePrice)
     }
 
     func calculateRainbowBand(price: Double) -> RainbowBand {
@@ -347,8 +349,8 @@ nonisolated class BitcoinService: Sendable {
         let logDays = log10(days)
         let logPrice = log10(price)
 
-        let logFairValue = 5.71 * logDays - 16.26
-        let bandWidth = 0.15
+        let logFairValue = 5.82 * logDays - 17.01
+        let bandWidth = 0.09
 
         let deviation = (logPrice - logFairValue) / bandWidth
 
