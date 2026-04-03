@@ -28,12 +28,12 @@ struct OnboardingView: View {
             withAnimation(.easeIn(duration: 1.0)) {
                 opacity = 1
             }
-            try? await Task.sleep(for: .seconds(2.5))
+            try? await Task.sleep(for: .seconds(3.0))
             guard !dismissed else { return }
-            withAnimation(.easeOut(duration: 0.8)) {
+            withAnimation(.easeOut(duration: 2.0)) {
                 opacity = 0
             }
-            try? await Task.sleep(for: .seconds(0.8))
+            try? await Task.sleep(for: .seconds(2.0))
             UserDefaults.standard.set(true, forKey: "bitshrug_onboarded")
             isPresented = false
         }
