@@ -438,6 +438,12 @@ class BitcoinViewModel {
             change24h: change24h
         )
 
+        let shared = UserDefaults(suiteName: "group.app.rork.mh5qf4z0nqy7olvg1im36")
+        shared?.set(fearGreedValue, forKey: "widget_fear_greed")
+        shared?.set(halvingInfo?.currentPhase.label ?? "Loading", forKey: "widget_cycle_phase")
+        shared?.set(trendStatus.label, forKey: "widget_trend")
+        shared?.set(momentumStatus.label, forKey: "widget_momentum")
+
         PriceAlertManager.shared.evaluate(
             price: price,
             support: powerLawSupport,

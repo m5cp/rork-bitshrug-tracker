@@ -292,15 +292,15 @@ struct ReversalTrackerView: View {
 
     private func sequenceRow(number: Int, step: SequenceStep) -> some View {
         let activeColor: Color = selectedTab == .bull
-            ? Color(red: 0.2, green: 0.85, blue: 0.5)
-            : Color(red: 0.95, green: 0.3, blue: 0.3)
+            ? AppColors.bullish
+            : AppColors.bearish
 
         return HStack(spacing: 12) {
             Text("\(number)")
                 .font(.system(size: 11, weight: .heavy, design: .monospaced))
-                .foregroundStyle(step.isActive ? Color.white : Color.white.opacity(0.3))
+                .foregroundStyle(step.isActive ? .white : Color.primary.opacity(0.3))
                 .frame(width: 24, height: 24)
-                .background(step.isActive ? activeColor : Color.white.opacity(0.08))
+                .background(step.isActive ? activeColor : Color.primary.opacity(0.08))
                 .clipShape(.rect(cornerRadius: 6))
 
             Text(step.label)
@@ -315,12 +315,12 @@ struct ReversalTrackerView: View {
         .background(
             step.isActive
                 ? activeColor.opacity(0.08)
-                : Color.white.opacity(0.02)
+                : Color.primary.opacity(0.02)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .strokeBorder(
-                    step.isActive ? activeColor.opacity(0.2) : Color.white.opacity(0.04),
+                    step.isActive ? activeColor.opacity(0.2) : Color.primary.opacity(0.04),
                     lineWidth: 1
                 )
         )

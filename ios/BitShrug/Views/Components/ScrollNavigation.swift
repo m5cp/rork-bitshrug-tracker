@@ -30,7 +30,7 @@ struct SectionJumpBar: View {
                         .clipShape(Capsule())
                         .overlay(
                             Capsule()
-                                .strokeBorder(Color.white.opacity(0.08), lineWidth: 1)
+                                .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
                         )
                     }
                     .sensoryFeedback(.selection, trigger: section.id)

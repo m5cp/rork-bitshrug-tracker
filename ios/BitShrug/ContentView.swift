@@ -10,6 +10,10 @@ struct ContentView: View {
                 HomeTab(viewModel: viewModel)
             }
 
+            Tab("Portfolio", systemImage: "wallet.bifold", value: .portfolio) {
+                PortfolioTab(viewModel: viewModel)
+            }
+
             Tab("Learn", systemImage: "book.closed", value: .learn) {
                 LearnTab(viewModel: viewModel)
             }
@@ -31,6 +35,7 @@ struct ContentView: View {
 
 enum AppTab: Hashable {
     case home
+    case portfolio
     case learn
     case powerLaw
     case cycle

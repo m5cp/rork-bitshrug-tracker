@@ -6,6 +6,7 @@ import RevenueCat
 @main
 struct BitShrugApp: App {
     @State private var showOnboarding: Bool = !UserDefaults.standard.bool(forKey: "bitshrug_onboarded")
+    @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
 
     init() {
         #if DEBUG
@@ -17,13 +18,21 @@ struct BitShrugApp: App {
         BitShrugShortcuts.updateAppShortcutParameters()
     }
 
+    private var colorScheme: ColorScheme? {
+        switch appColorScheme {
+        case "light": return .light
+        case "dark": return .dark
+        default: return nil
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(colorScheme)
                 .fullScreenCover(isPresented: $showOnboarding) {
                     OnboardingView(isPresented: $showOnboarding)
-                        .preferredColorScheme(.dark)
+                        .preferredColorScheme(colorScheme)
                 }
         }
     }

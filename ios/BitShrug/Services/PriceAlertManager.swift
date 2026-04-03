@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import UserNotifications
 
 @Observable
@@ -12,12 +13,39 @@ class PriceAlertManager {
         didSet { UserDefaults.standard.set(powerLawResistanceAlert, forKey: "alert_pl_resistance") }
     }
 
+    var customTargets: [Double] = []
+
     private let lastSupportCrossKey = "last_support_cross"
     private let lastResistanceCrossKey = "last_resistance_cross"
+    private let customTargetsKey = "custom_price_targets"
 
     private init() {
         powerLawSupportAlert = UserDefaults.standard.bool(forKey: "alert_pl_support")
         powerLawResistanceAlert = UserDefaults.standard.bool(forKey: "alert_pl_resistance")
+        loadCustomTargets()
+    }
+
+    func addTarget(_ price: Double) {
+        guard !customTargets.contains(price) else { return }
+        customTargets.append(price)
+        customTargets.sort()
+        saveCustomTargets()
+    }
+
+    func removeTargets(at offsets: IndexSet) {
+        customTargets.remove(atOffsets: offsets)
+        saveCustomTargets()
+    }
+
+    private func loadCustomTargets() {
+        guard let data = UserDefaults.standard.data(forKey: customTargetsKey),
+              let targets = try? JSONDecoder().decode([Double].self, from: data) else { return }
+        customTargets = targets
+    }
+
+    private func saveCustomTargets() {
+        guard let data = try? JSONEncoder().encode(customTargets) else { return }
+        UserDefaults.standard.set(data, forKey: customTargetsKey)
     }
 
     func evaluate(price: Double, support: Double, resistance: Double) {
@@ -67,6 +95,28 @@ class PriceAlertManager {
                     body: "Price dropped below Power Law resistance at \(formatPrice(resistance))"
                 )
                 markNotified(key: lastResistanceCrossKey)
+            }
+        }
+
+        for target in customTargets {
+            let crossKey = "custom_target_\(Int(target))"
+            let wasBelow = prevPrice < target
+            let isAbove = price >= target
+            let wasAbove = prevPrice >= target
+            let isBelow = price < target
+
+            if wasBelow && isAbove && !alreadyNotified(key: crossKey) {
+                sendAlert(
+                    title: "BitShrug",
+                    body: "Bitcoin crossed above \(formatPrice(target))"
+                )
+                markNotified(key: crossKey)
+            } else if wasAbove && isBelow && !alreadyNotified(key: crossKey) {
+                sendAlert(
+                    title: "BitShrug",
+                    body: "Bitcoin dropped below \(formatPrice(target))"
+                )
+                markNotified(key: crossKey)
             }
         }
 

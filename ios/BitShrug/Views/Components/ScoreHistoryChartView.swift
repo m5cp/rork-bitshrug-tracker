@@ -18,10 +18,20 @@ struct ScoreHistoryChartView: View {
 
     private var scoreColor: Color {
         guard let last = chartEntries.last else { return .orange }
-        if last.score >= 75 { return Color(red: 0.2, green: 0.85, blue: 0.5) }
-        if last.score >= 55 { return .orange }
-        if last.score >= 35 { return Color(red: 0.95, green: 0.6, blue: 0.2) }
-        return Color(red: 0.95, green: 0.3, blue: 0.3)
+        return AppColors.scoreColor(for: last.score)
+    }
+
+    private var averageScore: Int {
+        guard !chartEntries.isEmpty else { return 0 }
+        return chartEntries.map(\.score).reduce(0, +) / chartEntries.count
+    }
+
+    private var highScore: Int {
+        chartEntries.map(\.score).max() ?? 0
+    }
+
+    private var lowScore: Int {
+        chartEntries.map(\.score).min() ?? 0
     }
 
     var body: some View {
@@ -33,7 +43,7 @@ struct ScoreHistoryChartView: View {
                     let delta = last - first
                     Text("\(delta >= 0 ? "+" : "")\(delta) pts")
                         .font(.system(size: 10, weight: .heavy, design: .monospaced))
-                        .foregroundStyle(delta >= 0 ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
+                        .foregroundStyle(AppColors.changeColor(positive: delta >= 0))
                 }
             }
 
@@ -88,6 +98,17 @@ struct ScoreHistoryChartView: View {
                     }
                 }
                 .frame(height: 120)
+                if chartEntries.count >= 2 {
+                    HStack(spacing: 0) {
+                        statPill(label: "Avg", value: "\(averageScore)")
+                        Spacer()
+                        statPill(label: "High", value: "\(highScore)")
+                        Spacer()
+                        statPill(label: "Low", value: "\(lowScore)")
+                        Spacer()
+                        statPill(label: "Days", value: "\(chartEntries.count)")
+                    }
+                }
             } else {
                 VStack(spacing: 8) {
                     Image(systemName: "chart.line.uptrend.xyaxis")
@@ -102,5 +123,16 @@ struct ScoreHistoryChartView: View {
             }
         }
         .premiumCard(.highlighted)
+    }
+
+    private func statPill(label: String, value: String) -> some View {
+        VStack(spacing: 2) {
+            Text(label)
+                .font(.system(size: 9, weight: .medium))
+                .foregroundStyle(.tertiary)
+            Text(value)
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundStyle(.secondary)
+        }
     }
 }

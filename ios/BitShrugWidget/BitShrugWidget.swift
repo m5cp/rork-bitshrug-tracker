@@ -7,11 +7,15 @@ nonisolated struct BitShrugEntry: TimelineEntry {
     let price: String
     let label: String
     let change24h: Double
+    let fearGreed: Int
+    let cyclePhase: String
+    let trend: String
+    let momentum: String
 }
 
 nonisolated struct BitShrugProvider: TimelineProvider {
     func placeholder(in context: Context) -> BitShrugEntry {
-        BitShrugEntry(date: .now, score: 62, price: "$84,250", label: "Moderate", change24h: 1.5)
+        BitShrugEntry(date: .now, score: 62, price: "$84,250", label: "Moderate", change24h: 1.5, fearGreed: 55, cyclePhase: "Early Bull", trend: "Bullish", momentum: "Neutral")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (BitShrugEntry) -> Void) {
@@ -31,6 +35,10 @@ nonisolated struct BitShrugProvider: TimelineProvider {
         let price = shared?.double(forKey: "widget_price") ?? 0
         let label = shared?.string(forKey: "widget_label") ?? "Loading"
         let change = shared?.double(forKey: "widget_change24h") ?? 0
+        let fearGreed = shared?.integer(forKey: "widget_fear_greed") ?? 50
+        let cyclePhase = shared?.string(forKey: "widget_cycle_phase") ?? "Loading"
+        let trend = shared?.string(forKey: "widget_trend") ?? "Neutral"
+        let momentum = shared?.string(forKey: "widget_momentum") ?? "Neutral"
 
         let priceString = price > 0 ? "$\(Int(price).formatted(.number))" : "--"
 
@@ -39,9 +47,24 @@ nonisolated struct BitShrugProvider: TimelineProvider {
             score: score > 0 ? score : 62,
             price: priceString,
             label: score > 0 ? label : "Moderate",
-            change24h: change
+            change24h: change,
+            fearGreed: fearGreed > 0 ? fearGreed : 55,
+            cyclePhase: cyclePhase,
+            trend: trend,
+            momentum: momentum
         )
     }
+}
+
+private func widgetScoreColor(_ score: Int) -> Color {
+    if score >= 75 { return Color(red: 0.2, green: 0.85, blue: 0.5) }
+    if score >= 55 { return .orange }
+    if score >= 35 { return Color(red: 0.95, green: 0.6, blue: 0.2) }
+    return Color(red: 0.95, green: 0.3, blue: 0.3)
+}
+
+private func widgetChangeColor(_ change: Double) -> Color {
+    change >= 0 ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3)
 }
 
 // MARK: - Small Widget
@@ -49,12 +72,7 @@ nonisolated struct BitShrugProvider: TimelineProvider {
 struct SmallWidgetView: View {
     var entry: BitShrugEntry
 
-    private var scoreColor: Color {
-        if entry.score >= 75 { return Color(red: 0.2, green: 0.85, blue: 0.5) }
-        if entry.score >= 55 { return .orange }
-        if entry.score >= 35 { return Color(red: 0.95, green: 0.6, blue: 0.2) }
-        return Color(red: 0.95, green: 0.3, blue: 0.3)
-    }
+    private var scoreColor: Color { widgetScoreColor(entry.score) }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -105,12 +123,7 @@ struct SmallWidgetView: View {
 struct MediumWidgetView: View {
     var entry: BitShrugEntry
 
-    private var scoreColor: Color {
-        if entry.score >= 75 { return Color(red: 0.2, green: 0.85, blue: 0.5) }
-        if entry.score >= 55 { return .orange }
-        if entry.score >= 35 { return Color(red: 0.95, green: 0.6, blue: 0.2) }
-        return Color(red: 0.95, green: 0.3, blue: 0.3)
-    }
+    private var scoreColor: Color { widgetScoreColor(entry.score) }
 
     var body: some View {
         HStack(spacing: 16) {
@@ -150,7 +163,7 @@ struct MediumWidgetView: View {
                     let sign = entry.change24h >= 0 ? "+" : ""
                     Text("\(sign)\(String(format: "%.1f", entry.change24h))%")
                         .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(entry.change24h >= 0 ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
+                        .foregroundStyle(widgetChangeColor(entry.change24h))
 
                     Text("24h")
                         .font(.system(size: 9, weight: .medium))
@@ -163,6 +176,96 @@ struct MediumWidgetView: View {
             }
         }
         .containerBackground(.fill.tertiary, for: .widget)
+    }
+}
+
+// MARK: - Large Widget
+
+struct LargeWidgetView: View {
+    var entry: BitShrugEntry
+
+    private var scoreColor: Color { widgetScoreColor(entry.score) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("BitShrug")
+                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(entry.date.formatted(.dateTime.hour().minute()))
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundStyle(.tertiary)
+            }
+
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .stroke(scoreColor.opacity(0.2), lineWidth: 6)
+                    Circle()
+                        .trim(from: 0, to: Double(entry.score) / 100.0)
+                        .stroke(scoreColor, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+
+                    VStack(spacing: 1) {
+                        Text("\(entry.score)")
+                            .font(.system(size: 28, weight: .bold, design: .monospaced))
+                            .foregroundStyle(.primary)
+                        Text(entry.label.uppercased())
+                            .font(.system(size: 7, weight: .bold))
+                            .foregroundStyle(scoreColor)
+                            .tracking(0.5)
+                    }
+                }
+                .frame(width: 80, height: 80)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(entry.price)
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundStyle(.primary)
+
+                    HStack(spacing: 6) {
+                        let sign = entry.change24h >= 0 ? "+" : ""
+                        Text("\(sign)\(String(format: "%.1f", entry.change24h))%")
+                            .font(.system(size: 13, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(widgetChangeColor(entry.change24h))
+                        Text("24h")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+
+                Spacer()
+            }
+
+            Divider()
+
+            VStack(spacing: 8) {
+                widgetDataRow(icon: "heart.text.square", label: "Fear & Greed", value: "\(entry.fearGreed)")
+                widgetDataRow(icon: "arrow.triangle.2.circlepath", label: "Cycle Phase", value: entry.cyclePhase)
+                widgetDataRow(icon: "chart.xyaxis.line", label: "Trend", value: entry.trend)
+                widgetDataRow(icon: "bolt.fill", label: "Momentum", value: entry.momentum)
+            }
+
+            Spacer(minLength: 0)
+        }
+        .containerBackground(.fill.tertiary, for: .widget)
+    }
+
+    private func widgetDataRow(icon: String, label: String, value: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.orange)
+                .frame(width: 20)
+            Text(label)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .foregroundStyle(.primary)
+        }
     }
 }
 
@@ -219,6 +322,7 @@ struct BitShrugWidget: Widget {
         .supportedFamilies([
             .systemSmall,
             .systemMedium,
+            .systemLarge,
             .accessoryCircular,
             .accessoryRectangular
         ])
@@ -235,6 +339,8 @@ struct BitShrugWidgetEntryView: View {
             SmallWidgetView(entry: entry)
         case .systemMedium:
             MediumWidgetView(entry: entry)
+        case .systemLarge:
+            LargeWidgetView(entry: entry)
         case .accessoryCircular:
             AccessoryCircularView(entry: entry)
         case .accessoryRectangular:

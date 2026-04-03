@@ -9,6 +9,9 @@ struct ProfileView: View {
     @State private var showEULA: Bool = false
     @State private var showAccessibility: Bool = false
     @State private var showDisclaimer: Bool = false
+    @State private var showPriceAlerts: Bool = false
+    @State private var showPaywall: Bool = false
+    @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
 
     var body: some View {
         NavigationStack {
@@ -144,6 +147,21 @@ struct ProfileView: View {
                         }
                     }
                     .foregroundStyle(.primary)
+
+                    Picker(selection: $appColorScheme) {
+                        Text("Dark").tag("dark")
+                        Text("Light").tag("light")
+                        Text("System").tag("system")
+                    } label: {
+                        Label {
+                            Text("Appearance")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                        } icon: {
+                            Image(systemName: "circle.lefthalf.filled")
+                                .foregroundStyle(.orange)
+                        }
+                    }
 
                     Button {
                         showAbout = true

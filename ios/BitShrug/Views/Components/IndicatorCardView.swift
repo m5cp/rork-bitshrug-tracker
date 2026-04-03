@@ -62,7 +62,7 @@ struct IndicatorCardView: View {
 
                 if isExpanded {
                     Divider()
-                        .overlay(Color.white.opacity(0.06))
+                        .overlay(Color.primary.opacity(0.06))
                         .padding(.vertical, 12)
 
                     Text(detail)
@@ -76,7 +76,7 @@ struct IndicatorCardView: View {
             .padding(16)
             .background(
                 LinearGradient(
-                    colors: [Color.white.opacity(0.06), Color.white.opacity(0.03)],
+                    colors: [Color.primary.opacity(0.06), Color.primary.opacity(0.03)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -84,7 +84,7 @@ struct IndicatorCardView: View {
             .clipShape(.rect(cornerRadius: 18))
             .overlay(
                 RoundedRectangle(cornerRadius: 18)
-                    .strokeBorder(Color.white.opacity(0.07), lineWidth: 1)
+                    .strokeBorder(Color.primary.opacity(0.07), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -163,7 +163,7 @@ struct WideIndicatorCard: View {
             .padding(16)
             .background(
                 LinearGradient(
-                    colors: [Color.white.opacity(0.06), Color.white.opacity(0.03)],
+                    colors: [Color.primary.opacity(0.06), Color.primary.opacity(0.03)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -171,7 +171,7 @@ struct WideIndicatorCard: View {
             .clipShape(.rect(cornerRadius: 18))
             .overlay(
                 RoundedRectangle(cornerRadius: 18)
-                    .strokeBorder(Color.white.opacity(0.07), lineWidth: 1)
+                    .strokeBorder(Color.primary.opacity(0.07), lineWidth: 1)
             )
         }
         .buttonStyle(.plain)

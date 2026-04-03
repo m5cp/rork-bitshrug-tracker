@@ -16,7 +16,6 @@ struct HomeTab: View {
         SectionAnchor(id: "insight", icon: "sparkle", label: "Insight"),
         SectionAnchor(id: "breakdown", icon: "gauge.with.dots.needle.bottom.50percent", label: "Breakdown"),
         SectionAnchor(id: "indicators", icon: "gauge.with.dots.needle.bottom.50percent", label: "Indicators"),
-        SectionAnchor(id: "weekly", icon: "calendar", label: "Weekly"),
         SectionAnchor(id: "context", icon: "globe", label: "Context"),
     ]
 
@@ -65,15 +64,8 @@ struct HomeTab: View {
                                 .id("breakdown")
                                 .padding(.bottom, 20)
 
-                            sentimentCard
+                            compactIndicatorsSection
                                 .id("indicators")
-                                .padding(.bottom, 12)
-
-                            indicatorsList
-                                .padding(.bottom, 20)
-
-                            weeklySummarySection
-                                .id("weekly")
                                 .padding(.bottom, 20)
 
                             contextSection
@@ -221,7 +213,7 @@ struct HomeTab: View {
                 if viewModel.price > 0 {
                     Text(viewModel.formattedChange)
                         .font(.system(.subheadline, design: .monospaced, weight: .bold))
-                        .foregroundStyle(viewModel.change24h >= 0 ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
+                        .foregroundStyle(AppColors.changeColor(positive: viewModel.change24h >= 0))
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
                         .background(
@@ -240,6 +232,12 @@ struct HomeTab: View {
                     metricPill(label: "7d", value: String(format: "%+.1f%%", c7))
                 }
                 Spacer()
+            }
+
+            if let updated = viewModel.lastUpdated {
+                Text("Updated \(updated.formatted(.relative(presentation: .named)))")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.quaternary)
             }
         }
         .padding(.top, 8)
@@ -360,9 +358,9 @@ struct HomeTab: View {
         let progress = Double(score) / Double(maxScore)
         let color: Color = {
             switch status {
-            case .bullish: return Color(red: 0.2, green: 0.85, blue: 0.5)
+            case .bullish: return AppColors.bullish
             case .neutral: return .orange
-            case .bearish: return Color(red: 0.95, green: 0.3, blue: 0.3)
+            case .bearish: return AppColors.bearish
             }
         }()
 
@@ -401,7 +399,7 @@ struct HomeTab: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(Color.white.opacity(0.06))
+                        .fill(Color.primary.opacity(0.06))
 
                     Capsule()
                         .fill(
@@ -421,7 +419,7 @@ struct HomeTab: View {
 
             if !isLast {
                 Divider()
-                    .overlay(Color.white.opacity(0.04))
+                    .overlay(Color.primary.opacity(0.04))
                     .padding(.top, 8)
             }
         }
@@ -429,37 +427,7 @@ struct HomeTab: View {
 
     // MARK: - Weekly Summary
 
-    private var weeklySummarySection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            SectionHeader(icon: "calendar", title: "THIS WEEK") {
-                let dir = viewModel.weeklyDirection
-                Text(dir)
-                    .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(dir == "Improving" ? Color(red: 0.2, green: 0.85, blue: 0.5) : dir == "Weakening" ? Color(red: 0.95, green: 0.3, blue: 0.3) : .secondary)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(
-                        (dir == "Improving" ? Color.green : dir == "Weakening" ? Color.red : Color.white).opacity(0.1)
-                    )
-                    .clipShape(Capsule())
-            }
 
-            if let change = viewModel.weeklyScoreChange {
-                Text(change)
-                    .font(.system(.subheadline, design: .monospaced, weight: .bold))
-                    .foregroundStyle(.primary)
-            }
-
-            Text(viewModel.weeklyExplanation)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .premiumCard()
-        .opacity(appeared ? 1 : 0)
-        .offset(y: appeared ? 0 : 16)
-    }
 
     // MARK: - Market Context
 
@@ -516,7 +484,7 @@ struct HomeTab: View {
                 "200-Day EMA",
                 formatIndicatorPrice(ma.ema200Day),
                 ma.isAboveEMA ? "Bull" : "Bear",
-                ma.isAboveEMA ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3),
+                ma.isAboveEMA ? AppColors.bullish : AppColors.bearish,
                 "Price is \(String(format: "%.1f%%", abs(ma.priceVsEMA))) \(ma.isAboveEMA ? "above" : "below") the 200-day exponential moving average. This long-term trend line separates bullish and bearish market structure."
             ))
 
@@ -525,7 +493,7 @@ struct HomeTab: View {
                 "200-Week MA",
                 formatIndicatorPrice(ma.estimated200WMA),
                 ma.isAbove200WMA ? "Above" : "Below",
-                ma.isAbove200WMA ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3),
+                ma.isAbove200WMA ? AppColors.bullish : AppColors.bearish,
                 "Price is \(String(format: "%.1f%%", abs(ma.priceVs200WMA))) \(ma.isAbove200WMA ? "above" : "below") the estimated 200-week moving average. This acts as a long-term floor in Bitcoin's history."
             ))
         }
@@ -628,25 +596,118 @@ struct HomeTab: View {
         .premiumCard(.accent)
     }
 
-    private var indicatorsList: some View {
-        VStack(spacing: 12) {
-            ForEach(Array(allIndicators.enumerated()), id: \.offset) { _, indicator in
-                IndicatorCardView(
-                    icon: indicator.icon,
-                    title: indicator.title,
-                    value: indicator.value,
-                    status: indicator.status,
-                    statusColor: indicator.statusColor,
-                    detail: indicator.detail
-                )
+    private var compactIndicatorsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionHeader(icon: "gauge.with.dots.needle.bottom.50percent", title: "INDICATORS")
+
+            let level = viewModel.fearGreedLevel
+            HStack(spacing: 14) {
+                ZStack {
+                    Circle()
+                        .stroke(level.color.opacity(0.12), lineWidth: 4)
+                    Circle()
+                        .trim(from: 0, to: Double(viewModel.fearGreedValue) / 100.0)
+                        .stroke(level.color, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.spring(duration: 0.6), value: viewModel.fearGreedValue)
+                    Text("\(viewModel.fearGreedValue)")
+                        .font(.system(.caption, design: .monospaced, weight: .heavy))
+                        .foregroundStyle(.primary)
+                }
+                .frame(width: 40, height: 40)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Fear & Greed")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                    Text(level.label)
+                        .font(.system(size: 11, weight: .heavy))
+                        .foregroundStyle(level.color)
+                }
+
+                Spacer()
+            }
+            .padding(.bottom, 4)
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                ForEach(Array(allIndicators.enumerated()), id: \.offset) { _, indicator in
+                    compactIndicatorCell(
+                        icon: indicator.icon,
+                        title: indicator.title,
+                        value: indicator.value,
+                        status: indicator.status,
+                        statusColor: indicator.statusColor
+                    )
+                }
+            }
+
+            if let dir = viewModel.weeklyScoreChange {
+                Divider().overlay(Color.primary.opacity(0.04)).padding(.top, 4)
+
+                HStack(spacing: 8) {
+                    Text("THIS WEEK")
+                        .font(.system(size: 9, weight: .heavy))
+                        .foregroundStyle(.tertiary)
+                        .tracking(1)
+                    Text(dir)
+                        .font(.system(.caption, design: .monospaced, weight: .bold))
+                        .foregroundStyle(.primary)
+
+                    let weekDir = viewModel.weeklyDirection
+                    Text(weekDir)
+                        .font(.system(size: 9, weight: .heavy))
+                        .foregroundStyle(weekDir == "Improving" ? AppColors.bullish : weekDir == "Weakening" ? AppColors.bearish : .secondary)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background((weekDir == "Improving" ? Color.green : weekDir == "Weakening" ? Color.red : Color.primary).opacity(0.1))
+                        .clipShape(Capsule())
+
+                    Spacer()
+                }
             }
         }
+        .premiumCard(.highlighted)
+        .opacity(appeared ? 1 : 0)
+        .offset(y: appeared ? 0 : 16)
+    }
+
+    private func compactIndicatorCell(icon: String, title: String, value: String, status: String, statusColor: Color) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 5) {
+                Image(systemName: icon)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.orange)
+                Text(title)
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
+            Text(value)
+                .font(.system(.caption, design: .monospaced, weight: .bold))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+
+            Text(status)
+                .font(.system(size: 8, weight: .heavy))
+                .foregroundStyle(statusColor)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(statusColor.opacity(0.12))
+                .clipShape(Capsule())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(Color.primary.opacity(0.04))
+        .clipShape(.rect(cornerRadius: 10))
     }
 
     private var s2fStatus: (label: String, color: Color, detail: String) {
         let ratio = viewModel.stockToFlowRatio
         if ratio < 0.5 {
-            return ("Undervalued", .green, "Price is significantly below the Stock-to-Flow model price. Historically, these periods precede major price appreciation as scarcity becomes the dominant narrative.")
+            return ("Undervalued", AppColors.bullish, "Price is significantly below the Stock-to-Flow model price. Historically, these periods precede major price appreciation as scarcity becomes the dominant narrative.")
         } else if ratio < 1.5 {
             return ("Fair Value", .blue, "Price is near the Stock-to-Flow model estimate. The market is fairly priced relative to Bitcoin's scarcity schedule and halving-driven supply reduction.")
         } else {

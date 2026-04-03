@@ -17,11 +17,11 @@ struct PremiumCard: ViewModifier {
     private var cardBackground: some ShapeStyle {
         switch style {
         case .standard:
-            return AnyShapeStyle(Color.white.opacity(0.05))
+            return AnyShapeStyle(Color.primary.opacity(0.05))
         case .highlighted:
             return AnyShapeStyle(
                 LinearGradient(
-                    colors: [Color.white.opacity(0.07), Color.white.opacity(0.03)],
+                    colors: [Color.primary.opacity(0.07), Color.primary.opacity(0.03)],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -40,11 +40,11 @@ struct PremiumCard: ViewModifier {
     private var borderGradient: some ShapeStyle {
         switch style {
         case .standard:
-            return AnyShapeStyle(Color.white.opacity(0.06))
+            return AnyShapeStyle(Color.primary.opacity(0.06))
         case .highlighted:
             return AnyShapeStyle(
                 LinearGradient(
-                    colors: [Color.white.opacity(0.1), Color.white.opacity(0.03)],
+                    colors: [Color.primary.opacity(0.1), Color.primary.opacity(0.03)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
