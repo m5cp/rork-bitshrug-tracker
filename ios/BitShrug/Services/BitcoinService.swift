@@ -422,4 +422,78 @@ nonisolated class BitcoinService: Sendable {
         components.day = day
         return Calendar.current.date(from: components) ?? Date()
     }
+
+    // MARK: - RSI Calculation
+
+    func calculateRSI(prices: [PricePoint], period: Int = 14) -> Double? {
+        guard prices.count > period else { return nil }
+        let closingPrices = prices.map(\.price)
+        var gains: [Double] = []
+        var losses: [Double] = []
+
+        for i in 1..<closingPrices.count {
+            let change = closingPrices[i] - closingPrices[i - 1]
+            gains.append(max(change, 0))
+            losses.append(max(-change, 0))
+        }
+
+        guard gains.count >= period else { return nil }
+
+        var avgGain = gains.prefix(period).reduce(0, +) / Double(period)
+        var avgLoss = losses.prefix(period).reduce(0, +) / Double(period)
+
+        for i in period..<gains.count {
+            avgGain = (avgGain * Double(period - 1) + gains[i]) / Double(period)
+            avgLoss = (avgLoss * Double(period - 1) + losses[i]) / Double(period)
+        }
+
+        guard avgLoss > 0 else { return 100 }
+        let rs = avgGain / avgLoss
+        return 100 - (100 / (1 + rs))
+    }
+
+    // MARK: - MACD Calculation
+
+    func calculateMACD(prices: [PricePoint]) -> (macd: Double, signal: Double, histogram: Double)? {
+        guard prices.count >= 35 else { return nil }
+        let closingPrices = prices.map(\.price)
+
+        guard let ema12 = calculateEMA(values: closingPrices, period: 12),
+              let ema26 = calculateEMA(values: closingPrices, period: 26) else { return nil }
+
+        let macdLine = ema12 - ema26
+
+        var macdValues: [Double] = []
+        let mult12 = 2.0 / 13.0
+        let mult26 = 2.0 / 27.0
+        var runEma12 = closingPrices.prefix(12).reduce(0, +) / 12.0
+        var runEma26 = closingPrices.prefix(26).reduce(0, +) / 26.0
+
+        for i in 26..<closingPrices.count {
+            if i >= 12 {
+                runEma12 = (closingPrices[i] - runEma12) * mult12 + runEma12
+            }
+            runEma26 = (closingPrices[i] - runEma26) * mult26 + runEma26
+            macdValues.append(runEma12 - runEma26)
+        }
+
+        guard macdValues.count >= 9 else { return nil }
+        var signalLine = macdValues.prefix(9).reduce(0, +) / 9.0
+        let signalMult = 2.0 / 10.0
+        for i in 9..<macdValues.count {
+            signalLine = (macdValues[i] - signalLine) * signalMult + signalLine
+        }
+
+        return (macd: macdLine, signal: signalLine, histogram: macdLine - signalLine)
+    }
+
+    private func calculateEMA(values: [Double], period: Int) -> Double? {
+        guard values.count >= period else { return nil }
+        let multiplier = 2.0 / Double(period + 1)
+        var ema = values.prefix(period).reduce(0, +) / Double(period)
+        for i in period..<values.count {
+            ema = (values[i] - ema) * multiplier + ema
+        }
+        return ema
+    }
 }

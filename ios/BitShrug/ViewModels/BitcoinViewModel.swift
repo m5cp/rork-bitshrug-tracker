@@ -24,6 +24,8 @@ class BitcoinViewModel {
     var actual200WMA: Double?
     var hashRate: Double = 0
     var blockHeight: Int = 0
+    var rsiValue: Double?
+    var macdData: (macd: Double, signal: Double, histogram: Double)?
     var isLoading: Bool = false
     var lastUpdated: Date?
     var errorMessage: String?
@@ -400,6 +402,11 @@ class BitcoinViewModel {
                 puellMultiple = service.calculatePuellMultiple(currentPrice: price, historicalPrices: historicalPrices)
             }
             supplyInProfit = service.calculateSupplyInProfit(price: price, mvrvZScore: mvrvZScore)
+
+            if !historicalPrices.isEmpty {
+                rsiValue = service.calculateRSI(prices: historicalPrices)
+                macdData = service.calculateMACD(prices: historicalPrices)
+            }
 
             print("[BitShrug] MVRV Z-Score: \(String(format: "%.2f", mvrvZScore))")
             print("[BitShrug] S2F Ratio: \(String(format: "%.2f", stockToFlowRatio))")

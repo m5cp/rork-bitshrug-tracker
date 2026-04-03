@@ -11,6 +11,7 @@ struct CycleTab: View {
         SectionAnchor(id: "status", icon: "waveform.path", label: "Status"),
         SectionAnchor(id: "concepts", icon: "book.closed", label: "Concepts"),
         SectionAnchor(id: "history", icon: "clock.arrow.circlepath", label: "History"),
+        SectionAnchor(id: "reversal", icon: "arrow.triangle.2.circlepath.circle", label: "Reversal"),
         SectionAnchor(id: "projected", icon: "chart.line.downtrend.xyaxis", label: "Bottom"),
         SectionAnchor(id: "why", icon: "questionmark.circle", label: "Why"),
         SectionAnchor(id: "learn", icon: "lightbulb", label: "Learn"),
@@ -59,6 +60,9 @@ struct CycleTab: View {
                             historicalHalvings
 
                             historicalCycleReturns
+
+                            ReversalTrackerView(viewModel: viewModel)
+                                .id("reversal")
 
                             ProjectedCycleBottomView(currentPrice: viewModel.price)
                                 .id("projected")
