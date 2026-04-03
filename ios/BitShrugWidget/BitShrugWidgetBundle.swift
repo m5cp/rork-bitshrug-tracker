@@ -5,5 +5,6 @@ import SwiftUI
 struct BitShrugWidgetBundle: WidgetBundle {
     var body: some Widget {
         BitShrugWidget()
+        BitShrugLiveActivity()
     }
 }

@@ -1,4 +1,5 @@
 import SwiftUI
+import ActivityKit
 
 @Observable
 class BitcoinViewModel {
@@ -455,6 +456,15 @@ class BitcoinViewModel {
             label: environmentScoreLabel,
             price: formattedPrice
         )
+
+        if LiveActivityManager.shared.isRunning {
+            LiveActivityManager.shared.update(
+                price: price,
+                change24h: change24h,
+                score: environmentScore,
+                label: environmentScoreLabel
+            )
+        }
 
         lastUpdated = Date()
         isLoading = false

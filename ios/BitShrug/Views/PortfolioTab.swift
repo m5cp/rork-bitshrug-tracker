@@ -94,6 +94,8 @@ struct PortfolioTab: View {
             Spacer().frame(height: 40)
         }
         .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Portfolio is empty. Tap Add Holdings to track your bitcoin. All data stays on your phone.")
     }
 
     private var holdingsHero: some View {
@@ -124,6 +126,8 @@ struct PortfolioTab: View {
                         .tracking(1)
                 }
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Holdings value \(formatUSD(portfolio.currentValue(at: viewModel.price))), \(formatBTC(portfolio.btcHoldings)) bitcoin")
 
             HStack(spacing: 12) {
                 metricPill(label: "Price", value: viewModel.formattedPrice)

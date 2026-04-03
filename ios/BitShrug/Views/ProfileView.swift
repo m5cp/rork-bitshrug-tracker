@@ -1,4 +1,5 @@
 import SwiftUI
+import ActivityKit
 
 struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
@@ -12,6 +13,7 @@ struct ProfileView: View {
     @State private var showPriceAlerts: Bool = false
     @State private var showPaywall: Bool = false
     @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
+    @AppStorage("liveActivityEnabled") private var liveActivityEnabled: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -160,6 +162,35 @@ struct ProfileView: View {
                         } icon: {
                             Image(systemName: "circle.lefthalf.filled")
                                 .foregroundStyle(.orange)
+                        }
+                    }
+
+                    Toggle(isOn: $liveActivityEnabled) {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Live Activity")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Text("Show price and score on Lock Screen")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        } icon: {
+                            Image(systemName: "sparkles.rectangle.stack")
+                                .foregroundStyle(.orange)
+                        }
+                    }
+                    .tint(.orange)
+                    .onChange(of: liveActivityEnabled) { _, enabled in
+                        if enabled {
+                            LiveActivityManager.shared.start(
+                                price: 0,
+                                change24h: 0,
+                                score: 0,
+                                label: "Loading"
+                            )
+                        } else {
+                            LiveActivityManager.shared.end()
                         }
                     }
 

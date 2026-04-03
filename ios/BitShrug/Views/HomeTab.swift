@@ -225,6 +225,8 @@ struct HomeTab: View {
 
                 Spacer()
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(viewModel.price > 0 ? "Bitcoin price \(viewModel.formattedPrice), \(viewModel.change24h >= 0 ? "up" : "down") \(viewModel.formattedChange) today" : "Price loading")
 
             HStack(spacing: 16) {
                 metricPill(label: "MCap", value: viewModel.formattedMarketCap)
@@ -234,6 +236,8 @@ struct HomeTab: View {
                 }
                 Spacer()
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Market cap \(viewModel.formattedMarketCap), volume \(viewModel.formattedVolume)")
 
             if let updated = viewModel.lastUpdated {
                 Text("Updated \(updated.formatted(.relative(presentation: .named)))")
@@ -335,6 +339,8 @@ struct HomeTab: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .premiumCard()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Daily insight: \(viewModel.insightHeadline). \(viewModel.insightExpansion)")
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }
@@ -472,6 +478,8 @@ struct HomeTab: View {
                         .clipShape(Capsule())
                 }
                 .padding(.top, 4)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Cycle phase: \(phase.label). Rainbow band: \(viewModel.rainbowBand.label)")
             }
         }
         .premiumCard()
@@ -708,6 +716,8 @@ struct HomeTab: View {
         .padding(10)
         .background(Color.primary.opacity(0.04))
         .clipShape(.rect(cornerRadius: 10))
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title): \(value), \(status)")
     }
 
     private var s2fStatus: (label: String, color: Color, detail: String) {

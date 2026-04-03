@@ -79,6 +79,7 @@ struct PowerLawTab: View {
             .navigationTitle("Power Law")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
     }
 
     private var loadingPlaceholder: some View {
@@ -261,6 +262,8 @@ struct PowerLawTab: View {
             }
         }
         .premiumCard(.highlighted)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Power Law position: \(zoneName), \(Int(viewModel.powerLawPercent * 100)) percent through corridor")
     }
 
     private func corridorBar(position: Double) -> some View {
@@ -295,6 +298,8 @@ struct PowerLawTab: View {
                 priceBox(label: "CURRENT PRICE", price: viewModel.price, color: .primary)
                 priceBox(label: "FAIR VALUE", price: viewModel.powerLawFairValue, color: .yellow)
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Current price \(formatPrice(viewModel.price)), Fair value \(formatPrice(viewModel.powerLawFairValue))")
 
             if let updated = viewModel.lastUpdated {
                 Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
@@ -315,6 +320,8 @@ struct PowerLawTab: View {
                 priceColumn(label: "Resistance", price: viewModel.powerLawResistance, color: Color(red: 0.95, green: 0.3, blue: 0.3))
             }
             .padding(.top, 4)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Support \(formatPrice(viewModel.powerLawSupport)), Fair value \(formatPrice(viewModel.powerLawFairValue)), Resistance \(formatPrice(viewModel.powerLawResistance))")
         }
         .premiumCard()
     }

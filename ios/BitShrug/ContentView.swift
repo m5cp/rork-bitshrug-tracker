@@ -27,6 +27,7 @@ struct ContentView: View {
             }
         }
         .tint(.orange)
+        .sensoryFeedback(.selection, trigger: selectedTab)
         .task {
             await viewModel.loadData()
         }

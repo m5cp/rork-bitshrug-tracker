@@ -87,6 +87,7 @@ struct CycleTab: View {
             .navigationTitle("4-Year Cycle Theory")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
     }
 
     private var loadingPlaceholder: some View {
@@ -232,6 +233,8 @@ struct CycleTab: View {
                 }
             }
             .frame(width: isRegular ? 200 : 170, height: isRegular ? 200 : 170)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Cycle progress: \(info?.currentPhase.label ?? "Loading"), \(Int((info?.cycleProgress ?? 0) * 100)) percent complete, Era \(info?.currentEra ?? 0)")
 
             if let info {
                 Text(info.currentPhase.description)

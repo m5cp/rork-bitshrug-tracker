@@ -41,5 +41,8 @@ struct ScoreRingView: View {
             }
         }
         .frame(width: size, height: size)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Score \(Int(progress * 100)) out of 100, \(label)")
+        .accessibilityValue("\(Int(progress * 100)) percent")
     }
 }
