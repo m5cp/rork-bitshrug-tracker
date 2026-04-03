@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @Binding var isPresented: Bool
+    var onContinue: () -> Void
     @State private var opacity: Double = 0
 
     var body: some View {
@@ -21,8 +21,7 @@ struct OnboardingView: View {
             Spacer()
 
             Button {
-                UserDefaults.standard.set(true, forKey: "bitshrug_onboarded")
-                isPresented = false
+                onContinue()
             } label: {
                 Text("Click to Learn")
                     .font(.headline)
