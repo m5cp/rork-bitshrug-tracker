@@ -12,6 +12,8 @@ struct ProfileView: View {
     @State private var showDisclaimer: Bool = false
     @State private var showPriceAlerts: Bool = false
     @State private var showPaywall: Bool = false
+    @State private var showSubscription: Bool = false
+    @State private var premium = PremiumManager.shared
     @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
     @AppStorage("liveActivityEnabled") private var liveActivityEnabled: Bool = false
 
@@ -143,6 +145,29 @@ struct ProfileView: View {
                     Text("How It Works")
                 } footer: {
                     Text("Numbers shown are not live. Nobody should view this as financial advice or make financial decisions based on this app. For educational purposes only.")
+                }
+
+                Section {
+                    Button {
+                        showSubscription = true
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(premium.isPremium ? "BitShrug Pro" : "Upgrade to Pro")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                Text(premium.isPremium ? "You're supporting BitShrug" : "Unlock all features")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        } icon: {
+                            Image(systemName: premium.isPremium ? "crown.fill" : "star.fill")
+                                .foregroundStyle(.orange)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                } header: {
+                    Text("Subscription")
                 }
 
                 Section {
@@ -321,6 +346,9 @@ struct ProfileView: View {
         }
         .sheet(isPresented: $showDisclaimer) {
             DisclaimerRisksView()
+        }
+        .sheet(isPresented: $showSubscription) {
+            SubscriptionView()
         }
     }
 }
