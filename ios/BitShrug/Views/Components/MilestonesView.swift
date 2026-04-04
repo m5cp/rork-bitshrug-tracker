@@ -22,10 +22,6 @@ struct MilestonesView: View {
         (21.0, "21 BTC — Magic Number", "bitcoinsign.circle.fill"),
     ]
 
-    private var achievedMilestones: [(threshold: Double, label: String, icon: String)] {
-        btcMilestones.filter { btcHoldings >= $0.threshold }
-    }
-
     private var nextMilestone: (threshold: Double, label: String, icon: String)? {
         btcMilestones.first { btcHoldings < $0.threshold }
     }
@@ -53,7 +49,7 @@ struct MilestonesView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            SectionHeader(icon: "trophy.fill", title: "MILESTONES")
+            SectionHeader(icon: "mappin.and.ellipse", title: "WHERE AM I?")
 
             rankBadge
 
@@ -61,9 +57,7 @@ struct MilestonesView: View {
                 nextMilestoneCard(next)
             }
 
-            if !achievedMilestones.isEmpty {
-                achievedGrid
-            }
+
         }
         .premiumCard(.highlighted)
     }
@@ -87,10 +81,6 @@ struct MilestonesView: View {
             }
 
             Spacer()
-
-            Text("\(achievedMilestones.count)/\(btcMilestones.count)")
-                .font(.system(size: 11, weight: .heavy, design: .monospaced))
-                .foregroundStyle(.secondary)
         }
     }
 
@@ -100,7 +90,7 @@ struct MilestonesView: View {
                 Image(systemName: "flag.checkered")
                     .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(.cyan)
-                Text("NEXT MILESTONE")
+                Text("NEXT LEVEL")
                     .font(.system(size: 9, weight: .heavy))
                     .foregroundStyle(.secondary)
                     .tracking(1)
@@ -161,29 +151,6 @@ struct MilestonesView: View {
         .clipShape(.rect(cornerRadius: 12))
     }
 
-    private var achievedGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-            ForEach(achievedMilestones.reversed(), id: \.threshold) { milestone in
-                HStack(spacing: 8) {
-                    Image(systemName: milestone.icon)
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(.orange)
-
-                    Text(milestone.label)
-                        .font(.system(size: 10, weight: .heavy))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-
-                    Spacer(minLength: 0)
-                }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 8)
-                .background(Color.orange.opacity(0.06))
-                .clipShape(.rect(cornerRadius: 8))
-            }
-        }
-    }
 
     private func formatBTC(_ value: Double) -> String {
         if value >= 1 { return String(format: "%.4f", value) }

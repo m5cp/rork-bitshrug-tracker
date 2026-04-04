@@ -164,10 +164,10 @@ struct PortfolioTab: View {
             )
 
             previewFeatureRow(
-                icon: "trophy.fill",
+                icon: "mappin.and.ellipse",
                 iconColor: .yellow,
-                title: "Milestone Tracker",
-                description: "12 milestones from 0.001 BTC to the Magic Number (21 BTC)"
+                title: "Where Am I?",
+                description: "See your global holder ranking and position among all Bitcoin holders"
             )
 
             previewFeatureRow(
