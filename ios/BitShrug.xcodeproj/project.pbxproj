@@ -661,6 +661,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BitShrugWidget/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BitShrugWidget/BitShrugWidget.entitlements;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -686,6 +687,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BitShrugWidget/Info.plist;
+				CODE_SIGN_ENTITLEMENTS = BitShrugWidget/BitShrugWidget.entitlements;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
