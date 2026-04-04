@@ -279,11 +279,16 @@ struct SubscriptionView: View {
             Task { await premium.purchase(package: package) }
         } label: {
             VStack(spacing: 0) {
+                if isLifetime {
+                    launchOfferBanner
+                }
+
                 HStack(spacing: 0) {
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(spacing: 8) {
                             Text(planTitle(for: package))
                                 .font(.system(.body, weight: .semibold))
+                                .foregroundStyle(isLifetime ? .white : .primary)
 
                             if isYearly {
                                 Text("BEST VALUE")
@@ -298,17 +303,17 @@ struct SubscriptionView: View {
                             if isLifetime {
                                 Text("ONE TIME")
                                     .font(.system(size: 9, weight: .heavy))
-                                    .foregroundStyle(.orange)
+                                    .foregroundStyle(.white.opacity(0.9))
                                     .padding(.horizontal, 7)
                                     .padding(.vertical, 3)
-                                    .background(.orange.opacity(0.12))
+                                    .background(.white.opacity(0.2))
                                     .clipShape(.capsule)
                             }
                         }
 
                         Text(planSubtitle(for: package))
                             .font(.caption)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(isLifetime ? AnyShapeStyle(.white.opacity(0.7)) : AnyShapeStyle(.tertiary))
                     }
 
                     Spacer()
@@ -316,11 +321,11 @@ struct SubscriptionView: View {
                     VStack(alignment: .trailing, spacing: 2) {
                         Text(package.storeProduct.localizedPriceString)
                             .font(.system(.title3, weight: .bold))
-                            .foregroundStyle(isYearly ? .orange : .primary)
+                            .foregroundStyle(isLifetime ? AnyShapeStyle(.white) : AnyShapeStyle(isYearly ? .orange : .primary))
 
                         Text(planPeriod(for: package))
                             .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(isLifetime ? AnyShapeStyle(.white.opacity(0.7)) : AnyShapeStyle(.tertiary))
                     }
                 }
                 .padding(16)
@@ -330,15 +335,28 @@ struct SubscriptionView: View {
                 }
             }
             .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(isYearly ? Color.orange.opacity(0.04) : Color(.secondarySystemBackground))
-                    .overlay(
+                Group {
+                    if isLifetime {
                         RoundedRectangle(cornerRadius: 14)
-                            .strokeBorder(
-                                isYearly ? Color.orange.opacity(0.3) : Color.clear,
-                                lineWidth: isYearly ? 1.5 : 0
+                            .fill(
+                                LinearGradient(
+                                    colors: [Color.orange, Color.orange.opacity(0.85)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
                             )
-                    )
+                    } else {
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(isYearly ? Color.orange.opacity(0.04) : Color(.secondarySystemBackground))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .strokeBorder(
+                                        isYearly ? Color.orange.opacity(0.3) : Color.clear,
+                                        lineWidth: isYearly ? 1.5 : 0
+                                    )
+                            )
+                    }
+                }
             )
             .foregroundStyle(.primary)
             .scaleEffect(isSelected && premium.isPurchasing ? 0.98 : 1.0)
@@ -346,6 +364,22 @@ struct SubscriptionView: View {
         .buttonStyle(.plain)
         .disabled(premium.isPurchasing)
         .sensoryFeedback(.selection, trigger: selectedPackageID)
+    }
+
+    private var launchOfferBanner: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10, weight: .bold))
+            Text("LAUNCH SPECIAL \u{2014} LIMITED TIME")
+                .font(.system(size: 10, weight: .heavy))
+                .tracking(0.5)
+            Image(systemName: "sparkles")
+                .font(.system(size: 10, weight: .bold))
+        }
+        .foregroundStyle(.white)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(Color.white.opacity(0.15))
     }
 
     private func savingsBar(for package: Package, in offering: Offering) -> some View {
