@@ -73,7 +73,7 @@ struct PortfolioTab: View {
 
     private var emptyState: some View {
         VStack(spacing: 20) {
-            Spacer().frame(height: 40)
+            Spacer().frame(height: 24)
 
             ZStack {
                 Circle()
@@ -85,7 +85,7 @@ struct PortfolioTab: View {
                             endRadius: 80
                         )
                     )
-                    .frame(width: 160, height: 160)
+                    .frame(width: 140, height: 140)
 
                 ShrugBadge(size: .hero, style: .hero)
             }
@@ -129,11 +129,85 @@ struct PortfolioTab: View {
             .tint(.orange)
             .padding(.top, 4)
 
-            Spacer().frame(height: 40)
+            featurePreview
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Portfolio is empty. Tap Add Holdings to track your bitcoin. All data stays on your phone.")
+    }
+
+    private var featurePreview: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 8) {
+                Image(systemName: "eyes")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.orange)
+                Text("WHAT YOU'LL UNLOCK")
+                    .font(.system(size: 10, weight: .heavy))
+                    .foregroundStyle(.secondary)
+                    .tracking(1)
+            }
+            .padding(.bottom, 2)
+
+            previewFeatureRow(
+                icon: "globe",
+                iconColor: .orange,
+                title: "Global Holder Ranking",
+                description: "See where you stand among all Bitcoin holders worldwide"
+            )
+
+            previewFeatureRow(
+                icon: "number",
+                iconColor: .cyan,
+                title: "Quick Stats",
+                description: "Satoshis, % of max supply, Power Law valuations"
+            )
+
+            previewFeatureRow(
+                icon: "trophy.fill",
+                iconColor: .yellow,
+                title: "Milestone Tracker",
+                description: "12 milestones from 0.001 BTC to the Magic Number (21 BTC)"
+            )
+
+            previewFeatureRow(
+                icon: "chart.line.uptrend.xyaxis",
+                iconColor: .green,
+                title: "Profit & Loss",
+                description: "Track unrealized gains with optional cost basis"
+            )
+
+            Text("Enter any amount — even a hypothetical one — to explore.")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.orange.opacity(0.7))
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.top, 4)
+        }
+        .premiumCard()
+    }
+
+    private func previewFeatureRow(icon: String, iconColor: Color, title: String, description: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(iconColor)
+                .frame(width: 32, height: 32)
+                .background(iconColor.opacity(0.12))
+                .clipShape(.rect(cornerRadius: 8))
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(.primary)
+                Text(description)
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+
+            Spacer(minLength: 0)
+        }
     }
 
     private var holdingsHero: some View {
@@ -404,12 +478,18 @@ struct EditHoldingsSheet: View {
 
     @State private var btcText: String = ""
     @State private var costBasisText: String = ""
+    @State private var showClearConfirmation: Bool = false
+    @FocusState private var focusedField: EditField?
+
+    private enum EditField {
+        case btc, costBasis
+    }
 
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    HStack {
+                    HStack(spacing: 10) {
                         Text("BTC Amount")
                             .font(.subheadline)
                         Spacer()
@@ -417,6 +497,18 @@ struct EditHoldingsSheet: View {
                             .font(.system(.subheadline, design: .monospaced, weight: .semibold))
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
+                            .focused($focusedField, equals: .btc)
+                        if !btcText.isEmpty {
+                            Button {
+                                btcText = ""
+                                focusedField = .btc
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                 } header: {
                     Text("Holdings")
@@ -427,14 +519,31 @@ struct EditHoldingsSheet: View {
                 }
 
                 Section {
-                    HStack {
+                    HStack(spacing: 10) {
                         Text("Avg. Buy Price")
                             .font(.subheadline)
                         Spacer()
-                        TextField("Optional", text: $costBasisText)
-                            .font(.system(.subheadline, design: .monospaced, weight: .semibold))
-                            .keyboardType(.decimalPad)
-                            .multilineTextAlignment(.trailing)
+                        HStack(spacing: 4) {
+                            Text("$")
+                                .font(.system(.subheadline, design: .monospaced, weight: .semibold))
+                                .foregroundStyle(costBasisText.isEmpty ? .tertiary : .primary)
+                            TextField("Optional", text: $costBasisText)
+                                .font(.system(.subheadline, design: .monospaced, weight: .semibold))
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .focused($focusedField, equals: .costBasis)
+                        }
+                        if !costBasisText.isEmpty {
+                            Button {
+                                costBasisText = ""
+                                focusedField = .costBasis
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                 } header: {
                     Text("Cost Basis (USD)")
@@ -442,11 +551,19 @@ struct EditHoldingsSheet: View {
                     Text("Enter your average purchase price to track P&L. This is optional.")
                 }
 
-                if portfolio.btcHoldings > 0 {
+                if portfolio.btcHoldings > 0 || !btcText.isEmpty {
                     Section {
-                        Button("Clear Holdings", role: .destructive) {
-                            portfolio.clear()
-                            dismiss()
+                        Button(role: .destructive) {
+                            showClearConfirmation = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "trash")
+                                    .font(.system(size: 14, weight: .semibold))
+                                Text("Clear All Holdings")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity)
                         }
                     }
                 }
@@ -459,19 +576,25 @@ struct EditHoldingsSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        if let btc = Double(btcText) {
-                            portfolio.btcHoldings = max(0, btc)
-                        }
-                        if let cost = Double(costBasisText), cost > 0 {
-                            portfolio.costBasis = cost
-                        } else if costBasisText.isEmpty {
-                            portfolio.costBasis = 0
-                        }
-                        dismiss()
+                        saveHoldings()
                     }
                     .fontWeight(.semibold)
-                    .disabled(Double(btcText) == nil || (Double(btcText) ?? 0) <= 0)
+                    .disabled(btcText.isEmpty || Double(btcText) == nil || (Double(btcText) ?? 0) <= 0)
                 }
+            }
+            .confirmationDialog(
+                "Clear Holdings?",
+                isPresented: $showClearConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button("Clear Everything", role: .destructive) {
+                    portfolio.btcHoldings = 0
+                    portfolio.costBasis = 0
+                    dismiss()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This will remove your BTC amount and cost basis. You can always add them back.")
             }
             .onAppear {
                 if portfolio.btcHoldings > 0 {
@@ -482,6 +605,18 @@ struct EditHoldingsSheet: View {
                 }
             }
         }
+    }
+
+    private func saveHoldings() {
+        if let btc = Double(btcText) {
+            portfolio.btcHoldings = max(0, btc)
+        }
+        if let cost = Double(costBasisText), cost > 0 {
+            portfolio.costBasis = cost
+        } else if costBasisText.isEmpty {
+            portfolio.costBasis = 0
+        }
+        dismiss()
     }
 
     private func formatEditValue(_ value: Double) -> String {
