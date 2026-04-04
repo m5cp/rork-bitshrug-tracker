@@ -1,4 +1,5 @@
 import SwiftUI
+import Charts
 
 struct PortfolioTab: View {
     let viewModel: BitcoinViewModel
@@ -7,6 +8,7 @@ struct PortfolioTab: View {
     @State private var isEditing: Bool = false
     @State private var showPriceAlerts: Bool = false
     @State private var showFunWithNumbers: Bool = false
+    @State private var showDCACalculator: Bool = false
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -21,7 +23,17 @@ struct PortfolioTab: View {
                         if portfolio.hasCostBasis {
                             plCard
                         }
+                        if !viewModel.historicalPrices.isEmpty {
+                            PortfolioSparklineView(
+                                historicalPrices: viewModel.historicalPrices,
+                                btcHoldings: portfolio.btcHoldings
+                            )
+                        }
                         statsGrid
+                        MilestonesView(
+                            btcHoldings: portfolio.btcHoldings,
+                            currentPrice: viewModel.price
+                        )
                     } else {
                         emptyState
                     }
@@ -52,6 +64,9 @@ struct PortfolioTab: View {
             }
             .navigationDestination(isPresented: $showFunWithNumbers) {
                 FunWithNumbersView(viewModel: viewModel)
+            }
+            .navigationDestination(isPresented: $showDCACalculator) {
+                DCACalculatorView(viewModel: viewModel)
             }
         }
     }
@@ -278,6 +293,18 @@ struct PortfolioTab: View {
                     iconColor: .purple,
                     title: "Fun with Numbers",
                     subtitle: "Explore future Power Law projections"
+                )
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showDCACalculator = true
+            } label: {
+                toolRow(
+                    icon: "arrow.triangle.2.circlepath.circle.fill",
+                    iconColor: .cyan,
+                    title: "DCA Calculator",
+                    subtitle: "Simulate weekly investing over time"
                 )
             }
             .buttonStyle(.plain)
