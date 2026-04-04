@@ -8,6 +8,8 @@ struct SubscriptionView: View {
     @State private var selectedPackageID: String?
     @State private var appeared: Bool = false
     @State private var selectedPlan: PlanTier = .pro
+    @State private var showTerms: Bool = false
+    @State private var showPrivacy: Bool = false
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 560 : .infinity }
@@ -74,6 +76,12 @@ struct SubscriptionView: View {
         }
         .onChange(of: premium.isPremium) { _, isPremium in
             if isPremium { dismiss() }
+        }
+        .sheet(isPresented: $showTerms) {
+            TermsOfUseView()
+        }
+        .sheet(isPresented: $showPrivacy) {
+            PrivacyPolicyView()
         }
         .onAppear {
             withAnimation(.easeOut(duration: 0.5).delay(0.1)) {
@@ -460,14 +468,14 @@ struct SubscriptionView: View {
                 Text("\u{00B7}")
                     .foregroundStyle(.quaternary)
 
-                Button("Terms") {}
+                Button("Terms") { showTerms = true }
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
                 Text("\u{00B7}")
                     .foregroundStyle(.quaternary)
 
-                Button("Privacy") {}
+                Button("Privacy") { showPrivacy = true }
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

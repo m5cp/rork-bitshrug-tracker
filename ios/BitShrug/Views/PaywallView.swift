@@ -7,6 +7,8 @@ struct PaywallView: View {
     @State private var premium = PremiumManager.shared
     @State private var selectedPackageID: String?
     @State private var appearAnimated: Bool = false
+    @State private var showTerms: Bool = false
+    @State private var showPrivacy: Bool = false
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 520 : .infinity }
@@ -77,6 +79,12 @@ struct PaywallView: View {
         }
         .onChange(of: premium.isPremium) { _, isPremium in
             if isPremium { dismiss() }
+        }
+        .sheet(isPresented: $showTerms) {
+            TermsOfUseView()
+        }
+        .sheet(isPresented: $showPrivacy) {
+            PrivacyPolicyView()
         }
         .onAppear {
             withAnimation(.easeOut(duration: 0.6).delay(0.1)) {
@@ -505,14 +513,14 @@ struct PaywallView: View {
             Text("\u{00B7}")
                 .foregroundStyle(.quaternary)
 
-            Button("Terms") {}
+            Button("Terms") { showTerms = true }
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
             Text("\u{00B7}")
                 .foregroundStyle(.quaternary)
 
-            Button("Privacy") {}
+            Button("Privacy") { showPrivacy = true }
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
