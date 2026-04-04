@@ -14,6 +14,24 @@ class NotificationManager {
     var indicatorAlerts: Bool = false {
         didSet { UserDefaults.standard.set(indicatorAlerts, forKey: "notif_indicator") }
     }
+    var dailyBriefingEnabled: Bool = false {
+        didSet {
+            UserDefaults.standard.set(dailyBriefingEnabled, forKey: "notif_daily_briefing")
+            if dailyBriefingEnabled {
+                scheduleDailyBriefing()
+            } else {
+                cancelDailyBriefing()
+            }
+        }
+    }
+    var briefingHour: Int = 8 {
+        didSet {
+            UserDefaults.standard.set(briefingHour, forKey: "notif_briefing_hour")
+            if dailyBriefingEnabled {
+                scheduleDailyBriefing()
+            }
+        }
+    }
 
     var isAuthorized: Bool = false
 
@@ -26,17 +44,21 @@ class NotificationManager {
     private let lastSignalKey = "last_notif_signal"
     private let lastNotifDateKey = "last_notif_date"
     private let dailyNotifCountKey = "daily_notif_count"
+    private let dailyBriefingIdentifier = "bitshrug_daily_briefing"
 
     private init() {
         environmentAlerts = UserDefaults.standard.bool(forKey: "notif_environment")
         signalStrengthAlerts = UserDefaults.standard.bool(forKey: "notif_signal")
         indicatorAlerts = UserDefaults.standard.bool(forKey: "notif_indicator")
+        dailyBriefingEnabled = UserDefaults.standard.bool(forKey: "notif_daily_briefing")
+        briefingHour = UserDefaults.standard.object(forKey: "notif_briefing_hour") != nil
+            ? UserDefaults.standard.integer(forKey: "notif_briefing_hour") : 8
 
         Task { await checkAuthorization() }
     }
 
     var hasAnyAlertEnabled: Bool {
-        environmentAlerts || signalStrengthAlerts || indicatorAlerts
+        environmentAlerts || signalStrengthAlerts || indicatorAlerts || dailyBriefingEnabled
     }
 
     func requestPermission() async {
@@ -221,5 +243,49 @@ class NotificationManager {
             ud.set(0, forKey: dailyNotifCountKey)
             ud.set(today.timeIntervalSinceReferenceDate, forKey: lastNotifDateKey)
         }
+    }
+
+    func updateDailyBriefingContent(score: Int, scoreDelta: Int?, price: String, trend: String) {
+        guard dailyBriefingEnabled else { return }
+
+        let deltaText: String
+        if let delta = scoreDelta {
+            deltaText = delta >= 0 ? "(+\(delta))" : "(\(delta))"
+        } else {
+            deltaText = ""
+        }
+
+        let body = "Score: \(score) \(deltaText) | BTC \(price) | Trend: \(trend)"
+
+        UserDefaults.standard.set(body, forKey: "daily_briefing_body")
+        scheduleDailyBriefing()
+    }
+
+    func scheduleDailyBriefing() {
+        center.removePendingNotificationRequests(withIdentifiers: [dailyBriefingIdentifier])
+
+        let body = UserDefaults.standard.string(forKey: "daily_briefing_body")
+            ?? "Open BitShrug for your daily market update."
+
+        let content = UNMutableNotificationContent()
+        content.title = "BitShrug Daily Briefing"
+        content.body = body
+        content.sound = .default
+
+        var dateComponents = DateComponents()
+        dateComponents.hour = briefingHour
+        dateComponents.minute = 0
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        let request = UNNotificationRequest(
+            identifier: dailyBriefingIdentifier,
+            content: content,
+            trigger: trigger
+        )
+        center.add(request)
+    }
+
+    private func cancelDailyBriefing() {
+        center.removePendingNotificationRequests(withIdentifiers: [dailyBriefingIdentifier])
     }
 }

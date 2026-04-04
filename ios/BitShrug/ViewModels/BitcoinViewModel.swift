@@ -451,6 +451,15 @@ class BitcoinViewModel {
             resistance: powerLawResistance
         )
 
+        PriceAlertManager.shared.evaluateScore(environmentScore)
+
+        NotificationManager.shared.updateDailyBriefingContent(
+            score: environmentScore,
+            scoreDelta: dailyDelta,
+            price: formattedPrice,
+            trend: trendStatus.label
+        )
+
         SpotlightManager.shared.indexContent(
             score: environmentScore,
             label: environmentScoreLabel,

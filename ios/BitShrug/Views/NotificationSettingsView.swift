@@ -3,6 +3,10 @@ import SwiftUI
 struct NotificationSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var manager = NotificationManager.shared
+    @State private var premium = PremiumManager.shared
+    @State private var showPaywall: Bool = false
+
+    private let briefingHours: [Int] = [6, 7, 8, 9, 10]
 
     var body: some View {
         NavigationStack {
@@ -35,7 +39,90 @@ struct NotificationSettingsView: View {
                 } header: {
                     Text("Alerts")
                 } footer: {
-                    Text("Maximum 1–2 notifications per day. No spam.")
+                    Text("Maximum 1\u{2013}2 notifications per day. No spam.")
+                }
+
+                Section {
+                    if premium.isPremium {
+                        Toggle(isOn: $manager.dailyBriefingEnabled) {
+                            Label {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Daily Briefing")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                    Text("Morning summary with score, price, and trend")
+                                        .font(.caption)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(.secondary)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            } icon: {
+                                Image(systemName: "sun.and.horizon.fill")
+                                    .foregroundStyle(.orange)
+                            }
+                        }
+                        .tint(.orange)
+                        .onChange(of: manager.dailyBriefingEnabled) { _, newValue in
+                            if newValue { ensurePermission() }
+                        }
+
+                        if manager.dailyBriefingEnabled {
+                            Picker(selection: $manager.briefingHour) {
+                                ForEach(briefingHours, id: \.self) { hour in
+                                    Text(formatHour(hour)).tag(hour)
+                                }
+                            } label: {
+                                Label {
+                                    Text("Delivery Time")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                } icon: {
+                                    Image(systemName: "clock")
+                                        .foregroundStyle(.orange)
+                                }
+                            }
+                        }
+                    } else {
+                        Button {
+                            showPaywall = true
+                        } label: {
+                            HStack {
+                                Label {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        HStack(spacing: 6) {
+                                            Text("Daily Briefing")
+                                                .font(.subheadline)
+                                                .fontWeight(.semibold)
+                                            premiumBadge
+                                        }
+                                        Text("Morning summary with score, price, and trend")
+                                            .font(.caption)
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.secondary)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                    }
+                                } icon: {
+                                    Image(systemName: "sun.and.horizon.fill")
+                                        .foregroundStyle(.orange)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: "lock.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
+                        .foregroundStyle(.primary)
+                    }
+                } header: {
+                    Text("Daily Briefing")
+                } footer: {
+                    if premium.isPremium && manager.dailyBriefingEnabled {
+                        Text("You will receive a daily notification at your chosen time with your Environment Score, Bitcoin price, and market trend.")
+                    } else if !premium.isPremium {
+                        Text("Unlock daily briefing notifications with BitShrug Pro.")
+                    }
                 }
 
                 Section {
@@ -43,6 +130,10 @@ struct NotificationSettingsView: View {
                         exampleRow("Environment shifted to Risk Elevated")
                         exampleRow("Momentum turning bullish")
                         exampleRow("Signal Strength increased to 62")
+                        if premium.isPremium {
+                            Divider()
+                            dailyBriefingExample
+                        }
                     }
                     .padding(.vertical, 4)
                 } header: {
@@ -66,6 +157,42 @@ struct NotificationSettingsView: View {
             .onChange(of: manager.indicatorAlerts) { _, newValue in
                 if newValue { ensurePermission() }
             }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView()
+            }
+        }
+    }
+
+    private var premiumBadge: some View {
+        Text("PRO")
+            .font(.system(size: 8, weight: .heavy))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 2)
+            .background(
+                LinearGradient(
+                    colors: [.orange, .orange.opacity(0.8)],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .clipShape(Capsule())
+    }
+
+    private var dailyBriefingExample: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 10) {
+                Image(systemName: "sun.and.horizon.fill")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                Text("BitShrug Daily Briefing")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.primary)
+            }
+            Text("Score: 72 (+3) | BTC $84,200 | Trend: Bullish")
+                .font(.system(.caption, design: .monospaced, weight: .semibold))
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -82,6 +209,7 @@ struct NotificationSettingsView: View {
 
                 Text("Allow BitShrug to notify you when market conditions change.")
                     .font(.caption)
+                    .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
 
@@ -112,6 +240,7 @@ struct NotificationSettingsView: View {
                         .fontWeight(.semibold)
                     Text(description)
                         .font(.caption)
+                        .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -130,8 +259,19 @@ struct NotificationSettingsView: View {
                 .foregroundStyle(.tertiary)
             Text(text)
                 .font(.caption)
+                .fontWeight(.semibold)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private func formatHour(_ hour: Int) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = 0
+        let date = Calendar.current.date(from: components) ?? Date()
+        return formatter.string(from: date)
     }
 
     private func ensurePermission() {
