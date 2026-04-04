@@ -5,41 +5,51 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var premium = PremiumManager.shared
+    @State private var selectedPackageID: String?
+    @State private var appearAnimated: Bool = false
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 520 : .infinity }
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Color(.systemBackground)
-                .ignoresSafeArea()
+            LinearGradient(
+                colors: [Color(.systemBackground), Color.orange.opacity(0.03)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 0) {
-                    header
-                        .padding(.top, 60)
-                        .padding(.bottom, 36)
+                    heroHeader
+                        .padding(.top, 56)
+                        .padding(.bottom, 32)
 
-                    featureComparison
-                        .padding(.bottom, 36)
+                    freeSection
+                        .padding(.bottom, 24)
+
+                    proValueCard
+                        .padding(.bottom, 28)
 
                     if premium.isLoading {
                         ProgressView()
-                            .padding(.bottom, 32)
+                            .tint(.orange)
+                            .padding(.vertical, 40)
                     } else if let current = premium.offerings?.current {
-                        packagesSection(current)
-                            .padding(.bottom, 32)
+                        planCards(current)
+                            .padding(.bottom, 24)
                     }
 
-                    tagline
-                        .padding(.bottom, 28)
+                    supportMessage
+                        .padding(.bottom, 24)
 
                     legalLinks
-                        .padding(.bottom, 16)
+                        .padding(.bottom, 20)
                 }
                 .frame(maxWidth: contentMaxWidth)
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, isRegular ? 40 : 24)
+                .padding(.horizontal, isRegular ? 40 : 20)
             }
             .scrollIndicators(.hidden)
 
@@ -47,13 +57,13 @@ struct PaywallView: View {
                 dismiss()
             } label: {
                 Image(systemName: "xmark")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(.secondary)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 30, height: 30)
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
-            .padding(.top, 12)
+            .padding(.top, 14)
             .padding(.trailing, 16)
             .accessibilityLabel("Close")
         }
@@ -68,134 +78,388 @@ struct PaywallView: View {
         .onChange(of: premium.isPremium) { _, isPremium in
             if isPremium { dismiss() }
         }
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.6).delay(0.1)) {
+                appearAnimated = true
+            }
+        }
     }
 
-    private var header: some View {
-        VStack(spacing: 14) {
-            Image(systemName: "bitcoinsign.circle.fill")
-                .font(.system(size: 48))
-                .foregroundStyle(.orange)
-                .symbolEffect(.pulse, options: .repeating.speed(0.3))
-                .padding(.bottom, 4)
+    // MARK: - Hero Header
 
-            Text("See the full\npicture")
-                .font(.system(size: isRegular ? 36 : 32, weight: .bold))
-                .multilineTextAlignment(.center)
+    private var heroHeader: some View {
+        VStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(.orange.opacity(0.1))
+                    .frame(width: 88, height: 88)
+
+                Circle()
+                    .fill(.orange.opacity(0.06))
+                    .frame(width: 110, height: 110)
+
+                Image(systemName: "bitcoinsign.circle.fill")
+                    .font(.system(size: 52))
+                    .foregroundStyle(.orange)
+                    .symbolEffect(.pulse, options: .repeating.speed(0.3))
+            }
+            .padding(.bottom, 4)
+
+            Text("Upgrade to Pro")
+                .font(.system(size: isRegular ? 34 : 30, weight: .bold))
                 .foregroundStyle(.primary)
 
-            Text("Unlock every indicator, daily insights,\nand the complete macro toolkit")
+            Text("Support BitShrug and get the\ncomplete experience")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
+                .lineSpacing(2)
         }
+        .opacity(appearAnimated ? 1 : 0)
+        .offset(y: appearAnimated ? 0 : 12)
     }
 
-    private var featureComparison: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text("Free")
-                    .font(.system(size: 11, weight: .bold))
+    // MARK: - Free Section
+
+    private var freeSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 8) {
+                Image(systemName: "gift.fill")
+                    .font(.system(size: 14))
                     .foregroundStyle(.secondary)
-                    .frame(width: 50)
-                Text("Pro")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.orange)
-                    .frame(width: 50)
+                Text("FREE FOREVER")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.secondary)
+                    .tracking(0.8)
             }
             .padding(.horizontal, 16)
-            .padding(.bottom, 10)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
 
-            featureRow(name: "Environment Score", free: true, pro: true, isLast: false)
-            featureRow(name: "Price & Chart", free: true, pro: true, isLast: false)
-            featureRow(name: "All Indicators", free: true, pro: true, isLast: false)
-            featureRow(name: "Power Law & Cycle", free: true, pro: true, isLast: false)
-            featureRow(name: "Daily Insights", free: true, pro: true, isLast: false)
-            featureRow(name: "Weekly Summary", free: true, pro: true, isLast: false)
-            featureRow(name: "Smart Notifications", free: true, pro: true, isLast: false)
-            featureRow(name: "Support Development", free: false, pro: true, isLast: true)
+            VStack(spacing: 0) {
+                freeFeatureRow(icon: "gauge.with.dots.needle.33percent", text: "Environment Score & breakdown", isLast: false)
+                freeFeatureRow(icon: "chart.xyaxis.line", text: "Live price & interactive chart", isLast: false)
+                freeFeatureRow(icon: "waveform.path.ecg", text: "All indicators & on-chain data", isLast: false)
+                freeFeatureRow(icon: "arrow.triangle.2.circlepath", text: "Power Law corridor & Rainbow Chart", isLast: false)
+                freeFeatureRow(icon: "clock.arrow.2.circlepath", text: "Halving cycle tracker & history", isLast: false)
+                freeFeatureRow(icon: "book.fill", text: "Full education & learn library", isLast: true)
+            }
+            .padding(.bottom, 12)
         }
-        .padding(.vertical, 14)
         .background(Color(.secondarySystemBackground))
         .clipShape(.rect(cornerRadius: 16))
+        .opacity(appearAnimated ? 1 : 0)
+        .offset(y: appearAnimated ? 0 : 16)
     }
 
-    private func featureRow(name: String, free: Bool, pro: Bool, isLast: Bool) -> some View {
+    private func freeFeatureRow(icon: String, text: String, isLast: Bool) -> some View {
         VStack(spacing: 0) {
-            HStack {
-                Text(name)
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 22)
+
+                Text(text)
                     .font(.subheadline)
                     .foregroundStyle(.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                Image(systemName: free ? "checkmark" : "xmark")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(free ? .secondary : Color(.quaternaryLabel))
-                    .frame(width: 50)
+                Spacer()
 
                 Image(systemName: "checkmark")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.orange)
-                    .frame(width: 50)
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.secondary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
 
             if !isLast {
                 Divider()
-                    .padding(.horizontal, 16)
+                    .padding(.leading, 50)
+                    .padding(.trailing, 16)
             }
         }
     }
 
-    private func packagesSection(_ offering: Offering) -> some View {
-        VStack(spacing: 10) {
-            ForEach(offering.availablePackages, id: \.identifier) { package in
-                packageCard(package)
+    // MARK: - Pro Value Card
+
+    private var proValueCard: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 8) {
+                Image(systemName: "star.fill")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.orange)
+                Text("PRO BENEFITS")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.orange)
+                    .tracking(0.8)
+
+                Spacer()
+
+                Text("Everything in Free, plus:")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 14)
+
+            VStack(spacing: 0) {
+                proFeatureRow(
+                    icon: "bell.badge.fill",
+                    title: "Smart Notifications",
+                    subtitle: "Environment shifts, indicator changes, daily briefings",
+                    isLast: false
+                )
+                proFeatureRow(
+                    icon: "text.badge.star",
+                    title: "Daily Insights",
+                    subtitle: "What changed and why — explained in plain language",
+                    isLast: false
+                )
+                proFeatureRow(
+                    icon: "calendar.badge.clock",
+                    title: "Weekly Summary",
+                    subtitle: "Direction, score change, and weekly narrative",
+                    isLast: false
+                )
+                proFeatureRow(
+                    icon: "target",
+                    title: "Custom Price Alerts",
+                    subtitle: "Set alerts for any price level",
+                    isLast: false
+                )
+                proFeatureRow(
+                    icon: "heart.fill",
+                    title: "Support Development",
+                    subtitle: "Help keep BitShrug independent and ad-free",
+                    isLast: true
+                )
+            }
+            .padding(.bottom, 12)
         }
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.orange.opacity(0.04))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Color.orange.opacity(0.15), lineWidth: 1)
+                )
+        )
+        .opacity(appearAnimated ? 1 : 0)
+        .offset(y: appearAnimated ? 0 : 20)
     }
 
-    private func packageCard(_ package: Package) -> some View {
-        Button {
-            Task { await premium.purchase(package: package) }
-        } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(package.storeProduct.localizedTitle)
-                        .font(.system(.body, weight: .semibold))
+    private func proFeatureRow(icon: String, title: String, subtitle: String, isLast: Bool) -> some View {
+        VStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.orange)
+                    .frame(width: 22, height: 22)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
                         .foregroundStyle(.primary)
 
-                    Text(package.storeProduct.localizedPriceString)
+                    Text(subtitle)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.tertiary)
+                        .lineSpacing(1)
                 }
 
                 Spacer()
 
-                if premium.isPurchasing {
-                    ProgressView()
-                        .tint(.orange)
-                } else {
-                    Image(systemName: "arrow.right.circle.fill")
-                        .font(.system(size: 22))
-                        .foregroundStyle(.orange)
+                Image(systemName: "checkmark")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.orange)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+
+            if !isLast {
+                Divider()
+                    .padding(.leading, 50)
+                    .padding(.trailing, 16)
+            }
+        }
+    }
+
+    // MARK: - Plan Cards
+
+    private func planCards(_ offering: Offering) -> some View {
+        VStack(spacing: 12) {
+            Text("CHOOSE YOUR PLAN")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(.secondary)
+                .tracking(0.8)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, 2)
+
+            ForEach(offering.availablePackages, id: \.identifier) { package in
+                planCard(package, offering: offering)
+            }
+        }
+        .opacity(appearAnimated ? 1 : 0)
+        .offset(y: appearAnimated ? 0 : 24)
+    }
+
+    private func planCard(_ package: Package, offering: Offering) -> some View {
+        let isYearly = package.packageType == .annual
+        let isLifetime = package.packageType == .lifetime
+        let isSelected = selectedPackageID == package.identifier
+        let isBestValue = isYearly
+
+        return Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                selectedPackageID = package.identifier
+            }
+            Task { await premium.purchase(package: package) }
+        } label: {
+            VStack(spacing: 0) {
+                HStack(spacing: 14) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 8) {
+                            Text(planTitle(for: package))
+                                .font(.system(.body, weight: .semibold))
+                                .foregroundStyle(.primary)
+
+                            if isBestValue {
+                                Text("BEST VALUE")
+                                    .font(.system(size: 9, weight: .heavy))
+                                    .foregroundStyle(.white)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 3)
+                                    .background(.orange)
+                                    .clipShape(.capsule)
+                            }
+
+                            if isLifetime {
+                                Text("ONE TIME")
+                                    .font(.system(size: 9, weight: .heavy))
+                                    .foregroundStyle(.orange)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 3)
+                                    .background(.orange.opacity(0.12))
+                                    .clipShape(.capsule)
+                            }
+                        }
+
+                        Text(planSubtitle(for: package))
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+
+                    Spacer()
+
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(package.storeProduct.localizedPriceString)
+                            .font(.system(.title3, weight: .bold))
+                            .foregroundStyle(isBestValue ? .orange : .primary)
+
+                        Text(planPeriod(for: package))
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .padding(16)
+
+                if isYearly {
+                    savingsBar(for: package, in: offering)
                 }
             }
-            .padding(16)
-            .background(Color(.secondarySystemBackground))
-            .clipShape(.rect(cornerRadius: 14))
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(isBestValue ? Color.orange.opacity(0.04) : Color(.secondarySystemBackground))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14)
+                            .strokeBorder(
+                                isBestValue ? Color.orange.opacity(0.3) : Color.clear,
+                                lineWidth: isBestValue ? 1.5 : 0
+                            )
+                    )
+            )
+            .scaleEffect(isSelected && premium.isPurchasing ? 0.98 : 1.0)
         }
         .buttonStyle(.plain)
         .disabled(premium.isPurchasing)
+        .sensoryFeedback(.selection, trigger: selectedPackageID)
     }
 
-    private var tagline: some View {
-        Text("No predictions. No hype. Just clarity.")
-            .font(.footnote)
-            .foregroundStyle(.tertiary)
+    private func savingsBar(for package: Package, in offering: Offering) -> some View {
+        let monthly = offering.availablePackages.first { $0.packageType == .monthly }
+        let savingsText: String = {
+            guard let monthlyPrice = monthly?.storeProduct.price as? NSDecimalNumber else { return "Save with yearly" }
+            let yearlyTotal = package.storeProduct.price as NSDecimalNumber
+            let monthlyAnnual = monthlyPrice.doubleValue * 12.0
+            let savings = monthlyAnnual - yearlyTotal.doubleValue
+            if savings > 0, monthlyAnnual > 0 {
+                let pct = Int((savings / monthlyAnnual * 100).rounded())
+                return "Save \(pct)% vs. monthly"
+            }
+            return "Save with yearly"
+        }()
+
+        return HStack(spacing: 6) {
+            Image(systemName: "tag.fill")
+                .font(.system(size: 10))
+            Text(savingsText)
+                .font(.system(size: 11, weight: .semibold))
+        }
+        .foregroundStyle(.orange)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(Color.orange.opacity(0.06))
+        .clipShape(.rect(bottomLeadingRadius: 14, bottomTrailingRadius: 14))
     }
+
+    private func planTitle(for package: Package) -> String {
+        switch package.packageType {
+        case .monthly: return "Monthly"
+        case .annual: return "Yearly"
+        case .lifetime: return "Lifetime"
+        default: return package.storeProduct.localizedTitle
+        }
+    }
+
+    private func planSubtitle(for package: Package) -> String {
+        switch package.packageType {
+        case .monthly: return "Cancel anytime"
+        case .annual: return "Billed once per year"
+        case .lifetime: return "Pay once, keep forever"
+        default: return ""
+        }
+    }
+
+    private func planPeriod(for package: Package) -> String {
+        switch package.packageType {
+        case .monthly: return "per month"
+        case .annual: return "per year"
+        case .lifetime: return "forever"
+        default: return ""
+        }
+    }
+
+    // MARK: - Support Message
+
+    private var supportMessage: some View {
+        VStack(spacing: 8) {
+            Text("No predictions. No hype. Just clarity.")
+                .font(.footnote)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+
+            Text("Your subscription keeps BitShrug independent,\nad-free, and continuously improving.")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+        }
+    }
+
+    // MARK: - Legal
 
     private var legalLinks: some View {
         HStack(spacing: 16) {
