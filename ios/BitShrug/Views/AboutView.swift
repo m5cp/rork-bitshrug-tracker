@@ -230,7 +230,7 @@ struct AboutView: View {
                 sourceRow(name: "Finnhub", detail: "BTC price & 24h change")
                 sourceRow(name: "CryptoCompare", detail: "Market cap, volume, supply, price history")
                 sourceRow(name: "Alternative.me", detail: "Fear & Greed Index")
-                sourceRow(name: "Blockchain.info", detail: "Hash rate, block height")
+                sourceRow(name: "Network Stats API", detail: "Hash rate, block height")
                 sourceRow(name: "Calculated Locally", detail: "MVRV, Puell, Power Law, Rainbow, Cycles")
             }
 

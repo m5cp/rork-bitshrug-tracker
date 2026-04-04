@@ -39,7 +39,7 @@ struct DataSourcesDetailView: View {
                 sourceRow(
                     icon: "cube.transparent",
                     color: .purple,
-                    name: "Blockchain.info",
+                    name: "Network Stats API",
                     detail: "Hash rate, block height",
                     url: "blockchain.info"
                 )
@@ -62,7 +62,7 @@ struct DataSourcesDetailView: View {
             } header: {
                 Text("Calculated Locally")
             } footer: {
-                Text("These indicators are mathematical estimates based on price data — not sourced from live blockchain or on-chain analytics platforms.")
+                Text("These indicators are mathematical estimates based on price data — not sourced from live network data or on-chain analytics platforms.")
             }
 
             Section {

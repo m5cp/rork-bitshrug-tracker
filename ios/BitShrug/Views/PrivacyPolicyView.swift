@@ -29,7 +29,7 @@ struct PrivacyPolicyView: View {
 
                     sectionBlock(
                         title: "Data Usage",
-                        content: "The App fetches publicly available Bitcoin market data from third-party APIs (Finnhub, CryptoCompare, Alternative.me, Blockchain.info) to display educational market information. This data is fetched directly from these services to your device and is not routed through any BitShrug servers. No user data is sent to these services beyond standard HTTP requests."
+                        content: "The App fetches publicly available Bitcoin market data from third-party APIs (Finnhub, CryptoCompare, Alternative.me) to display educational market information. This data is fetched directly from these services to your device and is not routed through any BitShrug servers. No user data is sent to these services beyond standard HTTP requests."
                     )
 
                     sectionBlock(
@@ -49,7 +49,7 @@ struct PrivacyPolicyView: View {
 
                     sectionBlock(
                         title: "Third-Party Services",
-                        content: "The App communicates with the following third-party APIs solely to retrieve publicly available Bitcoin market data:\n\n\u{2022} Finnhub (finnhub.io) \u{2014} Bitcoin price data\n\u{2022} CryptoCompare (cryptocompare.com) \u{2014} Market data and price history\n\u{2022} Alternative.me \u{2014} Fear & Greed Index\n\u{2022} Blockchain.info \u{2014} Network statistics\n\nPlease refer to each service's own privacy policy for information about how they handle requests."
+                        content: "The App communicates with the following third-party APIs solely to retrieve publicly available Bitcoin market data:\n\n\u{2022} Finnhub (finnhub.io) \u{2014} Bitcoin price data\n\u{2022} CryptoCompare (cryptocompare.com) \u{2014} Market data and price history\n\u{2022} Alternative.me \u{2014} Fear & Greed Index\n\nPlease refer to each service's own privacy policy for information about how they handle requests."
                     )
 
                     sectionBlock(

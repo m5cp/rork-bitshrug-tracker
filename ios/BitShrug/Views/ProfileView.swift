@@ -86,7 +86,7 @@ struct ProfileView: View {
                                 Text("View Data Sources")
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
-                                Text("Finnhub, CryptoCompare, Alternative.me, Blockchain.info")
+                                Text("Finnhub, CryptoCompare, Alternative.me, Network Stats API")
                                     .font(.caption)
                                     .foregroundStyle(.tertiary)
                             }
@@ -133,7 +133,7 @@ struct ProfileView: View {
                             Text("Calculated Locally")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
-                            Text("Indicators estimated from price data, not live blockchain")
+                            Text("Indicators estimated from price data, not live network data")
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
                         }

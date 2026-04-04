@@ -186,7 +186,7 @@ struct MilestonesView: View {
                             .fontWeight(.bold)
                             .foregroundStyle(.orange)
 
-                        Text("Address counts come from on-chain data aggregated by BitInfoCharts, which tracks every Bitcoin address with a non-zero balance on the public blockchain.")
+                        Text("Address counts come from on-chain data aggregated by BitInfoCharts, which tracks every Bitcoin address with a non-zero balance on the public network.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
