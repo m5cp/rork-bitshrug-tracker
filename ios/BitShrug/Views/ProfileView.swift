@@ -19,15 +19,25 @@ struct ProfileView: View {
         NavigationStack {
             List {
                 Section {
-                    VStack(spacing: 6) {
+                    VStack(spacing: 10) {
+                        ShrugBadge(size: .large, style: .hero)
+                            .padding(.top, 4)
+
                         Text("BitShrug")
                             .font(.system(.title3, design: .monospaced, weight: .bold))
+
                         Text("Understanding Bitcoin")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity)
-                    .listRowBackground(Color.clear)
+                    .listRowBackground(
+                        LinearGradient(
+                            colors: [.orange.opacity(0.06), .clear],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     .listRowSeparator(.hidden)
                     .padding(.vertical, 8)
                 }

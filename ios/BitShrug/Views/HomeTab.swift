@@ -736,19 +736,7 @@ struct HomeTab: View {
     }
 
     private var disclaimer: some View {
-        VStack(spacing: 4) {
-            Text("Numbers are not live. For educational purposes only.")
-                .font(.caption2)
-                .fontWeight(.bold)
-                .foregroundStyle(.primary)
-            Text("This is not financial advice. Do not make financial decisions based on this app.")
-                .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-        }
-        .multilineTextAlignment(.center)
-        .frame(maxWidth: .infinity)
-        .padding(.top, 8)
+        StyledDisclaimer()
     }
 }
 

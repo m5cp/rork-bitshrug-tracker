@@ -94,15 +94,15 @@ struct SectionHeader: View {
     }
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 7) {
             Image(systemName: icon)
-                .font(.system(size: 11, weight: .bold))
+                .font(.system(size: 12, weight: .bold))
                 .foregroundStyle(iconColor)
 
             Text(title)
-                .font(.system(size: 10, weight: .heavy))
+                .font(.system(size: 11, weight: .heavy))
                 .foregroundStyle(.primary)
-                .tracking(1.5)
+                .tracking(1.2)
 
             Spacer()
 

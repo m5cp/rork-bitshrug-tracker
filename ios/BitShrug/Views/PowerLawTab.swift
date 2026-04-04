@@ -248,17 +248,32 @@ struct PowerLawTab: View {
             corridorBar(position: viewModel.powerLawPercent)
 
             HStack {
-                Text("Support")
-                    .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(.green)
+                VStack(spacing: 2) {
+                    Text("Support")
+                        .font(.system(size: 10, weight: .heavy))
+                        .foregroundStyle(.green)
+                    Text("0%")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.tertiary)
+                }
                 Spacer()
-                Text("Midpoint")
-                    .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(.primary)
+                VStack(spacing: 2) {
+                    Text("Midpoint")
+                        .font(.system(size: 10, weight: .heavy))
+                        .foregroundStyle(.secondary)
+                    Text("50%")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.tertiary)
+                }
                 Spacer()
-                Text("Resistance")
-                    .font(.system(size: 10, weight: .heavy))
-                    .foregroundStyle(.red)
+                VStack(spacing: 2) {
+                    Text("Resistance")
+                        .font(.system(size: 10, weight: .heavy))
+                        .foregroundStyle(.red)
+                    Text("100%")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.tertiary)
+                }
             }
         }
         .premiumCard(.highlighted)
@@ -394,9 +409,13 @@ struct PowerLawTab: View {
                         .frame(width: 90, alignment: .trailing)
                 }
                 .font(.system(size: 9, weight: .heavy))
-                .foregroundStyle(.primary)
+                .foregroundStyle(.secondary)
                 .tracking(0.5)
-                .padding(.bottom, 10)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 4)
+                .background(Color.primary.opacity(0.03))
+                .clipShape(.rect(cornerRadius: 8))
+                .padding(.bottom, 6)
 
                 ForEach(projectionYears, id: \.year) { row in
                     HStack {
@@ -620,19 +639,7 @@ struct PowerLawTab: View {
     }
 
     private var disclaimer: some View {
-        VStack(spacing: 4) {
-            Text("Numbers are not live. For educational purposes only.")
-                .font(.caption2)
-                .fontWeight(.bold)
-                .foregroundStyle(.primary)
-            Text("This is not financial advice. Do not make financial decisions based on this app.")
-                .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-        }
-        .multilineTextAlignment(.center)
-        .frame(maxWidth: .infinity)
-        .padding(.top, 8)
+        StyledDisclaimer()
     }
 
     private func formatPrice(_ value: Double) -> String {

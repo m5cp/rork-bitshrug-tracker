@@ -72,39 +72,62 @@ struct PortfolioTab: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            Spacer().frame(height: 60)
+        VStack(spacing: 20) {
+            Spacer().frame(height: 40)
 
-            ShrugBadge(size: .hero, style: .hero)
+            ZStack {
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [.orange.opacity(0.12), .orange.opacity(0.02), .clear],
+                            center: .center,
+                            startRadius: 20,
+                            endRadius: 80
+                        )
+                    )
+                    .frame(width: 160, height: 160)
 
-            Text("Track Your Holdings")
-                .font(.title3)
-                .fontWeight(.bold)
+                ShrugBadge(size: .hero, style: .hero)
+            }
 
-            Text("Or don't. It's up to you.")
-                .font(.subheadline)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 8) {
+                Text("Track Your Holdings")
+                    .font(.title3)
+                    .fontWeight(.bold)
 
-            Text("We don't see your bitcoin. This isn't a wallet and all data is stored on your phone.")
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(.primary.opacity(0.5))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 8)
+                Text("Or don't. It's up to you.")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            HStack(spacing: 8) {
+                Image(systemName: "lock.shield.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.orange.opacity(0.6))
+                Text("100% local. Not a wallet. We never see your bitcoin.")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.horizontal, 8)
 
             Button {
                 isEditing = true
             } label: {
-                Text("Add Holdings")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: 200)
-                    .padding(.vertical, 12)
+                HStack(spacing: 8) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 16))
+                    Text("Add Holdings")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                }
+                .frame(maxWidth: 220)
+                .padding(.vertical, 12)
             }
             .buttonStyle(.borderedProminent)
             .tint(.orange)
-            .padding(.top, 8)
+            .padding(.top, 4)
 
             Spacer().frame(height: 40)
         }
@@ -317,9 +340,9 @@ struct PortfolioTab: View {
             Image(systemName: icon)
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(iconColor)
-                .frame(width: 36, height: 36)
+                .frame(width: 40, height: 40)
                 .background(iconColor.opacity(0.12))
-                .clipShape(.rect(cornerRadius: 10))
+                .clipShape(.rect(cornerRadius: 12))
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
@@ -329,16 +352,19 @@ struct PortfolioTab: View {
                 Text(subtitle)
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(.primary)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.tertiary)
+                .frame(width: 28, height: 28)
+                .background(Color.primary.opacity(0.04))
+                .clipShape(Circle())
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 6)
     }
 
     private func metricPill(label: String, value: String) -> some View {

@@ -228,7 +228,7 @@ struct CycleTab: View {
                     if let info {
                         Text("Era \(info.currentEra)")
                             .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -248,7 +248,8 @@ struct CycleTab: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
+        .padding(.vertical, 12)
+        .premiumCard(.highlighted)
     }
 
     // MARK: - Halving Stats
@@ -257,22 +258,34 @@ struct CycleTab: View {
         Group {
             if let info = viewModel.halvingInfo {
                 HStack(spacing: 0) {
-                    statCell(label: "Since Halving", value: "\(info.daysSinceLast)d")
+                    statCell(label: "Since Halving", value: "\(info.daysSinceLast)d", icon: "calendar.badge.clock")
                     Spacer()
-                    statCell(label: "Next Halving", value: "~\(info.daysUntilNext)d")
+                    Rectangle()
+                        .fill(Color.primary.opacity(0.06))
+                        .frame(width: 1, height: 36)
                     Spacer()
-                    statCell(label: "Block Reward", value: "\(String(format: "%.3f", info.blockReward)) BTC")
+                    statCell(label: "Next Halving", value: "~\(info.daysUntilNext)d", icon: "hourglass")
+                    Spacer()
+                    Rectangle()
+                        .fill(Color.primary.opacity(0.06))
+                        .frame(width: 1, height: 36)
+                    Spacer()
+                    statCell(label: "Block Reward", value: "\(String(format: "%.3f", info.blockReward)) BTC", icon: "cube")
                 }
-                .premiumCard()
+                .premiumCard(.accent)
             }
         }
     }
 
-    private func statCell(label: String, value: String) -> some View {
-        VStack(spacing: 5) {
+    private func statCell(label: String, value: String, icon: String) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.orange.opacity(0.7))
             Text(label)
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(.primary)
+                .font(.system(size: 9, weight: .heavy))
+                .foregroundStyle(.secondary)
+                .tracking(0.5)
             Text(value)
                 .font(.system(.footnote, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
@@ -402,24 +415,7 @@ struct CycleTab: View {
     // MARK: - Disclaimer
 
     private var disclaimer: some View {
-        VStack(spacing: 4) {
-            if let updated = viewModel.lastUpdated {
-                Text("Price updated \(updated.formatted(.relative(presentation: .named)))")
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundStyle(.primary.opacity(0.5))
-            }
-            Text("Numbers are not live. For educational purposes only.")
-                .font(.caption2)
-                .fontWeight(.bold)
-                .foregroundStyle(.primary)
-            Text("This is not financial advice. Do not make financial decisions based on this app.")
-                .font(.caption2)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-        }
-        .multilineTextAlignment(.center)
-        .frame(maxWidth: .infinity)
-        .padding(.top, 8)
+        StyledDisclaimer(showLastUpdated: viewModel.lastUpdated)
     }
 }
 
