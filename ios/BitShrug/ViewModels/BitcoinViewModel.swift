@@ -101,23 +101,35 @@ class BitcoinViewModel {
         let aboveMA200 = price > ma.sma200Day
         let ma50AboveMA200 = ma.sma50Day > ma.sma200Day
 
-        if aboveMA50 && ma50AboveMA200 { return 30 }
-        if aboveMA200 && !ma50AboveMA200 { return 20 }
-        if !aboveMA200 && !aboveMA50 && !ma50AboveMA200 { return 5 }
-        if !aboveMA200 { return 10 }
-        return 15
+        let distMA200 = ma.sma200Day > 0 ? (price - ma.sma200Day) / ma.sma200Day : 0
+        let distMA50 = ma.sma50Day > 0 ? (price - ma.sma50Day) / ma.sma50Day : 0
+
+        var base: Double
+        if aboveMA50 && ma50AboveMA200 {
+            base = 25.0 + min(5.0, distMA50 * 50)
+        } else if aboveMA200 && !ma50AboveMA200 {
+            base = 16.0 + min(4.0, distMA200 * 40)
+        } else if !aboveMA200 && !aboveMA50 && !ma50AboveMA200 {
+            base = 3.0 + max(0, min(7.0, (1.0 + distMA200) * 7.0))
+        } else if !aboveMA200 {
+            base = 8.0 + max(0, min(4.0, (1.0 + distMA200) * 8.0))
+        } else {
+            base = 13.0 + min(2.0, distMA50 * 20)
+        }
+        return max(0, min(30, Int(round(base))))
     }
 
     // MARK: - Momentum (0–25)
     var momentumScore: Int {
         let c7 = change7d ?? 0
         let c30 = change30d ?? 0
-
-        if c7 > 5 && c30 > 10 { return 25 }
-        if c7 >= 0 && c7 <= 5 && c30 >= 0 && c30 <= 10 { return 18 }
-        if c7 < 0 && c7 >= -7 { return 10 }
-        if c7 < -7 && c30 < -10 { return 5 }
-        return 12
+        let w7 = 0.6
+        let w30 = 0.4
+        let norm7 = max(-1, min(1, c7 / 15.0))
+        let norm30 = max(-1, min(1, c30 / 25.0))
+        let blended = norm7 * w7 + norm30 * w30
+        let base = 12.5 + blended * 12.5
+        return max(0, min(25, Int(round(base))))
     }
 
     // MARK: - Positioning (0–25)
@@ -126,28 +138,31 @@ class BitcoinViewModel {
             return 12
         }
         let aboveMA200 = price > ma.sma200Day
-        let highThreshold = hl.high * 0.85
         let range = hl.high - hl.low
         let positionInRange = range > 0 ? (price - hl.low) / range : 0.5
 
-        if aboveMA200 && price < highThreshold { return 25 }
-        if aboveMA200 && price >= highThreshold && positionInRange < 0.92 { return 18 }
-        if price >= hl.high * 0.95 || (aboveMA200 && positionInRange > 0.92) { return 10 }
-        if !aboveMA200 {
-            let c7 = change7d ?? 0
-            if c7 < -3 { return 5 }
-            return 10
+        var base: Double
+        if aboveMA200 {
+            if positionInRange < 0.5 {
+                base = 22.0 + (0.5 - positionInRange) * 6.0
+            } else if positionInRange < 0.85 {
+                base = 15.0 + (0.85 - positionInRange) * 20.0
+            } else {
+                base = 8.0 + (1.0 - positionInRange) * 46.0
+            }
+        } else {
+            let distBelow = ma.sma200Day > 0 ? (ma.sma200Day - price) / ma.sma200Day : 0.1
+            base = max(3.0, 12.0 - distBelow * 60.0)
         }
-        return 12
+        return max(0, min(25, Int(round(base))))
     }
 
     // MARK: - Volatility / Risk (0–20)
     var volatilityScore: Int {
         guard let vol = volatility30d else { return 10 }
-        if vol < 1.5 { return 20 }
-        if vol < 2.5 { return 14 }
-        if vol < 4.0 { return 8 }
-        return 4
+        let clamped = max(0.5, min(6.0, vol))
+        let base = 20.0 - (clamped - 0.5) * (16.0 / 5.5)
+        return max(0, min(20, Int(round(base))))
     }
 
     var environmentScore: Int {

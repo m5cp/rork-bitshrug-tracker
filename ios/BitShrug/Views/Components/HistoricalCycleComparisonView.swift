@@ -156,7 +156,10 @@ struct HistoricalCycleComparisonView: View {
         if price >= 1000 {
             return "$\(Int(price).formatted(.number))"
         }
-        return "$\(String(format: "%.2g", price))"
+        if price >= 1 {
+            return "$\(Int(round(price)).formatted(.number))"
+        }
+        return "$\(String(format: "%.2f", price))"
     }
 
     private func formatReturn(_ value: Double) -> String {
