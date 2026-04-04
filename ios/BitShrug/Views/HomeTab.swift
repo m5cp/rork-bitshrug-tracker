@@ -5,7 +5,6 @@ struct HomeTab: View {
     let viewModel: BitcoinViewModel
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showSettings: Bool = false
-    @State private var shareItem: ShareImageItem?
     @State private var appeared: Bool = false
     @State private var animatedScore: Int = 0
     @State private var scoreHistory = ScoreHistoryManager.shared
@@ -105,18 +104,9 @@ struct HomeTab: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { shareEnvironmentScore() } label: {
-                        Image(systemName: "square.and.arrow.up")
-                            .font(.body)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+
             }
             .sheet(isPresented: $showSettings) { ProfileView() }
-            .sheet(item: $shareItem) { item in
-                ShareSheetView(image: item.image)
-            }
         }
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
         .onAppear {
@@ -148,17 +138,6 @@ struct HomeTab: View {
                 animatedScore = value
             }
         }
-    }
-
-    private func shareEnvironmentScore() {
-        guard let image = ShareCardRenderer.render(
-            score: viewModel.environmentScore,
-            label: viewModel.environmentScoreLabel,
-            price: viewModel.formattedPrice,
-            change: viewModel.formattedChange,
-            isPositive: viewModel.change24h >= 0
-        ) else { return }
-        shareItem = ShareImageItem(image: image)
     }
 
     private var brandMark: some View {
@@ -740,12 +719,3 @@ struct HomeTab: View {
     }
 }
 
-struct ShareSheetView: UIViewControllerRepresentable {
-    let image: UIImage
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [image], applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
