@@ -13,7 +13,7 @@ struct LearnTab: View {
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
     private var horizontalPadding: CGFloat { isRegular ? 32 : 20 }
 
-    private var totalLessons: Int { 90 }
+    private var totalLessons: Int { 100 }
     private var completedTotal: Int { learnProgress.completedLessons.count }
     private var progressPercent: Double { totalLessons > 0 ? Double(completedTotal) / Double(totalLessons) : 0 }
 
@@ -22,6 +22,7 @@ struct LearnTab: View {
         SectionAnchor(id: "core", icon: "cube.fill", label: "Core"),
         SectionAnchor(id: "deep", icon: "magnifyingglass", label: "Deep Dives"),
         SectionAnchor(id: "mindset", icon: "brain.head.profile", label: "Mindset"),
+        SectionAnchor(id: "explain", icon: "bubble.left.and.text.bubble.right", label: "Explain It"),
         SectionAnchor(id: "ref", icon: "text.book.closed", label: "Reference"),
     ]
 
@@ -96,6 +97,9 @@ struct LearnTab: View {
             deepDivesSection
 
             mindsetSection
+                .padding(.horizontal, horizontalPadding)
+
+            explainBitcoinSection
                 .padding(.horizontal, horizontalPadding)
 
             referenceSection
@@ -428,6 +432,103 @@ struct LearnTab: View {
         }
     }
 
+    // MARK: - Explain Bitcoin Section
+
+    private var explainBitcoinSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            sectionTitle(icon: "bubble.left.and.text.bubble.right", color: .pink, title: "EXPLAIN IT TO ANYONE")
+                .id("explain")
+
+            Button {
+                withAnimation(.spring(duration: 0.35)) {
+                    selectedTopic = .explainBitcoin
+                }
+            } label: {
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack(spacing: 6) {
+                                Text("10 lessons")
+                                    .font(.system(size: 10, weight: .heavy))
+                                    .foregroundStyle(.pink)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(Color.pink.opacity(0.12))
+                                    .clipShape(Capsule())
+
+                                progressBadge(for: .explainBitcoin)
+                            }
+
+                            Text("Explain Bitcoin\nto Anyone")
+                                .font(.title3)
+                                .fontWeight(.heavy)
+                                .foregroundStyle(.primary)
+                                .lineSpacing(2)
+
+                            Text("Simple analogies, one-liners, and techniques to help friends and family finally get it")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(3)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+
+                        Spacer(minLength: 12)
+
+                        VStack(spacing: 6) {
+                            Image(systemName: "bubble.left.and.text.bubble.right.fill")
+                                .font(.system(size: 34, weight: .semibold))
+                                .foregroundStyle(.pink.opacity(0.8))
+                                .frame(width: 64, height: 64)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.pink.opacity(0.15), .pink.opacity(0.05)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .clipShape(.rect(cornerRadius: 18))
+
+                            Text("\"I just\ndon't get it\"")
+                                .font(.system(size: 9, weight: .heavy))
+                                .foregroundStyle(.pink.opacity(0.6))
+                                .multilineTextAlignment(.center)
+                                .italic()
+                        }
+                    }
+
+                    HStack(spacing: 8) {
+                        ForEach(["Analogies", "One-Liners", "Conversations"], id: \.self) { tag in
+                            Text(tag)
+                                .font(.system(size: 9, weight: .heavy))
+                                .foregroundStyle(.pink.opacity(0.7))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.pink.opacity(0.06))
+                                .clipShape(Capsule())
+                        }
+                    }
+                    .padding(.top, 12)
+                }
+                .padding(18)
+                .background(
+                    LinearGradient(
+                        colors: [Color.pink.opacity(0.08), Color.pink.opacity(0.02)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(.rect(cornerRadius: 20))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .strokeBorder(Color.pink.opacity(0.15), lineWidth: 1)
+                )
+            }
+            .buttonStyle(.plain)
+            .sensoryFeedback(.impact(flexibility: .soft), trigger: selectedTopic)
+        }
+    }
+
     // MARK: - Reference Section
 
     private var referenceSection: some View {
@@ -646,6 +747,8 @@ struct LearnTab: View {
             psychologyEducation
         case .realWorld:
             realWorldEducation
+        case .explainBitcoin:
+            explainBitcoinEducation
         }
     }
 
@@ -1108,6 +1211,111 @@ struct LearnTab: View {
         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
     }
 
+    // MARK: - Explain Bitcoin to Anyone
+
+    private var explainBitcoinEducation: some View {
+        VStack(spacing: 0) {
+            topicHeader(icon: "bubble.left.and.text.bubble.right.fill", color: .pink, title: "Explain Bitcoin to Anyone", subtitle: "We've all been there. Here's your toolkit.")
+
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 10) {
+                    Image(systemName: "quote.opening")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(.pink)
+                    Text("\"I just don't understand Bitcoin.\"")
+                        .font(.subheadline)
+                        .fontWeight(.heavy)
+                        .italic()
+                }
+                Text("You've heard it from family, friends, coworkers. It's not that they're wrong — Bitcoin IS hard to explain. It doesn't look like money. You can't hold it. The jargon is intimidating. This section gives you practical tools to bridge that gap — no lectures, just simple ways to make it click.")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .lineSpacing(4)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(16)
+            .background(Color.pink.opacity(0.05))
+            .clipShape(.rect(cornerRadius: 16))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(Color.pink.opacity(0.1), lineWidth: 1)
+            )
+            .padding(.bottom, 16)
+
+            VStack(spacing: 12) {
+                analogySectionHeader
+
+                trackedLesson(id: "explain_1", number: 1, color: .pink, icon: "envelope.fill", title: "The Email Analogy", summary: "Email replaced letters — Bitcoin replaces wiring money", detail: "Before email, sending a message across the world took days and cost money. Email made it instant and free. Bitcoin does the same for money — it lets you send value to anyone, anywhere, in minutes, without a bank in the middle. Just like you don't need to understand SMTP to send an email, you don't need to understand cryptography to use Bitcoin.")
+
+                trackedLesson(id: "explain_2", number: 2, color: .orange, icon: "building.columns.fill", title: "The Digital Gold Analogy", summary: "Scarce, durable, and no one can print more of it", detail: "Gold is valuable because it's rare, hard to fake, and no government controls it. Bitcoin has the same properties — but it's digital. There will only ever be 21 million Bitcoin, just like there's a limited amount of gold on Earth. The difference? You can send Bitcoin across the world in minutes, you can divide it into tiny pieces, and you can verify its authenticity instantly. It's gold for the internet age.")
+
+                trackedLesson(id: "explain_3", number: 3, color: .blue, icon: "doc.text.fill", title: "The Google Doc Analogy", summary: "Everyone can see the same document — no one can secretly edit it", detail: "Imagine a shared Google Doc that records every Bitcoin transaction ever made. Everyone in the world can see it. But here's the twist: nobody can edit past entries, nobody can delete rows, and nobody owns the document. That's the blockchain. Instead of trusting a bank to keep accurate records, Bitcoin lets everyone verify the records together. If someone tries to cheat, thousands of computers instantly spot the discrepancy.")
+
+                trackedLesson(id: "explain_4", number: 4, color: .purple, icon: "drop.fill", title: "The Water Meter Analogy", summary: "You can't fake how much water went through the pipe", detail: "Think of Bitcoin's blockchain like a water meter that every neighbor can read. You can see exactly how much water (money) flowed through every pipe (wallet). Nobody can claim they didn't receive water, and nobody can secretly add water. The meter is tamper-proof and public. That's why Bitcoin transactions are trustworthy without needing a bank to vouch for them.")
+
+                oneLinersSectionHeader
+
+                trackedLesson(id: "explain_5", number: 5, color: .mint, icon: "text.quote", title: "The 10-Second Explanations", summary: "When someone says 'What IS Bitcoin?' — pick one of these", detail: "Choose the one that fits your audience:\n\n• For the practical person: \"It's a way to send money to anyone in the world without a bank taking a cut or asking permission.\"\n\n• For the saver: \"It's digital money with a fixed supply — only 21 million will ever exist. No one can print more.\"\n\n• For the tech person: \"It's an open-source protocol for transferring value, like HTTP is for transferring information.\"\n\n• For the skeptic: \"It's been running for 16 years, processes billions daily, has never been hacked, and major banks now offer it.\"\n\n• For the parent: \"It's money that works like the internet — global, always on, and controlled by no single company or government.\"")
+
+                trackedLesson(id: "explain_6", number: 6, color: .cyan, icon: "bubble.left.fill", title: "Handling Common Pushback", summary: "What to say when they say \"but it's not real money\"", detail: "Pushback: \"But it's not backed by anything.\"\nResponse: \"Neither is the dollar since 1971. The dollar is backed by trust in the government. Bitcoin is backed by math, scarcity, and a global network.\"\n\nPushback: \"It's too volatile.\"\nResponse: \"Zoom out. Anyone who held Bitcoin for 4+ years has never lost money. Volatility is the price of early adoption.\"\n\nPushback: \"It's only for criminals.\"\nResponse: \"Less than 1% of Bitcoin transactions are illicit — lower than cash. Every transaction is recorded publicly forever.\"\n\nPushback: \"I missed the boat.\"\nResponse: \"Bitcoin's market cap is $2 trillion. Gold is $15 trillion. If Bitcoin captures even a fraction of global store-of-value use, we're still early.\"")
+
+                conversationSectionHeader
+
+                trackedLesson(id: "explain_7", number: 7, color: .yellow, icon: "person.2.fill", title: "Start With Their Problem", summary: "Don't explain Bitcoin — explain what it solves for THEM", detail: "The biggest mistake Bitcoiners make is explaining the technology instead of the value. Don't start with \"blockchain\" — start with their pain point:\n\n• They worry about inflation? \"Bitcoin has a fixed supply that can't be inflated.\"\n• They distrust banks? \"Bitcoin lets you hold your own money without permission.\"\n• They send money abroad? \"Bitcoin transfers settle in minutes for pennies.\"\n• They're saving for kids? \"An asset that's gained value every 4-year period in its history.\"\n\nMatch the explanation to what they already care about.")
+
+                trackedLesson(id: "explain_8", number: 8, color: .teal, icon: "hand.raised.fill", title: "Know When to Stop", summary: "Plant the seed — don't force the tree to grow", detail: "Most people need to hear about Bitcoin 5-7 times before they take it seriously. Your job isn't to convert anyone in one conversation. Share one interesting fact, one simple analogy, then stop. Let them come back with questions.\n\nGood stopping points:\n• \"It's interesting stuff. I can share more if you're ever curious.\"\n• \"I felt the same way at first. It takes a while to click.\"\n• \"No rush. It's been around 16 years and it's not going anywhere.\"\n\nPressure creates resistance. Patience creates curiosity.")
+
+                trackedLesson(id: "explain_9", number: 9, color: .red, icon: "exclamationmark.triangle.fill", title: "What NOT to Say", summary: "These phrases shut conversations down instantly", detail: "Avoid these — they make people defensive or skeptical:\n\n❌ \"You just don't understand.\" (Condescending)\n❌ \"It's going to $1 million.\" (Sounds like a scam)\n❌ \"Fiat is worthless.\" (They use fiat every day)\n❌ \"Have fun staying poor.\" (Hostile and cultish)\n❌ \"DYOR\" with no context (Dismissive)\n❌ Technical jargon dump (Hash rates, nodes, UTXOs)\n\nInstead: be humble, acknowledge the weirdness, and meet them where they are. \"Yeah, it's a strange idea at first. Took me a while too.\"")
+
+                trackedLesson(id: "explain_10", number: 10, color: .indigo, icon: "lightbulb.fill", title: "The Dinner Table Framework", summary: "A 3-step approach for explaining Bitcoin to anyone over a meal", detail: "Step 1 — The Hook (30 seconds):\n\"There's a type of money that no government or company controls, and there will only ever be 21 million of them. It's been running since 2009 and it's never been hacked.\"\n\nStep 2 — The Relatable Comparison (30 seconds):\nPick the analogy that fits them best from this section. Email for boomers, digital gold for investors, Google Doc for tech people.\n\nStep 3 — The Honest Close (15 seconds):\n\"I'm not saying put your savings in it. I'm saying it's worth understanding. It's already a $2 trillion asset and every major bank is getting involved.\"\n\nThat's it. Under 2 minutes. No jargon. No price predictions. Just a seed planted.")
+            }
+        }
+        .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
+    }
+
+    private var analogySectionHeader: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "lightbulb.max.fill")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.pink)
+            Text("ANALOGIES THAT CLICK")
+                .font(.system(size: 10, weight: .heavy))
+                .foregroundStyle(.pink)
+                .tracking(1)
+            VStack { Divider() }
+        }
+        .padding(.top, 8)
+    }
+
+    private var oneLinersSectionHeader: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "text.quote")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.mint)
+            Text("ONE-LINERS & COMEBACKS")
+                .font(.system(size: 10, weight: .heavy))
+                .foregroundStyle(.mint)
+                .tracking(1)
+            VStack { Divider() }
+        }
+        .padding(.top, 8)
+    }
+
+    private var conversationSectionHeader: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "bubble.left.and.bubble.right.fill")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(.yellow)
+            Text("CONVERSATION TECHNIQUES")
+                .font(.system(size: 10, weight: .heavy))
+                .foregroundStyle(.yellow)
+                .tracking(1)
+            VStack { Divider() }
+        }
+        .padding(.top, 8)
+    }
+
     // MARK: - NEW: Bitcoin Psychology
 
     private var psychologyEducation: some View {
@@ -1205,6 +1413,7 @@ enum LearnTopic: Hashable {
     case history
     case psychology
     case realWorld
+    case explainBitcoin
 
     var progressKey: String {
         switch self {
@@ -1222,6 +1431,7 @@ enum LearnTopic: Hashable {
         case .history: return "history"
         case .psychology: return "psych"
         case .realWorld: return "real"
+        case .explainBitcoin: return "explain"
         }
     }
 
@@ -1241,6 +1451,7 @@ enum LearnTopic: Hashable {
         case .history: return 6
         case .psychology: return 5
         case .realWorld: return 5
+        case .explainBitcoin: return 10
         }
     }
 }
