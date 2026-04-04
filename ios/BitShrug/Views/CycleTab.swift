@@ -8,7 +8,6 @@ struct CycleTab: View {
 
     private let sections: [SectionAnchor] = [
         SectionAnchor(id: "verdict", icon: "hand.raised", label: "Verdict"),
-        SectionAnchor(id: "status", icon: "waveform.path", label: "Status"),
         SectionAnchor(id: "history", icon: "clock.arrow.circlepath", label: "History"),
         SectionAnchor(id: "reversal", icon: "arrow.triangle.2.circlepath.circle", label: "Reversal"),
         SectionAnchor(id: "projected", icon: "chart.line.downtrend.xyaxis", label: "Bottom"),
@@ -41,12 +40,6 @@ struct CycleTab: View {
                             cycleRing
 
                             halvingStats
-
-                            CycleStatusView(
-                                currentPrice: viewModel.price,
-                                daysSinceHalving: viewModel.halvingInfo?.daysSinceLast ?? 0
-                            )
-                            .id("status")
 
                             HistoricalCycleComparisonView(currentPrice: viewModel.price)
                                 .id("history")
