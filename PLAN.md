@@ -49,7 +49,7 @@ BitShrug is a premium Bitcoin macro analysis app that helps users understand the
 ### Freemium Model
 - **Free tier**: Environment Score, price + chart, 3 core indicators, cycle info, Power Law basics
 - **Premium tier**: All 6+ indicators, daily insights, weekly summaries, smart notifications, Power Law charts
-- **Paywall**: Feature comparison table, yearly ($39) and monthly ($5.99) plans, 7-day free trial
+- **Paywall**: Feature comparison table, monthly ($4.99), yearly ($39.99), and lifetime ($49.99) plans
 - **PremiumManager** — centralized gating logic with UserDefaults persistence
 
 ### Notifications
