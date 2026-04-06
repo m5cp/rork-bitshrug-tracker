@@ -18,6 +18,7 @@ struct HomeTab: View {
         SectionAnchor(id: "insight", icon: "sparkle", label: "Insight"),
         SectionAnchor(id: "breakdown", icon: "gauge.with.dots.needle.bottom.50percent", label: "Breakdown"),
         SectionAnchor(id: "indicators", icon: "gauge.with.dots.needle.bottom.50percent", label: "Indicators"),
+        SectionAnchor(id: "macro", icon: "building.columns", label: "Macro"),
         SectionAnchor(id: "context", icon: "globe", label: "Context"),
     ]
 
@@ -73,6 +74,14 @@ struct HomeTab: View {
                             if !premium.isPremium {
                                 premiumUpsellCard
                                     .padding(.bottom, 20)
+                            }
+
+                            if viewModel.macroData.isLoaded {
+                                MacroIntelligenceView(macroData: viewModel.macroData)
+                                    .id("macro")
+                                    .padding(.bottom, 20)
+                                    .opacity(appeared ? 1 : 0)
+                                    .offset(y: appeared ? 0 : 16)
                             }
 
                             contextSection

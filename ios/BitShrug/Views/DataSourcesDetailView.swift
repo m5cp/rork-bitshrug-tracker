@@ -43,6 +43,13 @@ struct DataSourcesDetailView: View {
                     detail: "Hash rate, block height",
                     url: "blockchain.info"
                 )
+                sourceRow(
+                    icon: "building.columns",
+                    color: .teal,
+                    name: "FRED (Federal Reserve)",
+                    detail: "Federal Funds Rate, Treasury Yields, CPI, Unemployment, Financial Stress, Fed Balance Sheet",
+                    url: "fred.stlouisfed.org"
+                )
             } header: {
                 Text("Live Data Sources")
             } footer: {
@@ -63,6 +70,25 @@ struct DataSourcesDetailView: View {
                 Text("Calculated Locally")
             } footer: {
                 Text("These indicators are mathematical estimates based on price data — not sourced from live network data or on-chain analytics platforms.")
+            }
+
+            Section {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label {
+                        Text("FRED Attribution")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                    } icon: {
+                        Image(systemName: "building.columns")
+                            .foregroundStyle(.teal)
+                    }
+                    Text("Data sourced from Federal Reserve Economic Data (FRED), Federal Reserve Bank of St. Louis. This app is not affiliated with or endorsed by the Federal Reserve. Macro data may be delayed and is for informational purposes only.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.vertical, 4)
+            } header: {
+                Text("Attribution")
             }
 
             Section {

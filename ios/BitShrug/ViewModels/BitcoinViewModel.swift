@@ -27,6 +27,7 @@ class BitcoinViewModel {
     var blockHeight: Int = 0
     var rsiValue: Double?
     var macdData: (macd: Double, signal: Double, histogram: Double)?
+    var macroData: MacroIntelligenceData = MacroIntelligenceData()
     var isLoading: Bool = false
     var lastUpdated: Date?
     var errorMessage: String?
@@ -34,6 +35,7 @@ class BitcoinViewModel {
     private var previousComponentStatuses: [String: String]?
 
     private let service = BitcoinService.shared
+    private let fredService = FREDService.shared
 
     var fearGreedLevel: FearGreedLevel {
         FearGreedLevel(value: fearGreedValue)
@@ -493,8 +495,23 @@ class BitcoinViewModel {
             )
         }
 
+        await loadMacroData()
+
         lastUpdated = Date()
         isLoading = false
+    }
+
+    private func loadMacroData() async {
+        let indicators = await fredService.fetchAllSeries()
+        let backdrop = fredService.calculateBackdrop(indicators: indicators)
+        macroData = MacroIntelligenceData(
+            indicators: indicators,
+            backdrop: backdrop,
+            isLoaded: true,
+            lastFetched: Date(),
+            hasError: indicators.allSatisfy { !$0.isAvailable }
+        )
+        print("[BitShrug] FRED: Loaded \(indicators.filter(\.isAvailable).count)/\(indicators.count) indicators, backdrop: \(backdrop.rawValue)")
     }
 
     var dailyDelta: Int? {
