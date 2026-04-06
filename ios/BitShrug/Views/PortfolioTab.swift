@@ -74,7 +74,9 @@ struct PortfolioTab: View {
 
     private var emptyState: some View {
         VStack(spacing: 20) {
-            Spacer().frame(height: 24)
+            Spacer().frame(height: 12)
+
+            quickActions
 
             ZStack {
                 Circle()
@@ -90,8 +92,6 @@ struct PortfolioTab: View {
 
                 ShrugBadge(size: .hero, style: .hero)
             }
-
-            quickActions
 
             VStack(spacing: 8) {
                 Text("Track Your Holdings")
@@ -214,64 +214,61 @@ struct PortfolioTab: View {
     }
 
     private var quickActions: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             Button {
                 showFunWithNumbers = true
             } label: {
-                VStack(spacing: 6) {
+                HStack(spacing: 5) {
                     Image(systemName: "sparkles")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.purple)
-                    Text("Fun with\nNumbers")
+                    Text("Fun with Numbers")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.primary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
+                        .lineLimit(1)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
                 .background(Color.purple.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 12))
+                .clipShape(Capsule())
             }
             .buttonStyle(.plain)
 
             Button {
                 showDCACalculator = true
             } label: {
-                VStack(spacing: 6) {
+                HStack(spacing: 5) {
                     Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.cyan)
-                    Text("DCA\nCalculator")
+                    Text("DCA")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.primary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
+                        .lineLimit(1)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
                 .background(Color.cyan.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 12))
+                .clipShape(Capsule())
             }
             .buttonStyle(.plain)
 
             Button {
                 showPriceAlerts = true
             } label: {
-                VStack(spacing: 6) {
+                HStack(spacing: 5) {
                     Image(systemName: "bell.badge.fill")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 11, weight: .semibold))
                         .foregroundStyle(.orange)
-                    Text("Price\nAlerts")
+                    Text("Alerts")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.primary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
+                        .lineLimit(1)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
                 .background(Color.orange.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 12))
+                .clipShape(Capsule())
             }
             .buttonStyle(.plain)
         }
