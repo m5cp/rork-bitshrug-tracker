@@ -233,7 +233,7 @@ struct HomeTab: View {
                 Button {
                     selectedTab = .portfolio
                 } label: {
-                    Image(systemName: "briefcase.fill")
+                    Image(systemName: "wallet.bifold.fill")
                         .font(.system(size: 18))
                         .foregroundStyle(.orange)
                         .padding(10)
