@@ -238,9 +238,9 @@ struct PaywallView: View {
                     isLast: false
                 )
                 proFeatureRow(
-                    icon: "heart.fill",
-                    title: "Support Development",
-                    subtitle: "Help keep BitShrug independent and ad-free",
+                    icon: "square.grid.2x2.fill",
+                    title: "Home Screen Widget",
+                    subtitle: "Environment Score at a glance, right on your Home Screen",
                     isLast: true
                 )
             }
