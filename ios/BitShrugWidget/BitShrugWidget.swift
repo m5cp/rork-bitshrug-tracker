@@ -77,7 +77,7 @@ struct SmallWidgetView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("BitShrug")
+                Text("Fog of Bitcoin")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -149,7 +149,7 @@ struct MediumWidgetView: View {
 
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("BitShrug")
+                    Text("Fog of Bitcoin")
                         .font(.system(size: 11, weight: .bold, design: .monospaced))
                         .foregroundStyle(.secondary)
                     Spacer()
@@ -189,7 +189,7 @@ struct LargeWidgetView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("BitShrug")
+                Text("Fog of Bitcoin")
                     .font(.system(size: 12, weight: .bold, design: .monospaced))
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -296,7 +296,7 @@ struct AccessoryRectangularView: View {
             HStack(spacing: 4) {
                 Image(systemName: "bitcoinsign.circle.fill")
                     .font(.system(size: 10))
-                Text("BitShrug")
+                Text("Fog of Bitcoin")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
             }
             Text(entry.price)
@@ -317,7 +317,7 @@ struct BitShrugWidget: Widget {
         StaticConfiguration(kind: kind, provider: BitShrugProvider()) { entry in
             BitShrugWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("BitShrug")
+        .configurationDisplayName("Fog of Bitcoin")
         .description("Bitcoin Environment Score and price at a glance.")
         .supportedFamilies([
             .systemSmall,

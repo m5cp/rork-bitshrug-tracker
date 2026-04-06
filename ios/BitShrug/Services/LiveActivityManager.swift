@@ -16,7 +16,7 @@ class LiveActivityManager {
 
         end()
 
-        let attributes = BitShrugLiveAttributes(appName: "BitShrug")
+        let attributes = BitShrugLiveAttributes(appName: "Fog of Bitcoin")
         let state = BitShrugLiveAttributes.ContentState(
             price: price,
             change24h: change24h,

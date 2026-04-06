@@ -90,13 +90,13 @@ class PriceAlertManager {
 
             if wasBelowSupport && isAboveSupport && !alreadyNotified(key: lastSupportCrossKey) {
                 sendAlert(
-                    title: "BitShrug",
+                    title: "Fog of Bitcoin",
                     body: "Price crossed above Power Law support at \(formatPrice(support))"
                 )
                 markNotified(key: lastSupportCrossKey)
             } else if wasAboveSupport && isBelowSupport && !alreadyNotified(key: lastSupportCrossKey) {
                 sendAlert(
-                    title: "BitShrug",
+                    title: "Fog of Bitcoin",
                     body: "Price dropped below Power Law support at \(formatPrice(support))"
                 )
                 markNotified(key: lastSupportCrossKey)
@@ -111,13 +111,13 @@ class PriceAlertManager {
 
             if wasBelowResistance && isAboveResistance && !alreadyNotified(key: lastResistanceCrossKey) {
                 sendAlert(
-                    title: "BitShrug",
+                    title: "Fog of Bitcoin",
                     body: "Price crossed above Power Law resistance at \(formatPrice(resistance))"
                 )
                 markNotified(key: lastResistanceCrossKey)
             } else if wasAboveResistance && isBelowResistance && !alreadyNotified(key: lastResistanceCrossKey) {
                 sendAlert(
-                    title: "BitShrug",
+                    title: "Fog of Bitcoin",
                     body: "Price dropped below Power Law resistance at \(formatPrice(resistance))"
                 )
                 markNotified(key: lastResistanceCrossKey)
@@ -133,13 +133,13 @@ class PriceAlertManager {
 
             if wasBelow && isAbove && !alreadyNotified(key: crossKey) {
                 sendAlert(
-                    title: "BitShrug",
+                    title: "Fog of Bitcoin",
                     body: "Bitcoin crossed above \(formatPrice(target))"
                 )
                 markNotified(key: crossKey)
             } else if wasAbove && isBelow && !alreadyNotified(key: crossKey) {
                 sendAlert(
-                    title: "BitShrug",
+                    title: "Fog of Bitcoin",
                     body: "Bitcoin dropped below \(formatPrice(target))"
                 )
                 markNotified(key: crossKey)
@@ -166,7 +166,7 @@ class PriceAlertManager {
             case .crossesAbove:
                 if prevScore < target.value && score >= target.value && !alreadyNotified(key: crossKey) {
                     sendAlert(
-                        title: "BitShrug",
+                        title: "Fog of Bitcoin",
                         body: "Environment Score crossed above \(target.value)"
                     )
                     markNotified(key: crossKey)
@@ -174,7 +174,7 @@ class PriceAlertManager {
             case .crossesBelow:
                 if prevScore >= target.value && score < target.value && !alreadyNotified(key: crossKey) {
                     sendAlert(
-                        title: "BitShrug",
+                        title: "Fog of Bitcoin",
                         body: "Environment Score dropped below \(target.value)"
                     )
                     markNotified(key: crossKey)
@@ -185,7 +185,7 @@ class PriceAlertManager {
                 if (crossedUp || crossedDown) && !alreadyNotified(key: crossKey) {
                     let verb = crossedUp ? "crossed above" : "dropped below"
                     sendAlert(
-                        title: "BitShrug",
+                        title: "Fog of Bitcoin",
                         body: "Environment Score \(verb) \(target.value)"
                     )
                     markNotified(key: crossKey)

@@ -14,7 +14,7 @@ struct BitShrugLiveActivity: Widget {
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundStyle(.orange)
                         VStack(alignment: .leading, spacing: 1) {
-                            Text("BitShrug")
+                            Text("Fog of Bitcoin")
                                 .font(.system(size: 10, weight: .bold, design: .monospaced))
                                 .foregroundStyle(.secondary)
                             Text(formatPrice(context.state.price))
@@ -75,7 +75,7 @@ struct BitShrugLiveActivity: Widget {
                     Image(systemName: "bitcoinsign.circle.fill")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(.orange)
-                    Text("BitShrug")
+                    Text("Fog of Bitcoin")
                         .font(.system(size: 11, weight: .bold, design: .monospaced))
                         .foregroundStyle(.secondary)
                 }

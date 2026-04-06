@@ -14,7 +14,7 @@ struct OnboardingView: View {
             ShrugBadge(size: .hero, style: .hero)
                 .scaleEffect(badgeScale)
 
-            Text("BitShrug")
+            Text("Fog of Bitcoin")
                 .font(.system(size: 36, weight: .heavy))
                 .foregroundStyle(.primary)
                 .offset(y: titleOffset)

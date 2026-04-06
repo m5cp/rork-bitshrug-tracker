@@ -104,7 +104,7 @@ struct MemeCardView: View {
 
     private var brandWatermark: some View {
         HStack(spacing: 6) {
-            Text("BitShrug")
+            Text("Fog of Bitcoin")
                 .font(.system(size: 11, weight: .bold, design: .monospaced))
                 .foregroundStyle(.white.opacity(0.4))
             Text("¯\\_(ツ)_/¯")

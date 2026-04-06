@@ -25,7 +25,7 @@ struct ProfileView: View {
                         ShrugBadge(size: .large, style: .hero)
                             .padding(.top, 4)
 
-                        Text("BitShrug")
+                        Text("Fog of Bitcoin")
                             .font(.system(.title3, design: .monospaced, weight: .bold))
 
                         Text("Understanding Bitcoin")
@@ -153,10 +153,10 @@ struct ProfileView: View {
                     } label: {
                         Label {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(premium.isPremium ? "BitShrug Pro" : "Upgrade to Pro")
+                                Text(premium.isPremium ? "Fog of Bitcoin Pro" : "Upgrade to Pro")
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
-                                Text(premium.isPremium ? "You're supporting BitShrug" : "Unlock all features")
+                                Text(premium.isPremium ? "You're supporting Fog of Bitcoin" : "Unlock all features")
                                     .font(.caption)
                                     .foregroundStyle(.tertiary)
                             }
@@ -233,7 +233,7 @@ struct ProfileView: View {
                         showAbout = true
                     } label: {
                         Label {
-                            Text("About BitShrug")
+                            Text("About Fog of Bitcoin")
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                         } icon: {

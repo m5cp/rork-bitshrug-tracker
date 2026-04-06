@@ -55,7 +55,7 @@ struct GetEnvironmentIntent: AppIntent {
 
             return .result(dialog: "Bitcoin is at \(priceFormatted). The Environment Score is \(clampedScore) out of 100 \u{2014} \(label).")
         } catch {
-            return .result(dialog: "I couldn't fetch the latest Bitcoin data right now. Try opening BitShrug directly.")
+            return .result(dialog: "I couldn't fetch the latest Bitcoin data right now. Try opening Fog of Bitcoin directly.")
         }
     }
 }

@@ -176,7 +176,7 @@ struct HomeTab: View {
 
     private var brandMark: some View {
         HStack(spacing: 8) {
-            Text("BitShrug")
+            Text("Fog of Bitcoin")
                 .font(.system(.subheadline, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
             ShrugBadge(size: .small, style: .inline)
