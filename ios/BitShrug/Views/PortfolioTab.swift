@@ -69,6 +69,7 @@ struct PortfolioTab: View {
                 DCACalculatorView(viewModel: viewModel)
             }
         }
+        .fogBackground()
     }
 
     private var emptyState: some View {

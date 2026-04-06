@@ -68,6 +68,7 @@ struct LearnTab: View {
             .navigationTitle("Learn")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .fogBackground()
     }
 
     // MARK: - Topic Browser

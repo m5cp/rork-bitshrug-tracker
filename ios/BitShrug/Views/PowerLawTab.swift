@@ -79,6 +79,7 @@ struct PowerLawTab: View {
             .navigationTitle("Power Law")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .fogBackground()
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
     }
 

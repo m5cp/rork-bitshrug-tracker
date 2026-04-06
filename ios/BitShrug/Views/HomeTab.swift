@@ -142,6 +142,7 @@ struct HomeTab: View {
                 MemeGeneratorView(viewModel: viewModel)
             }
         }
+        .fogBackground()
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
         .onAppear {
             withAnimation(.easeOut(duration: 0.6).delay(0.1)) {

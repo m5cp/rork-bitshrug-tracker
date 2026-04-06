@@ -86,6 +86,7 @@ struct CycleTab: View {
                 CycleTimeMachineView(viewModel: viewModel)
             }
         }
+        .fogBackground()
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
     }
 

@@ -54,7 +54,7 @@ struct OnboardingView: View {
                 .offset(y: buttonOffset)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground).ignoresSafeArea())
+        .fogBackground()
         .opacity(opacity)
         .sensoryFeedback(.impact(weight: .medium), trigger: opacity > 0.5)
         .task {
