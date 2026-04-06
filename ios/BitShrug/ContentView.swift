@@ -7,7 +7,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Home", systemImage: "bitcoinsign.circle.fill", value: .home) {
-                HomeTab(viewModel: viewModel)
+                HomeTab(viewModel: viewModel, selectedTab: $selectedTab)
             }
 
             Tab("Signals", systemImage: "waveform.path.ecg", value: .signals) {

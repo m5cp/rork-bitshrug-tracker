@@ -3,6 +3,7 @@ import Charts
 
 struct HomeTab: View {
     let viewModel: BitcoinViewModel
+    @Binding var selectedTab: AppTab
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var showSettings: Bool = false
     @State private var appeared: Bool = false
@@ -228,6 +229,19 @@ struct HomeTab: View {
                 }
 
                 Spacer()
+
+                Button {
+                    selectedTab = .portfolio
+                } label: {
+                    Image(systemName: "briefcase.fill")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.orange)
+                        .padding(10)
+                        .background(Color.orange.opacity(0.12))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
+                .sensoryFeedback(.selection, trigger: selectedTab)
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel(viewModel.price > 0 ? "Bitcoin price \(viewModel.formattedPrice), \(viewModel.change24h >= 0 ? "up" : "down") \(viewModel.formattedChange) today" : "Price loading")
