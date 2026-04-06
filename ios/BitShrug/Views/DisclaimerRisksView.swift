@@ -19,12 +19,12 @@ struct DisclaimerRisksView: View {
 
                     sectionBlock(
                         title: "Not Financial Advice",
-                        content: "BitShrug is an educational tool designed to help users understand Bitcoin market conditions. It is NOT a financial advisory service. BitShrug does not provide financial advice, investment advice, trading advice, or any other kind of professional advice. Nothing in this app should be construed as a recommendation to purchase, sell, hold, or trade Bitcoin or any other cryptocurrency."
+                        content: "Fog of Bitcoin is an educational tool designed to help users understand Bitcoin market conditions. It is NOT a financial advisory service. Fog of Bitcoin does not provide financial advice, investment advice, trading advice, or any other kind of professional advice. Nothing in this app should be construed as a recommendation to purchase, sell, hold, or trade Bitcoin or any other cryptocurrency."
                     )
 
                     sectionBlock(
                         title: "No Recommendation to Purchase",
-                        content: "BitShrug does not recommend purchasing Bitcoin or any cryptocurrency. The information presented — including scores, indicators, charts, and commentary — is purely educational and intended to help users understand historical patterns and market concepts. Any decision to purchase, sell, or hold any asset is solely your own responsibility."
+                        content: "Fog of Bitcoin does not recommend purchasing Bitcoin or any cryptocurrency. The information presented — including scores, indicators, charts, and commentary — is purely educational and intended to help users understand historical patterns and market concepts. Any decision to purchase, sell, or hold any asset is solely your own responsibility."
                     )
 
                     sectionBlock(
@@ -34,7 +34,7 @@ struct DisclaimerRisksView: View {
 
                     sectionBlock(
                         title: "Data Accuracy",
-                        content: "Prices and indicators shown in BitShrug are delayed estimates — not real-time market data. Numbers are not live. Indicators are calculated locally from historical price data using mathematical models and estimates. They may differ significantly from values reported by professional on-chain analytics platforms. Do not rely on these numbers for any financial decision."
+                        content: "Prices and indicators shown in Fog of Bitcoin are delayed estimates — not real-time market data. Numbers are not live. Indicators are calculated locally from historical price data using mathematical models and estimates. They may differ significantly from values reported by professional on-chain analytics platforms. Do not rely on these numbers for any financial decision."
                     )
 
                     sectionBlock(
@@ -44,7 +44,7 @@ struct DisclaimerRisksView: View {
 
                     sectionBlock(
                         title: "No Guarantee",
-                        content: "BitShrug makes no guarantees about the accuracy, completeness, or timeliness of any information provided. The developers of BitShrug are not responsible for any losses, damages, or costs arising from the use of this app or reliance on any information contained within it."
+                        content: "Fog of Bitcoin makes no guarantees about the accuracy, completeness, or timeliness of any information provided. The developers of Fog of Bitcoin are not responsible for any losses, damages, or costs arising from the use of this app or reliance on any information contained within it."
                     )
 
                     sectionBlock(

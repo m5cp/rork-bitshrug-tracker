@@ -881,7 +881,7 @@ struct HomeTab: View {
 
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(spacing: 6) {
-                            Text("Unlock BitShrug Pro")
+                            Text("Unlock Fog of Bitcoin Pro")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.primary)

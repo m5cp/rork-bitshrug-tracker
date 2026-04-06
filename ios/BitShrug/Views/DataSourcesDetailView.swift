@@ -4,7 +4,7 @@ struct DataSourcesDetailView: View {
     var body: some View {
         List {
             Section {
-                Text("Prices and indicators shown in BitShrug are delayed estimates — not real-time data. Do not make financial decisions based on this app.")
+                Text("Prices and indicators shown in Fog of Bitcoin are delayed estimates — not real-time data. Do not make financial decisions based on this app.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .listRowBackground(Color.clear)
@@ -90,7 +90,7 @@ struct DataSourcesDetailView: View {
                         Image(systemName: "exclamationmark.triangle.fill")
                             .foregroundStyle(.red)
                     }
-                    Text("BitShrug is for educational and informational purposes only. Nobody should trade or make financial decisions based on this app.")
+                    Text("Fog of Bitcoin is for educational and informational purposes only. Nobody should trade or make financial decisions based on this app.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

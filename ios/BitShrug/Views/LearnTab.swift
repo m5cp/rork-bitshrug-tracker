@@ -268,7 +268,7 @@ struct LearnTab: View {
                 topic: .howToRead,
                 icon: "app.badge.checkmark",
                 color: .orange,
-                title: "How to Read BitShrug",
+                title: "How to Read Fog of Bitcoin",
                 subtitle: "Understand every feature of this app in under 3 minutes",
                 lessonCount: 5
             )
@@ -541,7 +541,7 @@ struct LearnTab: View {
                 icon: "character.book.closed.fill",
                 color: .indigo,
                 title: "Glossary",
-                subtitle: "Key terms and definitions you'll encounter in BitShrug and beyond",
+                subtitle: "Key terms and definitions you'll encounter in Fog of Bitcoin and beyond",
                 lessonCount: 9
             )
         }
@@ -752,11 +752,11 @@ struct LearnTab: View {
         }
     }
 
-    // MARK: - How to Read BitShrug
+    // MARK: - How to Read Fog of Bitcoin
 
     private var howToReadEducation: some View {
         VStack(spacing: 0) {
-            topicHeader(icon: "app.badge.checkmark", color: .orange, title: "How to Read BitShrug", subtitle: "Understand every feature of this app.")
+            topicHeader(icon: "app.badge.checkmark", color: .orange, title: "How to Read Fog of Bitcoin", subtitle: "Understand every feature of this app.")
             VStack(spacing: 12) {
                 trackedLesson(id: "howtoread_1", number: 1, color: .orange, icon: "gauge.with.dots.needle.bottom.50percent", title: "The Environment Score", summary: "A 0–100 composite of trend, momentum, positioning & volatility", detail: "The Environment Score is a single number that summarizes Bitcoin's current macro conditions. It combines four drivers: Trend (are we above key moving averages?), Momentum (how fast is price moving?), Positioning (where are we relative to the 52-week range?), and Volatility (is risk elevated?). Higher scores suggest favorable conditions; lower scores suggest caution. It is not a buy/sell signal.")
                 trackedLesson(id: "howtoread_2", number: 2, color: .blue, icon: "chart.line.uptrend.xyaxis", title: "The Power Law Corridor", summary: "A long-term mathematical channel for Bitcoin's price", detail: "The Power Law chart shows a support line (historical floor) and resistance line (historical ceiling). When price is near support, conditions have historically been favorable for long-term holders. Near resistance, conditions have historically been overheated. The percentage shows where price sits within this corridor. The Rainbow Chart adds color bands for more granular context.")
@@ -873,7 +873,7 @@ struct LearnTab: View {
                 ExpandableInfoCard(icon: "exclamationmark.triangle", iconColor: .red, title: "Could the Cycles Be Over?", summary: "Bull case vs bear case — both have merit", detail: "Bull case: Institutional adoption changes dynamics. Spot ETFs absorb selling pressure. Possible \"supercycle\" scenario. Bear case: Oct 2025 ATH followed by bear-like action. Pattern matches historical cycle behavior. Psychology hasn't changed. Where signal meets uncertainty.")
                 ExpandableInfoCard(icon: "lightbulb", iconColor: .yellow, title: "Using Cycles as a Reference", summary: "Educational context, not a timing tool", detail: "Cycles are not precisely 4 years — they've varied each time. No guarantee cycles will continue as before. Past patterns don't predict future behavior. Use as educational context, not as a timing tool. Crypto is high-risk. This is educational context, not a recommendation.")
                 ExpandableInfoCard(icon: "questionmark.diamond", iconColor: .purple, title: "Is It Guaranteed?", summary: "No — only 4 halving events observed so far", detail: "As Bitcoin matures, institutional adoption, regulation, macro conditions, and diminishing supply shocks may alter or dampen the cycle. Useful framework, but past patterns don't guarantee future behavior.")
-                ExpandableInfoCard(icon: "app.badge", iconColor: .blue, title: "How BitShrug Uses It", summary: "One lens among many for understanding conditions", detail: "The cycle phase is combined with momentum, trend, positioning, and volatility to create a composite picture. It's a context tool — not a timing tool.")
+                ExpandableInfoCard(icon: "app.badge", iconColor: .blue, title: "How Fog of Bitcoin Uses It", summary: "One lens among many for understanding conditions", detail: "The cycle phase is combined with momentum, trend, positioning, and volatility to create a composite picture. It's a context tool — not a timing tool.")
             }
         }
         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
@@ -979,7 +979,7 @@ struct LearnTab: View {
                 trackedLesson(id: "dca_2", number: 2, color: .blue, icon: "chart.line.uptrend.xyaxis", title: "Why DCA Works for Bitcoin", summary: "Volatility is your friend with a consistent schedule", detail: "Bitcoin's volatility makes timing nearly impossible. DCA turns that volatility into an advantage — you naturally buy more when prices drop and less when they spike. Over Bitcoin's history, consistent weekly DCA has produced positive returns over any 4-year period, regardless of when you started.")
                 trackedLesson(id: "dca_3", number: 3, color: .orange, icon: "clock.fill", title: "Time Preference", summary: "Valuing the future over instant gratification", detail: "Low time preference means prioritizing long-term outcomes over short-term consumption. Bitcoin encourages low time preference because its fixed supply and deflationary nature reward patience. This is fundamentally different from fiat currency, which loses purchasing power over time and encourages spending now.")
                 trackedLesson(id: "dca_4", number: 4, color: .purple, icon: "exclamationmark.triangle", title: "Why Timing the Market Fails", summary: "Missing just a few of the best days destroys returns", detail: "Bitcoin's biggest gains often come in sudden bursts. Missing the 10 best days in any given year can dramatically reduce annual returns. Staying invested consistently (or DCA'ing) ensures you capture those gains. The emotional toll of trying to time entries and exits also leads to poor decisions — selling low out of fear, buying high out of FOMO.")
-                trackedLesson(id: "dca_5", number: 5, color: .cyan, icon: "shield.checkered", title: "BitShrug's Philosophy", summary: "Where signal meets uncertainty — positioning over prediction", detail: "BitShrug is built for long-term holders, not traders. The Environment Score helps you understand conditions, not time trades. The Power Law and cycle data provide context, not crystal balls. The best strategy for most people is consistent accumulation with a multi-year horizon. The app is designed to keep you informed and grounded — not to create anxiety or FOMO.")
+                trackedLesson(id: "dca_5", number: 5, color: .cyan, icon: "shield.checkered", title: "Fog of Bitcoin's Philosophy", summary: "Where signal meets uncertainty — positioning over prediction", detail: "Fog of Bitcoin is built for long-term holders, not traders. The Environment Score helps you understand conditions, not time trades. The Power Law and cycle data provide context, not crystal balls. The best strategy for most people is consistent accumulation with a multi-year horizon. The app is designed to keep you informed and grounded — not to create anxiety or FOMO.")
             }
         }
         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
@@ -989,7 +989,7 @@ struct LearnTab: View {
 
     private var glossaryEducation: some View {
         VStack(spacing: 0) {
-            topicHeader(icon: "character.book.closed.fill", color: .indigo, title: "Glossary", subtitle: "Key terms you'll encounter in BitShrug and beyond.")
+            topicHeader(icon: "character.book.closed.fill", color: .indigo, title: "Glossary", subtitle: "Key terms you'll encounter in Fog of Bitcoin and beyond.")
             VStack(spacing: 12) {
                 trackedLesson(id: "glossary_1", number: 1, color: .orange, icon: "bitcoinsign.circle", title: "HODL", summary: "Hold On for Dear Life — long-term holding strategy", detail: "Originally a typo for 'hold' from a 2013 Bitcoin forum post, HODL has become a philosophy: buy Bitcoin and hold through volatility without panic-selling. It reflects the belief that long-term holding outperforms trading for most people.")
                 trackedLesson(id: "glossary_2", number: 2, color: .blue, icon: "arrow.triangle.2.circlepath", title: "DCA (Dollar Cost Averaging)", summary: "Investing a fixed amount at regular intervals", detail: "Instead of trying to time the market, DCA means buying a fixed dollar amount of Bitcoin on a regular schedule (e.g., $50/week). This smooths out volatility over time. Historically effective for assets with long-term upward trends.")
@@ -1169,7 +1169,7 @@ struct LearnTab: View {
                 trackedLesson(id: "psych_2", number: 2, color: .orange, icon: "flame.fill", title: "FOMO, FUD, and Emotional Cycles", summary: "Fear and greed drive most market mistakes", detail: "FOMO (Fear Of Missing Out) causes people to buy at peaks after watching prices surge. FUD (Fear, Uncertainty, Doubt) causes panic selling during dips. The emotional cycle mirrors the market cycle: disbelief → hope → optimism → euphoria → anxiety → denial → panic → capitulation → depression → disbelief. Recognizing where you are emotionally is just as important as reading charts.")
                 trackedLesson(id: "psych_3", number: 3, color: .purple, icon: "chart.bar.fill", title: "The Wall of Worry", summary: "Markets climb a 'wall of worry' — bearish sentiment often coincides with rising prices", detail: "The 'Wall of Worry' is a market concept where prices rise despite widespread negative sentiment. Early in a bull market, most people are still scarred from the previous bear market. They see every dip as 'the crash' and every rally as a 'dead cat bounce.' This persistent skepticism actually fuels the rally — there are always more buyers to join. True tops tend to come when skepticism disappears and euphoria takes over.")
                 trackedLesson(id: "psych_4", number: 4, color: .blue, icon: "heart.fill", title: "How to Stay Calm in a Bear Market", summary: "Practical strategies for enduring the drawdowns", detail: "Bear markets can last 12-18 months with 70-80% drawdowns. Strategies for surviving: Zoom out — look at the 4-year chart, not the 4-hour chart. Remember your thesis — has anything fundamentally changed about Bitcoin? Continue DCA'ing — bear markets are where the best cost bases are built. Limit chart-checking to once daily. Stay off crypto Twitter during panic. Talk to people with longer time horizons.")
-                trackedLesson(id: "psych_5", number: 5, color: .cyan, icon: "shield.fill", title: "Conviction vs Gambling", summary: "Know the difference between informed belief and blind hope", detail: "Conviction comes from understanding: you've studied the technology, the economics, the history, and the math. Gambling comes from hoping the number goes up. Conviction lets you hold through a 50% drawdown because you understand the context. Gambling leads to panic selling at the bottom. BitShrug exists to build conviction through education — not to create false confidence. Know why you hold, and the volatility becomes manageable.")
+                trackedLesson(id: "psych_5", number: 5, color: .cyan, icon: "shield.fill", title: "Conviction vs Gambling", summary: "Know the difference between informed belief and blind hope", detail: "Conviction comes from understanding: you've studied the technology, the economics, the history, and the math. Gambling comes from hoping the number goes up. Conviction lets you hold through a 50% drawdown because you understand the context. Gambling leads to panic selling at the bottom. Fog of Bitcoin exists to build conviction through education — not to create false confidence. Know why you hold, and the volatility becomes manageable.")
             }
         }
         .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))

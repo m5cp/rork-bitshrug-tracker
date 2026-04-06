@@ -121,7 +121,7 @@ struct NotificationSettingsView: View {
                     if premium.isPremium && manager.dailyBriefingEnabled {
                         Text("You will receive a daily notification at your chosen time with your Environment Score, Bitcoin price, and market trend.")
                     } else if !premium.isPremium {
-                        Text("Unlock daily briefing notifications with BitShrug Pro.")
+                        Text("Unlock daily briefing notifications with Fog of Bitcoin Pro.")
                     }
                 }
 
@@ -185,7 +185,7 @@ struct NotificationSettingsView: View {
                 Image(systemName: "sun.and.horizon.fill")
                     .font(.caption)
                     .foregroundStyle(.orange)
-                Text("BitShrug Daily Briefing")
+                Text("Fog of Bitcoin Daily Briefing")
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(.primary)
@@ -207,7 +207,7 @@ struct NotificationSettingsView: View {
                     .font(.subheadline)
                     .fontWeight(.semibold)
 
-                Text("Allow BitShrug to notify you when market conditions change.")
+                Text("Allow Fog of Bitcoin to notify you when market conditions change.")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
