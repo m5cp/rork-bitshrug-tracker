@@ -8,6 +8,8 @@ struct LearnTab: View {
     @State private var showScrollToTop: Bool = false
     @State private var selectedTopic: LearnTopic?
     @State private var learnProgress = LearnProgressManager.shared
+    @State private var showQuestionOfTheDay: Bool = false
+    @State private var questionManager = DailyQuestionManager.shared
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -85,6 +87,9 @@ struct LearnTab: View {
                     proxy.scrollTo(id, anchor: .top)
                 }
             }
+
+            questionOfTheDayCard
+                .padding(.horizontal, horizontalPadding)
 
             didYouKnowCard
                 .padding(.horizontal, horizontalPadding)
@@ -1220,6 +1225,103 @@ struct LearnTab: View {
 
     private func trackedLesson(id: String, number: Int, color: Color, icon: String, title: String, summary: String, detail: String) -> some View {
         TrackedLessonCard(id: id, number: number, color: color, icon: icon, title: title, summary: summary, detail: detail, learnProgress: learnProgress)
+    }
+
+    // MARK: - Question of the Day Card
+
+    private var questionOfTheDayCard: some View {
+        Button {
+            showQuestionOfTheDay = true
+        } label: {
+            HStack(spacing: 14) {
+                VStack(spacing: 0) {
+                    Image(systemName: "brain.fill")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 52, height: 52)
+                        .background(
+                            LinearGradient(
+                                colors: [.orange, Color(red: 1.0, green: 0.5, blue: 0.1)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .clipShape(.rect(cornerRadius: 15))
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 6) {
+                        Text("QUESTION OF THE DAY")
+                            .font(.system(size: 9, weight: .heavy))
+                            .foregroundStyle(.orange)
+                            .tracking(1)
+
+                        if questionManager.hasAnsweredToday {
+                            Image(systemName: questionManager.wasCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .font(.system(size: 12))
+                                .foregroundStyle(questionManager.wasCorrect ? AppColors.bullish : AppColors.bearish)
+                        } else {
+                            Text("NEW")
+                                .font(.system(size: 8, weight: .heavy))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.orange)
+                                .clipShape(Capsule())
+                        }
+                    }
+
+                    Text(questionManager.hasAnsweredToday ? "See today's result" : "Test your Bitcoin knowledge")
+                        .font(.subheadline)
+                        .fontWeight(.heavy)
+                        .foregroundStyle(.primary)
+
+                    HStack(spacing: 10) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 10))
+                                .foregroundStyle(.orange)
+                            Text("\(questionManager.streak)")
+                                .font(.system(size: 11, weight: .heavy, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 10))
+                                .foregroundStyle(AppColors.bullish)
+                            Text("\(questionManager.totalCorrect)/\(questionManager.totalAnswered)")
+                                .font(.system(size: 11, weight: .heavy, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
+                Spacer(minLength: 0)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(16)
+            .background(
+                LinearGradient(
+                    colors: [Color.orange.opacity(0.1), Color.orange.opacity(0.03)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(.rect(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(Color.orange.opacity(0.2), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.impact(flexibility: .soft), trigger: showQuestionOfTheDay)
+        .sheet(isPresented: $showQuestionOfTheDay) {
+            QuestionOfTheDayView(viewModel: viewModel)
+        }
     }
 
     // MARK: - Disclaimer
