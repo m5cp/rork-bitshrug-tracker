@@ -91,6 +91,8 @@ struct PortfolioTab: View {
                 ShrugBadge(size: .hero, style: .hero)
             }
 
+            quickActions
+
             VStack(spacing: 8) {
                 Text("Track Your Holdings")
                     .font(.title3)
@@ -208,6 +210,70 @@ struct PortfolioTab: View {
             }
 
             Spacer(minLength: 0)
+        }
+    }
+
+    private var quickActions: some View {
+        HStack(spacing: 10) {
+            Button {
+                showFunWithNumbers = true
+            } label: {
+                VStack(spacing: 6) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.purple)
+                    Text("Fun with\nNumbers")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.purple.opacity(0.1))
+                .clipShape(.rect(cornerRadius: 12))
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showDCACalculator = true
+            } label: {
+                VStack(spacing: 6) {
+                    Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.cyan)
+                    Text("DCA\nCalculator")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.cyan.opacity(0.1))
+                .clipShape(.rect(cornerRadius: 12))
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showPriceAlerts = true
+            } label: {
+                VStack(spacing: 6) {
+                    Image(systemName: "bell.badge.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(.orange)
+                    Text("Price\nAlerts")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Color.orange.opacity(0.1))
+                .clipShape(.rect(cornerRadius: 12))
+            }
+            .buttonStyle(.plain)
         }
     }
 
