@@ -245,17 +245,43 @@ class NotificationManager {
         }
     }
 
-    func updateDailyBriefingContent(score: Int, scoreDelta: Int?, price: String, trend: String) {
+    func updateDailyBriefingContent(
+        score: Int,
+        scoreDelta: Int?,
+        price: String,
+        trend: String,
+        cyclePhase: String? = nil,
+        cycleDay: Int? = nil,
+        fearGreed: Int? = nil
+    ) {
         guard dailyBriefingEnabled else { return }
 
-        let deltaText: String
+        let deltaArrow: String
         if let delta = scoreDelta {
-            deltaText = delta >= 0 ? "(+\(delta))" : "(\(delta))"
+            if delta > 0 { deltaArrow = " \u{2191}\(delta)" }
+            else if delta < 0 { deltaArrow = " \u{2193}\(abs(delta))" }
+            else { deltaArrow = " \u{2014}" }
         } else {
-            deltaText = ""
+            deltaArrow = ""
         }
 
-        let body = "Score: \(score) \(deltaText) | BTC \(price) | Trend: \(trend)"
+        var body = "BTC \(price) \u{00B7} Score \(score)\(deltaArrow) \u{00B7} Trend: \(trend)"
+
+        if let phase = cyclePhase, let day = cycleDay {
+            body += "\nCycle: \(phase) \u{00B7} Day \(day)"
+        }
+
+        if let fg = fearGreed {
+            let sentiment: String
+            switch fg {
+            case 0..<25: sentiment = "Extreme Fear"
+            case 25..<45: sentiment = "Fear"
+            case 45..<55: sentiment = "Neutral"
+            case 55..<75: sentiment = "Greed"
+            default: sentiment = "Extreme Greed"
+            }
+            body += " \u{00B7} Sentiment: \(sentiment) (\(fg))"
+        }
 
         UserDefaults.standard.set(body, forKey: "daily_briefing_body")
         scheduleDailyBriefing()
@@ -268,7 +294,7 @@ class NotificationManager {
             ?? "Open BitShrug for your daily market update."
 
         let content = UNMutableNotificationContent()
-        content.title = "BitShrug Daily Briefing"
+        content.title = "\u{2615} BitShrug Morning Brief"
         content.body = body
         content.sound = .default
 

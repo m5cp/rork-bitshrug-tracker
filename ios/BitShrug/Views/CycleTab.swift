@@ -5,6 +5,7 @@ struct CycleTab: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     @State private var showScrollToTop: Bool = false
+    @State private var showTimeMachine: Bool = false
 
     private let sections: [SectionAnchor] = [
         SectionAnchor(id: "verdict", icon: "hand.raised", label: "Verdict"),
@@ -54,6 +55,8 @@ struct CycleTab: View {
                             ProjectedCycleBottomView(currentPrice: viewModel.price)
                                 .id("projected")
 
+                            timeMachineCard
+
                             disclaimer
                         }
                     }
@@ -79,6 +82,9 @@ struct CycleTab: View {
             }
             .navigationTitle("4-Year Cycle Theory")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showTimeMachine) {
+                CycleTimeMachineView(viewModel: viewModel)
+            }
         }
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
     }
@@ -403,6 +409,39 @@ struct CycleTab: View {
                     .overlay(Color.primary.opacity(0.04))
             }
         }
+    }
+
+    // MARK: - Time Machine
+
+    private var timeMachineCard: some View {
+        Button { showTimeMachine = true } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "clock.arrow.2.circlepath")
+                    .font(.system(size: 22))
+                    .foregroundStyle(.orange)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Cycle Time Machine")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+                    Text("Scrub through past cycles and see estimated scores")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .buttonStyle(.plain)
+        .premiumCard(.highlighted)
     }
 
     // MARK: - Disclaimer

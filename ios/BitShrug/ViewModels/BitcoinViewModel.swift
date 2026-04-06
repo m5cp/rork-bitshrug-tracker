@@ -472,7 +472,10 @@ class BitcoinViewModel {
             score: environmentScore,
             scoreDelta: dailyDelta,
             price: formattedPrice,
-            trend: trendStatus.label
+            trend: trendStatus.label,
+            cyclePhase: halvingInfo?.currentPhase.label,
+            cycleDay: halvingInfo?.daysSinceLast,
+            fearGreed: fearGreedValue
         )
 
         SpotlightManager.shared.indexContent(
