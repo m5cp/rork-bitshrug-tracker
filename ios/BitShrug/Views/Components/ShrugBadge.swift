@@ -20,13 +20,13 @@ struct ShrugBadge: View {
             .font(.system(size: size.fontSize, weight: .bold, design: .monospaced))
             .foregroundStyle(
                 LinearGradient(
-                    colors: [.orange, Color(red: 1.0, green: 0.7, blue: 0.2)],
+                    colors: [Color(red: 0.0, green: 0.8, blue: 0.4), Color(red: 0.2, green: 0.9, blue: 0.5)],
                     startPoint: .leading,
                     endPoint: .trailing
                 )
             )
-            .shadow(color: .orange.opacity(0.5), radius: size.glowRadius)
-            .shadow(color: .orange.opacity(0.2), radius: size.glowRadius * 2)
+            .shadow(color: Color(red: 0.0, green: 0.8, blue: 0.4).opacity(0.5), radius: size.glowRadius)
+            .shadow(color: Color(red: 0.0, green: 0.8, blue: 0.4).opacity(0.2), radius: size.glowRadius * 2)
     }
 
     private var inlineShrug: some View {
@@ -34,7 +34,7 @@ struct ShrugBadge: View {
             .font(.system(size: size.fontSize, weight: .heavy, design: .monospaced))
             .foregroundStyle(
                 LinearGradient(
-                    colors: [.orange, Color(red: 1.0, green: 0.6, blue: 0.1)],
+                    colors: [Color(red: 0.0, green: 0.8, blue: 0.4), Color(red: 0.1, green: 0.7, blue: 0.3)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -47,16 +47,16 @@ struct ShrugBadge: View {
             .foregroundStyle(
                 LinearGradient(
                     colors: [
-                        Color(red: 1.0, green: 0.8, blue: 0.3),
-                        .orange,
-                        Color(red: 1.0, green: 0.5, blue: 0.1)
+                        Color(red: 0.3, green: 0.95, blue: 0.5),
+                        Color(red: 0.0, green: 0.8, blue: 0.4),
+                        Color(red: 0.0, green: 0.65, blue: 0.3)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
             )
-            .shadow(color: .orange.opacity(0.6), radius: size.glowRadius)
-            .shadow(color: .orange.opacity(0.3), radius: size.glowRadius * 2.5)
+            .shadow(color: Color(red: 0.0, green: 0.8, blue: 0.4).opacity(0.6), radius: size.glowRadius)
+            .shadow(color: Color(red: 0.0, green: 0.8, blue: 0.4).opacity(0.3), radius: size.glowRadius * 2.5)
     }
 
     nonisolated enum ShrugSize: Sendable {
