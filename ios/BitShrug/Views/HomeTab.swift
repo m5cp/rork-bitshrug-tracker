@@ -9,6 +9,8 @@ struct HomeTab: View {
     @State private var animatedScore: Int = 0
     @State private var scoreHistory = ScoreHistoryManager.shared
     @State private var showScrollToTop: Bool = false
+    @State private var premium = PremiumManager.shared
+    @State private var showPaywall: Bool = false
 
     private let sections: [SectionAnchor] = [
         SectionAnchor(id: "price", icon: "chart.xyaxis.line", label: "Price"),
@@ -67,6 +69,11 @@ struct HomeTab: View {
                                 .id("indicators")
                                 .padding(.bottom, 20)
 
+                            if !premium.isPremium {
+                                premiumUpsellCard
+                                    .padding(.bottom, 20)
+                            }
+
                             contextSection
                                 .id("context")
                                 .padding(.bottom, 20)
@@ -107,6 +114,7 @@ struct HomeTab: View {
 
             }
             .sheet(isPresented: $showSettings) { ProfileView() }
+            .sheet(isPresented: $showPaywall) { PaywallView() }
         }
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
         .onAppear {
@@ -310,12 +318,43 @@ struct HomeTab: View {
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text(viewModel.insightExpansion)
-                .font(.caption)
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
-                .lineSpacing(3)
-                .fixedSize(horizontal: false, vertical: true)
+            if premium.isPremium {
+                Text(viewModel.insightExpansion)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text(viewModel.insightExpansion)
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(2)
+                    .overlay(alignment: .bottom) {
+                        LinearGradient(
+                            colors: [.clear, Color(.systemBackground)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: 20)
+                    }
+
+                Button { showPaywall = true } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 10))
+                        Text("Unlock full insights")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                        proBadge
+                    }
+                    .foregroundStyle(.orange)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .premiumCard()
         .accessibilityElement(children: .combine)
@@ -623,8 +662,22 @@ struct HomeTab: View {
             }
             .padding(.bottom, 4)
 
+            let freeCount = 3
+            let indicators = allIndicators
+            let freeIndicators = Array(indicators.prefix(freeCount))
+            let lockedIndicators = premium.isPremium ? Array(indicators.dropFirst(freeCount)) : []
+
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                ForEach(Array(allIndicators.enumerated()), id: \.offset) { _, indicator in
+                ForEach(Array(freeIndicators.enumerated()), id: \.offset) { _, indicator in
+                    compactIndicatorCell(
+                        icon: indicator.icon,
+                        title: indicator.title,
+                        value: indicator.value,
+                        status: indicator.status,
+                        statusColor: indicator.statusColor
+                    )
+                }
+                ForEach(Array(lockedIndicators.enumerated()), id: \.offset) { _, indicator in
                     compactIndicatorCell(
                         icon: indicator.icon,
                         title: indicator.title,
@@ -635,28 +688,52 @@ struct HomeTab: View {
                 }
             }
 
+            if !premium.isPremium {
+                lockedIndicatorsTeaser(count: indicators.count - freeCount)
+            }
+
             if let dir = viewModel.weeklyScoreChange {
                 Divider().overlay(Color.primary.opacity(0.04)).padding(.top, 4)
 
-                HStack(spacing: 8) {
-                    Text("THIS WEEK")
-                        .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(.primary)
-                        .tracking(1)
-                    Text(dir)
-                        .font(.system(.caption, design: .monospaced, weight: .bold))
-                        .foregroundStyle(.primary)
+                if premium.isPremium {
+                    HStack(spacing: 8) {
+                        Text("THIS WEEK")
+                            .font(.system(size: 9, weight: .heavy))
+                            .foregroundStyle(.primary)
+                            .tracking(1)
+                        Text(dir)
+                            .font(.system(.caption, design: .monospaced, weight: .bold))
+                            .foregroundStyle(.primary)
 
-                    let weekDir = viewModel.weeklyDirection
-                    Text(weekDir)
-                        .font(.system(size: 9, weight: .heavy))
-                        .foregroundStyle(weekDir == "Improving" ? AppColors.bullish : weekDir == "Weakening" ? AppColors.bearish : .secondary)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background((weekDir == "Improving" ? Color.green : weekDir == "Weakening" ? Color.red : Color.primary).opacity(0.1))
-                        .clipShape(Capsule())
+                        let weekDir = viewModel.weeklyDirection
+                        Text(weekDir)
+                            .font(.system(size: 9, weight: .heavy))
+                            .foregroundStyle(weekDir == "Improving" ? AppColors.bullish : weekDir == "Weakening" ? AppColors.bearish : .secondary)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background((weekDir == "Improving" ? Color.green : weekDir == "Weakening" ? Color.red : Color.primary).opacity(0.1))
+                            .clipShape(Capsule())
 
-                    Spacer()
+                        Spacer()
+                    }
+                } else {
+                    Button { showPaywall = true } label: {
+                        HStack(spacing: 8) {
+                            Text("THIS WEEK")
+                                .font(.system(size: 9, weight: .heavy))
+                                .foregroundStyle(.primary)
+                                .tracking(1)
+
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 9))
+                                .foregroundStyle(.tertiary)
+
+                            proBadge
+
+                            Spacer()
+                        }
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -712,6 +789,116 @@ struct HomeTab: View {
 
     private func formatIndicatorPrice(_ value: Double) -> String {
         "$\(Int(value).formatted(.number))"
+    }
+
+    private func lockedIndicatorsTeaser(count: Int) -> some View {
+        Button { showPaywall = true } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(.orange)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack(spacing: 6) {
+                        Text("+\(count) more indicators")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.primary)
+                        proBadge
+                    }
+                    Text("Puell Multiple, Stock-to-Flow, Supply in Profit")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(12)
+            .background(Color.orange.opacity(0.06))
+            .clipShape(.rect(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(Color.orange.opacity(0.15), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var proBadge: some View {
+        Text("PRO")
+            .font(.system(size: 8, weight: .heavy))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 2)
+            .background(
+                LinearGradient(
+                    colors: [.orange, .orange.opacity(0.8)],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
+            )
+            .clipShape(Capsule())
+    }
+
+    private var premiumUpsellCard: some View {
+        Button { showPaywall = true } label: {
+            VStack(spacing: 14) {
+                HStack(spacing: 10) {
+                    Image(systemName: "crown.fill")
+                        .font(.system(size: 20))
+                        .foregroundStyle(.orange)
+
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack(spacing: 6) {
+                            Text("Unlock BitShrug Pro")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                            proBadge
+                        }
+                        Text("All indicators, full insights, weekly summaries & more")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.orange)
+                }
+            }
+            .padding(16)
+            .background(
+                LinearGradient(
+                    colors: [Color.orange.opacity(0.1), Color.orange.opacity(0.03)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(.rect(cornerRadius: 16))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [Color.orange.opacity(0.4), Color.orange.opacity(0.1)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+        .sensoryFeedback(.selection, trigger: showPaywall)
     }
 
     private var disclaimer: some View {
