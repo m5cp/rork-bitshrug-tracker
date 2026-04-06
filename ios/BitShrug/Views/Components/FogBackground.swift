@@ -14,33 +14,41 @@ struct FogBackground: ViewModifier {
                     Color(.systemBackground)
 
                     Canvas { context, size in
-                        let baseOpacity: Double = colorScheme == .dark ? 0.06 : 0.045
+                        let baseOpacity: Double = colorScheme == .dark ? 0.18 : 0.10
 
                         let blob1 = Path(ellipseIn: CGRect(
-                            x: -size.width * 0.15,
-                            y: -size.height * 0.1,
-                            width: size.width * 0.7,
-                            height: size.height * 0.45
+                            x: -size.width * 0.2,
+                            y: -size.height * 0.08,
+                            width: size.width * 0.8,
+                            height: size.height * 0.5
                         ))
                         context.fill(blob1, with: .color(fogColor.opacity(baseOpacity)))
 
                         let blob2 = Path(ellipseIn: CGRect(
-                            x: size.width * 0.5,
-                            y: size.height * 0.35,
-                            width: size.width * 0.65,
-                            height: size.height * 0.4
+                            x: size.width * 0.45,
+                            y: size.height * 0.3,
+                            width: size.width * 0.7,
+                            height: size.height * 0.45
                         ))
                         context.fill(blob2, with: .color(fogColor.opacity(baseOpacity * 0.7)))
 
                         let blob3 = Path(ellipseIn: CGRect(
-                            x: size.width * 0.1,
-                            y: size.height * 0.7,
-                            width: size.width * 0.5,
-                            height: size.height * 0.35
+                            x: size.width * 0.05,
+                            y: size.height * 0.65,
+                            width: size.width * 0.6,
+                            height: size.height * 0.4
                         ))
-                        context.fill(blob3, with: .color(fogColor.opacity(baseOpacity * 0.5)))
+                        context.fill(blob3, with: .color(fogColor.opacity(baseOpacity * 0.55)))
+
+                        let blob4 = Path(ellipseIn: CGRect(
+                            x: size.width * 0.3,
+                            y: size.height * 0.1,
+                            width: size.width * 0.5,
+                            height: size.height * 0.3
+                        ))
+                        context.fill(blob4, with: .color(fogColor.opacity(baseOpacity * 0.4)))
                     }
-                    .blur(radius: 60)
+                    .blur(radius: 50)
                     .allowsHitTesting(false)
                 }
                 .ignoresSafeArea()
