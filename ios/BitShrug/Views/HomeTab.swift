@@ -12,7 +12,6 @@ struct HomeTab: View {
     @State private var showScrollToTop: Bool = false
     @State private var premium = PremiumManager.shared
     @State private var showPaywall: Bool = false
-    @State private var showMemeGenerator: Bool = false
 
     private let sections: [SectionAnchor] = [
         SectionAnchor(id: "price", icon: "chart.xyaxis.line", label: "Price"),
@@ -70,9 +69,6 @@ struct HomeTab: View {
                                     .padding(.bottom, 20)
                             }
 
-                            memeGeneratorCard
-                                .padding(.bottom, 20)
-
                             disclaimer
                         }
                     }
@@ -129,9 +125,6 @@ struct HomeTab: View {
             }
             .sheet(isPresented: $showSettings) { ProfileView() }
             .sheet(isPresented: $showPaywall) { PaywallView() }
-            .sheet(isPresented: $showMemeGenerator) {
-                MemeGeneratorView(viewModel: viewModel)
-            }
         }
         .fogBackground()
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
@@ -541,38 +534,6 @@ struct HomeTab: View {
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.selection, trigger: showPaywall)
-    }
-
-    private var memeGeneratorCard: some View {
-        Button { showMemeGenerator = true } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "photo.on.rectangle.angled")
-                    .font(.system(size: 22))
-                    .foregroundStyle(.orange)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Bitcoin Meme Generator")
-                        .font(.subheadline)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.primary)
-                    Text("Create & share Bitcoin memes with live data")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.tertiary)
-            }
-        }
-        .buttonStyle(.plain)
-        .premiumCard(.highlighted)
-        .opacity(appeared ? 1 : 0)
-        .offset(y: appeared ? 0 : 16)
     }
 
     private var proBadge: some View {

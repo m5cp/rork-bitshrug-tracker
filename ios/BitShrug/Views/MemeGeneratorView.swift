@@ -10,7 +10,9 @@ struct MemeGeneratorView: View {
     @State private var showShareSheet: Bool = false
     @State private var renderedImage: UIImage?
     @State private var showLiveData: Bool = true
+    @State private var showImagePreview: Bool = false
     @State private var premium = PremiumManager.shared
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -25,24 +27,36 @@ struct MemeGeneratorView: View {
 
                     liveDataToggle
 
-                    shareButton
+                    renderButton
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 40)
             }
+            .scrollDismissesKeyboard(.interactively)
             .scrollIndicators(.hidden)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Meme Generator")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                ToolbarItem(placement: .keyboard) {
+                    Button("Done") { isTextFieldFocused = false }
                         .fontWeight(.semibold)
                 }
             }
             .sheet(isPresented: $showShareSheet) {
                 if let image = renderedImage {
                     ShareSheet(items: [image])
+                }
+            }
+            .fullScreenCover(isPresented: $showImagePreview) {
+                if let image = renderedImage {
+                    MemePreviewView(image: image)
                 }
             }
             .onAppear {
@@ -128,6 +142,7 @@ struct MemeGeneratorView: View {
                     .background(Color.primary.opacity(0.05))
                     .clipShape(.rect(cornerRadius: 12))
                     .lineLimit(1...3)
+                    .focused($isTextFieldFocused)
 
                 TextField("Bottom text", text: $bottomText, axis: .vertical)
                     .font(.subheadline)
@@ -137,6 +152,7 @@ struct MemeGeneratorView: View {
                     .background(Color.primary.opacity(0.05))
                     .clipShape(.rect(cornerRadius: 12))
                     .lineLimit(1...3)
+                    .focused($isTextFieldFocused)
             }
         }
     }
@@ -163,14 +179,14 @@ struct MemeGeneratorView: View {
         .clipShape(.rect(cornerRadius: 14))
     }
 
-    private var shareButton: some View {
+    private var renderButton: some View {
         Button {
-            renderAndShare()
+            renderMeme()
         } label: {
             HStack(spacing: 10) {
-                Image(systemName: "square.and.arrow.up")
+                Image(systemName: "eye")
                     .font(.system(size: 14, weight: .bold))
-                Text("Share Meme")
+                Text("Preview & Share")
                     .font(.subheadline)
                     .fontWeight(.bold)
             }
@@ -186,11 +202,12 @@ struct MemeGeneratorView: View {
             )
             .clipShape(.rect(cornerRadius: 16))
         }
-        .sensoryFeedback(.success, trigger: showShareSheet)
+        .sensoryFeedback(.success, trigger: showImagePreview)
     }
 
     @MainActor
-    private func renderAndShare() {
+    private func renderMeme() {
+        isTextFieldFocused = false
         let renderer = ImageRenderer(content:
             MemeCardView(
                 template: selectedTemplate,
@@ -209,7 +226,76 @@ struct MemeGeneratorView: View {
         renderer.scale = 1.0
         if let image = renderer.uiImage {
             renderedImage = image
-            showShareSheet = true
+            showImagePreview = true
+        }
+    }
+}
+
+struct MemePreviewView: View {
+    let image: UIImage
+    @Environment(\.dismiss) private var dismiss
+    @State private var showShareSheet: Bool = false
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 24) {
+                Spacer()
+
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(.rect(cornerRadius: 20))
+                    .shadow(color: .black.opacity(0.5), radius: 24, y: 10)
+                    .padding(.horizontal, 24)
+
+                Spacer()
+
+                Button {
+                    showShareSheet = true
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 14, weight: .bold))
+                        Text("Share")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                    }
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(
+                            colors: [.orange, Color(red: 1.0, green: 0.5, blue: 0.1)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .clipShape(.rect(cornerRadius: 16))
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 16)
+            }
+            .background(Color.black)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 22))
+                            .foregroundStyle(.white.opacity(0.6))
+                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    Text("Your Meme")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                }
+            }
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .sheet(isPresented: $showShareSheet) {
+                ShareSheet(items: [image])
+            }
         }
     }
 }

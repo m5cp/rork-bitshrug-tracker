@@ -9,6 +9,7 @@ struct PortfolioTab: View {
     @State private var showPriceAlerts: Bool = false
     @State private var showFunWithNumbers: Bool = false
     @State private var showDCACalculator: Bool = false
+    @State private var showMemeCreator: Bool = false
 
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 720 : .infinity }
@@ -67,6 +68,9 @@ struct PortfolioTab: View {
             }
             .navigationDestination(isPresented: $showDCACalculator) {
                 DCACalculatorView(viewModel: viewModel)
+            }
+            .sheet(isPresented: $showMemeCreator) {
+                MemeGeneratorView(viewModel: viewModel)
             }
         }
         .fogBackground()
@@ -466,6 +470,18 @@ struct PortfolioTab: View {
                     iconColor: .cyan,
                     title: "DCA Calculator",
                     subtitle: "Simulate weekly investing over time"
+                )
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                showMemeCreator = true
+            } label: {
+                toolRow(
+                    icon: "photo.on.rectangle.angled",
+                    iconColor: .pink,
+                    title: "Meme Creator",
+                    subtitle: "Create & share Bitcoin memes with live data"
                 )
             }
             .buttonStyle(.plain)
