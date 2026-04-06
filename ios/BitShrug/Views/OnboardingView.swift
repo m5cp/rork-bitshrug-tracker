@@ -11,7 +11,13 @@ struct OnboardingView: View {
         VStack(spacing: 24) {
             Spacer()
 
-            ShrugBadge(size: .hero, style: .hero)
+            Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 140, height: 140)
+                .clipShape(.rect(cornerRadius: 30))
+                .shadow(color: .orange.opacity(0.5), radius: 20)
+                .shadow(color: .orange.opacity(0.2), radius: 40)
                 .scaleEffect(badgeScale)
 
             Text("Fog of Bitcoin")
