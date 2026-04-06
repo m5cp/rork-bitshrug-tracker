@@ -10,20 +10,20 @@ struct ContentView: View {
                 HomeTab(viewModel: viewModel)
             }
 
+            Tab("Signals", systemImage: "waveform.path.ecg", value: .signals) {
+                SignalsTab(viewModel: viewModel)
+            }
+
+            Tab("Analysis", systemImage: "chart.line.uptrend.xyaxis", value: .analysis) {
+                AnalysisTab(viewModel: viewModel)
+            }
+
             Tab("Portfolio", systemImage: "wallet.bifold", value: .portfolio) {
                 PortfolioTab(viewModel: viewModel)
             }
 
             Tab("Learn", systemImage: "book.closed", value: .learn) {
                 LearnTab(viewModel: viewModel)
-            }
-
-            Tab("Power Law", systemImage: "chart.line.uptrend.xyaxis", value: .powerLaw) {
-                PowerLawTab(viewModel: viewModel)
-            }
-
-            Tab("Cycle", systemImage: "arrow.triangle.2.circlepath", value: .cycle) {
-                CycleTab(viewModel: viewModel)
             }
         }
         .tint(.orange)
@@ -36,8 +36,8 @@ struct ContentView: View {
 
 enum AppTab: Hashable {
     case home
+    case signals
+    case analysis
     case portfolio
     case learn
-    case powerLaw
-    case cycle
 }
