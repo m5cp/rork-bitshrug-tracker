@@ -111,7 +111,26 @@ struct HomeTab: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-
+                ToolbarItem(placement: .topBarTrailing) {
+                    if !premium.isPremium {
+                        Button { showPaywall = true } label: {
+                            Text("PRO")
+                                .font(.system(size: 11, weight: .heavy))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.orange, .orange.opacity(0.8)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .clipShape(Capsule())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
             }
             .sheet(isPresented: $showSettings) { ProfileView() }
             .sheet(isPresented: $showPaywall) { PaywallView() }
