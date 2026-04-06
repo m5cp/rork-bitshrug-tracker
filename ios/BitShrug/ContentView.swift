@@ -18,7 +18,7 @@ struct ContentView: View {
                 AnalysisTab(viewModel: viewModel)
             }
 
-            Tab("Portfolio", systemImage: "wallet.bifold", value: .portfolio) {
+            Tab("Tools", systemImage: "wrench.and.screwdriver", value: .portfolio) {
                 PortfolioTab(viewModel: viewModel)
             }
 
