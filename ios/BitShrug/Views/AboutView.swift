@@ -181,7 +181,7 @@ struct AboutView: View {
                 rangeRow(range: "0–34", label: "High Risk", color: Color(red: 0.95, green: 0.3, blue: 0.3))
             }
 
-            Text("For educational context only. Rise or Fall, we hold.")
+            Text("For educational context only. Where signal meets uncertainty.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .italic()

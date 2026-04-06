@@ -334,13 +334,13 @@ class BitcoinViewModel {
     var environmentMessage: String {
         switch environmentStatus {
         case .strong:
-            return "Conditions appear favorable. Rise or Fall, we hold."
+            return "Conditions appear favorable. Where signal meets uncertainty."
         case .moderate:
-            return "Conditions are mixed. Rise or Fall, we hold."
+            return "Conditions are mixed. Where signal meets uncertainty."
         case .weak:
-            return "Conditions are weakening. Rise or Fall, we hold."
+            return "Conditions are weakening. Where signal meets uncertainty."
         case .highRisk:
-            return "Conditions suggest elevated risk. Rise or Fall, we hold."
+            return "Conditions suggest elevated risk. Where signal meets uncertainty."
         }
     }
 

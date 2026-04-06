@@ -19,7 +19,7 @@ struct OnboardingView: View {
                 .foregroundStyle(.primary)
                 .offset(y: titleOffset)
 
-            Text("Rise or Fall, we hold.")
+            Text("Where signal meets uncertainty.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .offset(y: titleOffset)

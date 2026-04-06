@@ -407,7 +407,7 @@ struct FunWithNumbersView: View {
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text("Rise or Fall, we hold.")
+            Text("Where signal meets uncertainty.")
                 .font(.system(size: 12, weight: .heavy))
                 .foregroundStyle(.orange)
                 .padding(.top, 2)
