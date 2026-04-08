@@ -21,33 +21,35 @@ struct MemeCardView: View {
             noiseOverlay
 
             VStack(spacing: 0) {
-                Spacer(minLength: isRenderMode ? 80 : 28)
+                Spacer(minLength: isRenderMode ? 80 : 24)
 
                 Text(topText.uppercased())
-                    .font(.system(size: (isRenderMode ? 32 : 26) , weight: .black))
+                    .font(.system(size: (isRenderMode ? 48 : 32) , weight: .black))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .shadow(color: .black.opacity(0.8), radius: isRenderMode ? 8 : 4, y: 2)
-                    .padding(.horizontal, isRenderMode ? 48 : 24)
+                    .padding(.horizontal, isRenderMode ? 48 : 20)
+                    .minimumScaleFactor(0.6)
 
                 Spacer()
 
                 if showLiveData {
                     liveDataStrip
-                        .padding(.bottom, isRenderMode ? 24 : 14)
+                        .padding(.bottom, isRenderMode ? 24 : 10)
                 }
 
                 Text(bottomText.uppercased())
-                    .font(.system(size: (isRenderMode ? 32 : 26), weight: .black))
+                    .font(.system(size: (isRenderMode ? 48 : 32), weight: .black))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .shadow(color: .black.opacity(0.8), radius: isRenderMode ? 8 : 4, y: 2)
-                    .padding(.horizontal, isRenderMode ? 48 : 24)
+                    .padding(.horizontal, isRenderMode ? 48 : 20)
+                    .minimumScaleFactor(0.6)
 
-                Spacer(minLength: isRenderMode ? 56 : 20)
+                Spacer(minLength: isRenderMode ? 56 : 16)
 
                 brandWatermark
-                    .padding(.bottom, isRenderMode ? 32 : 16)
+                    .padding(.bottom, isRenderMode ? 32 : 12)
             }
 
             accentLine
@@ -151,39 +153,39 @@ struct MemeCardView: View {
     }
 
     private var liveDataStrip: some View {
-        HStack(spacing: isRenderMode ? 20 : 14) {
+        HStack(spacing: isRenderMode ? 20 : 12) {
             HStack(spacing: isRenderMode ? 6 : 4) {
                 Image(systemName: "bitcoinsign.circle.fill")
-                    .font(.system(size: isRenderMode ? 16 : 12, weight: .bold))
+                    .font(.system(size: isRenderMode ? 20 : 16, weight: .bold))
                     .foregroundStyle(.orange)
                 Text(price)
-                    .font(.system(size: isRenderMode ? 18 : 13, weight: .heavy, design: .monospaced))
+                    .font(.system(size: isRenderMode ? 22 : 16, weight: .heavy, design: .monospaced))
                     .foregroundStyle(.white)
             }
 
             Rectangle()
                 .fill(.white.opacity(0.2))
-                .frame(width: 1, height: isRenderMode ? 20 : 14)
+                .frame(width: 1, height: isRenderMode ? 22 : 18)
 
             Text(change)
-                .font(.system(size: isRenderMode ? 15 : 11, weight: .bold, design: .monospaced))
+                .font(.system(size: isRenderMode ? 18 : 14, weight: .bold, design: .monospaced))
                 .foregroundStyle(isPositive ? Color(red: 0.2, green: 0.85, blue: 0.5) : Color(red: 0.95, green: 0.3, blue: 0.3))
 
             Rectangle()
                 .fill(.white.opacity(0.2))
-                .frame(width: 1, height: isRenderMode ? 20 : 14)
+                .frame(width: 1, height: isRenderMode ? 22 : 18)
 
             HStack(spacing: isRenderMode ? 5 : 3) {
                 Text("Score")
-                    .font(.system(size: isRenderMode ? 12 : 9, weight: .bold))
+                    .font(.system(size: isRenderMode ? 14 : 11, weight: .bold))
                     .foregroundStyle(.white.opacity(0.5))
                 Text("\(score)")
-                    .font(.system(size: isRenderMode ? 18 : 13, weight: .heavy, design: .monospaced))
+                    .font(.system(size: isRenderMode ? 22 : 16, weight: .heavy, design: .monospaced))
                     .foregroundStyle(.orange)
             }
         }
-        .padding(.horizontal, isRenderMode ? 24 : 16)
-        .padding(.vertical, isRenderMode ? 14 : 9)
+        .padding(.horizontal, isRenderMode ? 24 : 14)
+        .padding(.vertical, isRenderMode ? 14 : 10)
         .background(
             RoundedRectangle(cornerRadius: 100)
                 .fill(.black.opacity(0.5))

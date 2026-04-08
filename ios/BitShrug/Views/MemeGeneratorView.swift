@@ -337,21 +337,20 @@ struct MemePreviewView: View {
                     }
                     .sensoryFeedback(.success, trigger: saved)
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
                 .padding(.top, 12)
-
-                Spacer()
+                .padding(.bottom, 8)
 
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(1, contentMode: .fit)
-                    .clipShape(.rect(cornerRadius: 20))
+                    .clipShape(.rect(cornerRadius: 16))
                     .shadow(color: .orange.opacity(0.2), radius: 30, y: 10)
-                    .padding(.horizontal, 20)
+                    .padding(.horizontal, 8)
                     .scaleEffect(cardAppeared ? 1.0 : 0.9)
                     .opacity(cardAppeared ? 1 : 0)
 
-                Spacer()
+                Spacer(minLength: 12)
 
                 HStack(spacing: 12) {
                     Button {
@@ -394,7 +393,7 @@ struct MemePreviewView: View {
                         .clipShape(.rect(cornerRadius: 14))
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
                 .padding(.bottom, 16)
             }
         }
