@@ -1,0 +1,58 @@
+{
+  "theme": {
+    "style": "Deep obsidian and charcoal fields lit by single-source amber and burnt-orange warmth, evoking a premium trading terminal crossed with Bitcoin's native energy. Textures are smooth and metallic with subtle light dispersion, backgrounds feel weighty and authoritative. Orange accent acts as the sole heat source in an otherwise cool, disciplined darkness — confident and precise, never decorative.",
+    "headlineFont": "font-family: 'Inter', sans-serif; font-weight: 800; @import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap');",
+    "headlineFontSize": 120,
+    "mockupIds": {
+      "iphone": "cosmic-orange",
+      "ipad": "space-gray"
+    },
+    "palette": {
+      "primary": "#0C0C0E",
+      "secondary": "#1C1410",
+      "accent": "#F7931A"
+    }
+  },
+  "slides": [
+    {
+      "label": "Home Dashboard",
+      "backgroundPrompt": "Abstract digital art featuring sweeping arcs of molten amber and burnt orange light curving diagonally from the lower right across a deep obsidian field, dramatic upward rim lighting casting long lateral shadows, floating translucent shards of dark smoked glass catching warm golden reflections, fine metallic dust particles suspended mid-air, the upper third of the composition settling into near-black calm and stillness. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups.",
+      "backgroundUrl": "https://r2-pub.rork.com/app-store-screenshots/d24f2869-53d7-45f4-bfd5-edc67a565f62.png"
+    },
+    {
+      "label": "Signals & Indicators",
+      "backgroundPrompt": "Abstract digital art with a dense constellation of microscopic warm amber and pale gold pinpoints scattered across a vast deep charcoal expanse, connected by hair-thin filaments of luminous burnt-orange light forming a subtle web of energy, a concentrated soft glow blooming from the lower-left corner radiating outward in long horizontal gradients, the upper region open, near-black, and completely uncluttered. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups.",
+      "backgroundUrl": "https://r2-pub.rork.com/app-store-screenshots/16f58bc6-7476-4d13-b68e-cc166af75b26.png"
+    },
+    {
+      "label": "Power Law Analysis",
+      "backgroundPrompt": "3D rendered scene of stacked translucent planes of dark smoked obsidian glass tilted at sharp opposing diagonal angles, each leading edge catching a razor-thin line of warm amber and burnished copper light, deep velvet-black shadows pooling dramatically between the receding layers, the composition anchored by warm sienna tones at the bottom and fading to a cool near-black silence in the upper third. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups.",
+      "backgroundUrl": "https://r2-pub.rork.com/app-store-screenshots/0752bc6b-06c4-4efc-886e-9fa0161ba7e6.png"
+    },
+    {
+      "label": "Cycle Tracker",
+      "backgroundPrompt": "Abstract digital art with a single colossal diffused sphere of amber and deep copper radiance positioned at the lower center of a vast obsidian canvas, radiating long sweeping gradients of burnt sienna, gold, and warm ochre across the mid-frame, dark smoke-like wisps curling upward and dissolving at the edges, the upper half of the frame fading smoothly into total near-black darkness. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups.",
+      "backgroundUrl": "https://r2-pub.rork.com/app-store-screenshots/9082d94b-eda3-4762-8664-024262011d2f.png"
+    },
+    {
+      "label": "screenshot-1775677079260",
+      "backgroundPrompt": "Abstract digital art featuring flowing liquid-metal ribbons of dark bronze and molten amber weaving through a deep black void in slow fluid curves, dramatic side lighting from the right edge casting rich copper and gold highlights along each ribbon surface, smooth undulating reflective surfaces with subtle grain texture, depth-of-field blur softening the background ribbons while the foreground form remains razor sharp, the upper quarter dark and unoccupied. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups.",
+      "backgroundUrl": "https://r2-pub.rork.com/app-store-screenshots/d98249bd-94f9-49d8-a2c0-8c1352924723.png"
+    },
+    {
+      "label": "screenshot-1775677116061",
+      "backgroundPrompt": "3D rendered environment of fractured dark obsidian monoliths of varying heights rising from a flat black reflective plane, each angular facet catching warm amber and pale gold light at sharply different angles creating dramatic geometric contrast, soft volumetric amber light rays filtering through narrow gaps between the forms, fine ground-level mist catching warm orange undertones, the upper sky area dissolving into pure deep black. 8K quality, ultra smooth gradients, premium feel, no text, no letters, no UI elements, no device mockups.",
+      "backgroundUrl": "https://r2-pub.rork.com/app-store-screenshots/d39a4ca5-8cad-420b-8165-33da9ccd654e.png"
+    }
+  ],
+  "headlines": {
+    "en": {
+      "Home Dashboard": "At A Glance",
+      "Signals & Indicators": "Pure Signal",
+      "Power Law Analysis": "The Bigger<br>Picture",
+      "Cycle Tracker": "Know The Cycle",
+      "screenshot-1775677079260": "Stay Ahead",
+      "screenshot-1775677116061": "Built For<br>HODLers"
+    }
+  }
+}
