@@ -104,7 +104,9 @@ struct HomeTab: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     if !premium.isPremium {
-                        Button { showPaywall = true } label: {
+                        Button {
+                            showPaywall = true
+                        } label: {
                             Text("PRO")
                                 .font(.system(size: 11, weight: .heavy))
                                 .foregroundStyle(.white)
@@ -119,7 +121,6 @@ struct HomeTab: View {
                                 )
                                 .clipShape(Capsule())
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -166,6 +167,7 @@ struct HomeTab: View {
                 .foregroundStyle(.primary)
             ShrugBadge(size: .small, style: .inline)
         }
+        .fixedSize()
     }
 
     private var loadingView: some View {
