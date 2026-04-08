@@ -14,6 +14,7 @@ struct ProfileView: View {
     @State private var showPaywall: Bool = false
     @State private var showSubscription: Bool = false
     @State private var premium = PremiumManager.shared
+    @State private var isRestoringPurchases: Bool = false
     @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
     @AppStorage("liveActivityEnabled") private var liveActivityEnabled: Bool = false
 
@@ -166,6 +167,48 @@ struct ProfileView: View {
                         }
                     }
                     .foregroundStyle(.primary)
+
+                    if premium.isPremium {
+                        Button {
+                            premium.openManageSubscriptions()
+                        } label: {
+                            Label {
+                                Text("Manage Subscription")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                            } icon: {
+                                Image(systemName: "creditcard.fill")
+                                    .foregroundStyle(.orange)
+                            }
+                        }
+                        .foregroundStyle(.primary)
+                    }
+
+                    Button {
+                        isRestoringPurchases = true
+                        Task {
+                            await premium.restore()
+                            isRestoringPurchases = false
+                        }
+                    } label: {
+                        Label {
+                            HStack {
+                                Text("Restore Purchases")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                if isRestoringPurchases {
+                                    Spacer()
+                                    ProgressView()
+                                        .scaleEffect(0.8)
+                                }
+                            }
+                        } icon: {
+                            Image(systemName: "arrow.clockwise.circle.fill")
+                                .foregroundStyle(.orange)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                    .disabled(isRestoringPurchases)
                 } header: {
                     Text("Subscription")
                 }

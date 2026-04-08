@@ -503,26 +503,35 @@ struct PaywallView: View {
     // MARK: - Legal
 
     private var legalLinks: some View {
-        HStack(spacing: 16) {
-            Button("Restore Purchases") {
-                Task { await premium.restore() }
+        VStack(spacing: 10) {
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. You can manage and cancel subscriptions in your Apple ID account settings.")
+                .font(.system(size: 10))
+                .foregroundStyle(.quaternary)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+                .padding(.horizontal, 4)
+
+            HStack(spacing: 16) {
+                Button("Restore Purchases") {
+                    Task { await premium.restore() }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+                Text("\u{00B7}")
+                    .foregroundStyle(.quaternary)
+
+                Button("Terms") { showTerms = true }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Text("\u{00B7}")
+                    .foregroundStyle(.quaternary)
+
+                Button("Privacy") { showPrivacy = true }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            .font(.caption)
-            .foregroundStyle(.secondary)
-
-            Text("\u{00B7}")
-                .foregroundStyle(.quaternary)
-
-            Button("Terms") { showTerms = true }
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            Text("\u{00B7}")
-                .foregroundStyle(.quaternary)
-
-            Button("Privacy") { showPrivacy = true }
-                .font(.caption)
-                .foregroundStyle(.secondary)
         }
     }
 }

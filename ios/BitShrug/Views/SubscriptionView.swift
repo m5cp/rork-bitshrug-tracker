@@ -451,12 +451,19 @@ struct SubscriptionView: View {
     // MARK: - Legal
 
     private var legalSection: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             Text("Your subscription keeps Fog of Bitcoin independent,\nad-free, and continuously improving.")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)
                 .lineSpacing(2)
+
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. You can manage and cancel subscriptions in your Apple ID account settings.")
+                .font(.system(size: 10))
+                .foregroundStyle(.quaternary)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+                .padding(.horizontal, 4)
 
             HStack(spacing: 16) {
                 Button("Restore Purchases") {
