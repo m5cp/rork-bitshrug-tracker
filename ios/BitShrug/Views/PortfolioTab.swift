@@ -275,6 +275,25 @@ struct PortfolioTab: View {
                 .clipShape(Capsule())
             }
             .buttonStyle(.plain)
+
+            Button {
+                showMemeCreator = true
+            } label: {
+                HStack(spacing: 5) {
+                    Image(systemName: "photo.on.rectangle.angled")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.pink)
+                    Text("Memes")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .background(Color.pink.opacity(0.1))
+                .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
         }
     }
 
