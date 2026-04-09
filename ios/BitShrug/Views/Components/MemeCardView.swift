@@ -201,7 +201,7 @@ struct MemeCardView: View {
             Circle()
                 .fill(.orange.opacity(0.6))
                 .frame(width: isRenderMode ? 8 : 5, height: isRenderMode ? 8 : 5)
-            Text("Fog of Bitcoin")
+            Text("TouchGrass BTC")
                 .font(.system(size: isRenderMode ? 14 : 10, weight: .bold))
                 .foregroundStyle(.white.opacity(0.3))
             Text("·")

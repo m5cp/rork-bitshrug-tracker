@@ -45,7 +45,7 @@ struct OnboardingView: View {
                     .frame(height: 40)
 
                 VStack(spacing: 14) {
-                    Text("Fog of Bitcoin")
+                    Text("TouchGrass BTC")
                         .font(.system(size: 42, weight: .heavy))
                         .foregroundStyle(
                             LinearGradient(

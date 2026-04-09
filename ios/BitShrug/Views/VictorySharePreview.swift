@@ -429,7 +429,7 @@ struct VictoryShareCard: View {
             Text("₿")
                 .font(.system(size: 16, weight: .heavy))
                 .foregroundStyle(accentColor)
-            Text("Fog of Bitcoin")
+            Text("TouchGrass BTC")
                 .font(.system(size: 13, weight: .heavy))
                 .foregroundStyle(textSecondary)
             Spacer()

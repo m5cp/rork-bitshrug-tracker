@@ -121,7 +121,7 @@ struct SubscriptionView: View {
             .scaleEffect(appeared ? 1 : 0.8)
 
             VStack(spacing: 6) {
-                Text("Fog of Bitcoin Pro")
+                Text("TouchGrass BTC Pro")
                     .font(.system(size: isRegular ? 34 : 30, weight: .bold))
 
                 Text("The complete Bitcoin macro toolkit")
@@ -452,7 +452,7 @@ struct SubscriptionView: View {
 
     private var legalSection: some View {
         VStack(spacing: 10) {
-            Text("Your subscription keeps Fog of Bitcoin independent,\nad-free, and continuously improving.")
+            Text("Your subscription keeps TouchGrass BTC independent,\nad-free, and continuously improving.")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)

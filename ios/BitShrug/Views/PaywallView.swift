@@ -117,7 +117,7 @@ struct PaywallView: View {
                 .font(.system(size: isRegular ? 34 : 30, weight: .bold))
                 .foregroundStyle(.primary)
 
-            Text("Support Fog of Bitcoin and get the\ncomplete experience")
+            Text("Support TouchGrass BTC and get the\ncomplete experience")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -492,7 +492,7 @@ struct PaywallView: View {
                 .fontWeight(.medium)
                 .foregroundStyle(.secondary)
 
-            Text("Your subscription keeps Fog of Bitcoin independent,\nad-free, and continuously improving.")
+            Text("Your subscription keeps TouchGrass BTC independent,\nad-free, and continuously improving.")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)

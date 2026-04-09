@@ -19,12 +19,12 @@ struct TermsOfUseView: View {
 
                     sectionBlock(
                         title: "Acceptance of Terms",
-                        content: "By downloading, installing, or using Fog of Bitcoin (\"the App\"), you agree to be bound by these Terms of Use. If you do not agree to these terms, do not use the App."
+                        content: "By downloading, installing, or using TouchGrass BTC (\"the App\"), you agree to be bound by these Terms of Use. If you do not agree to these terms, do not use the App."
                     )
 
                     sectionBlock(
                         title: "Description of Service",
-                        content: "Fog of Bitcoin is an educational application designed to help users understand Bitcoin market conditions, historical patterns, and mathematical models. The App displays delayed market data, calculated indicators, and educational content. Fog of Bitcoin is NOT a financial advisory service, brokerage, exchange, or trading platform."
+                        content: "TouchGrass BTC is an educational application designed to help users understand Bitcoin market conditions, historical patterns, and mathematical models. The App displays delayed market data, calculated indicators, and educational content. TouchGrass BTC is NOT a financial advisory service, brokerage, exchange, or trading platform."
                     )
 
                     sectionBlock(
@@ -39,7 +39,7 @@ struct TermsOfUseView: View {
 
                     sectionBlock(
                         title: "Data Accuracy",
-                        content: "The App displays delayed market data obtained from third-party sources. Prices and indicators are not real-time. Calculated indicators are mathematical estimates that may differ from values reported by professional analytics platforms. Fog of Bitcoin makes no warranty regarding the accuracy, completeness, or timeliness of any data displayed."
+                        content: "The App displays delayed market data obtained from third-party sources. Prices and indicators are not real-time. Calculated indicators are mathematical estimates that may differ from values reported by professional analytics platforms. TouchGrass BTC makes no warranty regarding the accuracy, completeness, or timeliness of any data displayed."
                     )
 
                     sectionBlock(
@@ -49,12 +49,12 @@ struct TermsOfUseView: View {
 
                     sectionBlock(
                         title: "Intellectual Property",
-                        content: "All content, design, and code in Fog of Bitcoin are the intellectual property of the developer. You may not copy, modify, distribute, or reverse-engineer the App or its contents."
+                        content: "All content, design, and code in TouchGrass BTC are the intellectual property of the developer. You may not copy, modify, distribute, or reverse-engineer the App or its contents."
                     )
 
                     sectionBlock(
                         title: "Limitation of Liability",
-                        content: "To the maximum extent permitted by applicable law, Fog of Bitcoin and its developers shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or other intangible losses, resulting from your use of or inability to use the App, or any decisions made based on information provided by the App."
+                        content: "To the maximum extent permitted by applicable law, TouchGrass BTC and its developers shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or other intangible losses, resulting from your use of or inability to use the App, or any decisions made based on information provided by the App."
                     )
 
                     sectionBlock(

@@ -104,7 +104,7 @@ class NotificationManager {
                         volatility: volatility
                     )
                     scheduleNotification(
-                        title: "Fog of Bitcoin",
+                        title: "TouchGrass BTC",
                         body: narrative
                     )
                     triggered = true
@@ -147,7 +147,7 @@ class NotificationManager {
                     to: to
                 )
                 scheduleNotification(
-                    title: "Fog of Bitcoin",
+                    title: "TouchGrass BTC",
                     body: narrative
                 )
             }
@@ -291,10 +291,10 @@ class NotificationManager {
         center.removePendingNotificationRequests(withIdentifiers: [dailyBriefingIdentifier])
 
         let body = UserDefaults.standard.string(forKey: "daily_briefing_body")
-            ?? "Open Fog of Bitcoin for your daily market update."
+            ?? "Open TouchGrass BTC for your daily market update."
 
         let content = UNMutableNotificationContent()
-        content.title = "\u{2615} Fog of Bitcoin Morning Brief"
+        content.title = "\u{2615} TouchGrass BTC Morning Brief"
         content.body = body
         content.sound = .default
 

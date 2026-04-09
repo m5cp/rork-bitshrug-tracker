@@ -49,7 +49,7 @@ struct AboutView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            Text("Fog of Bitcoin")
+            Text("TouchGrass BTC")
                 .font(.system(.title2, design: .monospaced, weight: .heavy))
                 .foregroundStyle(.primary)
 
@@ -75,7 +75,7 @@ struct AboutView: View {
                     )
                     .clipShape(.rect(cornerRadius: 9))
 
-                Text("What is Fog of Bitcoin?")
+                Text("What is TouchGrass BTC?")
                     .font(.subheadline)
                     .fontWeight(.bold)
             }
@@ -284,7 +284,7 @@ struct AboutView: View {
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text("This is not financial advice. Fog of Bitcoin is for educational purposes only. Nobody should make financial decisions based on this app. We do not recommend purchasing Bitcoin or any cryptocurrency. Bitcoin is a volatile asset and you could lose all of your money. Past performance does not guarantee future results.")
+            Text("This is not financial advice. TouchGrass BTC is for educational purposes only. Nobody should make financial decisions based on this app. We do not recommend purchasing Bitcoin or any cryptocurrency. Bitcoin is a volatile asset and you could lose all of your money. Past performance does not guarantee future results.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineSpacing(3)

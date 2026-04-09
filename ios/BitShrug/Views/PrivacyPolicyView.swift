@@ -19,27 +19,27 @@ struct PrivacyPolicyView: View {
 
                     sectionBlock(
                         title: "Introduction",
-                        content: "Fog of Bitcoin (\"the App\") is committed to protecting your privacy. This Privacy Policy explains what information the App collects, how it is used, and your rights regarding that information."
+                        content: "TouchGrass BTC (\"the App\") is committed to protecting your privacy. This Privacy Policy explains what information the App collects, how it is used, and your rights regarding that information."
                     )
 
                     sectionBlock(
                         title: "Information We Do Not Collect",
-                        content: "Fog of Bitcoin does not collect, store, or transmit any personal information. We do not collect your name, email address, phone number, location, IP address, device identifiers, or any other personally identifiable information. We do not use cookies, analytics, tracking pixels, or any third-party tracking services."
+                        content: "TouchGrass BTC does not collect, store, or transmit any personal information. We do not collect your name, email address, phone number, location, IP address, device identifiers, or any other personally identifiable information. We do not use cookies, analytics, tracking pixels, or any third-party tracking services."
                     )
 
                     sectionBlock(
                         title: "Data Usage",
-                        content: "The App fetches publicly available Bitcoin market data from third-party APIs (Finnhub, CryptoCompare, Alternative.me) to display educational market information. This data is fetched directly from these services to your device and is not routed through any Fog of Bitcoin servers. No user data is sent to these services beyond standard HTTP requests."
+                        content: "The App fetches publicly available Bitcoin market data from third-party APIs (Finnhub, CryptoCompare, Alternative.me) to display educational market information. This data is fetched directly from these services to your device and is not routed through any TouchGrass BTC servers. No user data is sent to these services beyond standard HTTP requests."
                     )
 
                     sectionBlock(
                         title: "Local Storage",
-                        content: "The App stores your preferences (such as notification settings and onboarding completion) locally on your device using UserDefaults. This data never leaves your device and is not accessible to Fog of Bitcoin or any third party."
+                        content: "The App stores your preferences (such as notification settings and onboarding completion) locally on your device using UserDefaults. This data never leaves your device and is not accessible to TouchGrass BTC or any third party."
                     )
 
                     sectionBlock(
                         title: "In-App Purchases",
-                        content: "Premium subscriptions are processed entirely by Apple through the App Store. Fog of Bitcoin does not have access to your payment information, Apple ID, or billing details. All subscription management is handled by Apple."
+                        content: "Premium subscriptions are processed entirely by Apple through the App Store. TouchGrass BTC does not have access to your payment information, Apple ID, or billing details. All subscription management is handled by Apple."
                     )
 
                     sectionBlock(

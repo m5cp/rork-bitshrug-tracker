@@ -19,7 +19,7 @@ struct EULAView: View {
 
                     sectionBlock(
                         title: "Agreement",
-                        content: "This End User License Agreement (\"EULA\") is a legal agreement between you and Fog of Bitcoin for the use of the Fog of Bitcoin mobile application (\"Licensed Application\") available through the Apple App Store."
+                        content: "This End User License Agreement (\"EULA\") is a legal agreement between you and TouchGrass BTC for the use of the TouchGrass BTC mobile application (\"Licensed Application\") available through the Apple App Store."
                     )
 
                     sectionBlock(

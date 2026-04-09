@@ -162,7 +162,7 @@ struct HomeTab: View {
 
     private var brandMark: some View {
         HStack(spacing: 8) {
-            Text("Fog of Bitcoin")
+            Text("TouchGrass BTC")
                 .font(.system(.subheadline, design: .monospaced, weight: .bold))
                 .foregroundStyle(.primary)
             ShrugBadge(size: .small, style: .inline)
@@ -492,7 +492,7 @@ struct HomeTab: View {
 
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(spacing: 6) {
-                            Text("Unlock Fog of Bitcoin Pro")
+                            Text("Unlock TouchGrass BTC Pro")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.primary)

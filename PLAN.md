@@ -1,8 +1,8 @@
-# Fog of Bitcoin — Bitcoin Macro Environment Tracker
+# TouchGrass BTC — Bitcoin Macro Environment Tracker
 
 ## Overview
 
-Fog of Bitcoin is a premium Bitcoin macro analysis app that helps users understand the current market environment through a single Environment Score, interactive charts, on-chain indicators, and educational content about the 4-year cycle and Power Law theories. Designed for long-term positioning, not short-term trading.
+TouchGrass BTC is a premium Bitcoin macro analysis app that helps users understand the current market environment through a single Environment Score, interactive charts, on-chain indicators, and educational content about the 4-year cycle and Power Law theories. Designed for long-term positioning, not short-term trading.
 
 ## Features
 
@@ -39,7 +39,7 @@ Fog of Bitcoin is a premium Bitcoin macro analysis app that helps users understa
 - **Phase Timeline** — 7-phase visual timeline with current position
 - **Halving Stats** — days since/until halving, block reward
 - **Historical Halvings** — all 4 eras with dates, rewards, and cycle peaks
-- **Educational content** — halving mechanics, cycle theory, and how Fog of Bitcoin uses it
+- **Educational content** — halving mechanics, cycle theory, and how TouchGrass BTC uses it
 
 ### Onboarding
 - **4-page onboarding flow** — Welcome, Environment Score, Power Law & Cycle, Daily Insights
@@ -59,7 +59,7 @@ Fog of Bitcoin is a premium Bitcoin macro analysis app that helps users understa
 - **Max 1 notification per day** — calm, no hype, no financial advice language
 
 ### Settings & About
-- **About Fog of Bitcoin** — Environment Score explanation, score ranges, data sources, disclaimer
+- **About TouchGrass BTC** — Environment Score explanation, score ranges, data sources, disclaimer
 - **Privacy section** — no personal data collected, no tracking
 - **Notification settings** — granular toggle for each alert type
 - **Data sources** — Finnhub, CryptoCompare, Alternative.me, Blockchain.info, calculated indicators
