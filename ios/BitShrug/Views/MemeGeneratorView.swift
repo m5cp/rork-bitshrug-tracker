@@ -269,6 +269,7 @@ struct MemeGeneratorView: View {
     @MainActor
     private func renderMeme() {
         focusedField = nil
+        let renderSize: CGFloat = 360
         let card = MemeCardView(
             template: selectedTemplate,
             topText: topText,
@@ -279,14 +280,14 @@ struct MemeGeneratorView: View {
             scoreLabel: viewModel.environmentScoreLabel,
             change: viewModel.formattedChange,
             isPositive: viewModel.change24h >= 0,
-            isRenderMode: true
+            isRenderMode: false
         )
-        .frame(width: 1080, height: 1080)
+        .frame(width: renderSize, height: renderSize)
         .environment(\.colorScheme, .dark)
 
         let renderer = ImageRenderer(content: card)
-        renderer.scale = 1.0
-        renderer.proposedSize = .init(width: 1080, height: 1080)
+        renderer.scale = 3.0
+        renderer.proposedSize = .init(width: renderSize, height: renderSize)
         if let image = renderer.uiImage {
             renderedImage = image
             showImagePreview = true
