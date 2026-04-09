@@ -69,7 +69,7 @@ class DailyQuestionManager {
         let dateString = formatter.string(from: Date())
         var hasher = Hasher()
         hasher.combine(dateString)
-        hasher.combine("TouchGrassBTC_QOTD_v1")
+        hasher.combine("BitShrug_QOTD_v1")
         let hash = abs(hasher.finalize())
         let index = hash % DailyQuestion.bank.count
         return DailyQuestion.bank[index]

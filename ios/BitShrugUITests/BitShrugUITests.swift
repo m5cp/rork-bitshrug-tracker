@@ -1,13 +1,13 @@
 //
-//  TouchGrassBTCUITests.swift
-//  TouchGrassBTCUITests
+//  BitShrugUITests.swift
+//  BitShrugUITests
 //
 //  Created by Rork on April 1, 2026.
 //
 
 import XCTest
 
-final class TouchGrassBTCUITests: XCTestCase {
+final class BitShrugUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

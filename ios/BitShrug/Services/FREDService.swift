@@ -24,7 +24,7 @@ nonisolated class FREDService: Sendable {
     func fetchAllSeries() async -> [MacroIndicator] {
         let apiKey = Config.EXPO_PUBLIC_FRED_API_KEY
         guard !apiKey.isEmpty else {
-            print("[TouchGrassBTC] FRED: No API key configured")
+            print("[BitShrug] FRED: No API key configured")
             return Self.seriesConfigs.map { config in
                 MacroIndicator(
                     id: config.id,
@@ -68,7 +68,7 @@ nonisolated class FREDService: Sendable {
             let (data, response) = try await URLSession.shared.data(from: url)
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                print("[TouchGrassBTC] FRED \(config.id): HTTP \(httpResponse.statusCode)")
+                print("[BitShrug] FRED \(config.id): HTTP \(httpResponse.statusCode)")
                 return unavailableIndicator(for: config)
             }
 
@@ -114,7 +114,7 @@ nonisolated class FREDService: Sendable {
                 seriesID: config.id
             )
         } catch {
-            print("[TouchGrassBTC] FRED \(config.id) failed: \(error.localizedDescription)")
+            print("[BitShrug] FRED \(config.id) failed: \(error.localizedDescription)")
             return unavailableIndicator(for: config)
         }
     }

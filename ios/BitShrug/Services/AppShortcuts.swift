@@ -60,7 +60,7 @@ struct GetEnvironmentIntent: AppIntent {
     }
 }
 
-struct TouchGrassBTCShortcuts: AppShortcutsProvider {
+struct BitShrugShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: GetEnvironmentIntent(),

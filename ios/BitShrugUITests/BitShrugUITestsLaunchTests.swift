@@ -1,13 +1,13 @@
 //
-//  TouchGrassBTCUITestsLaunchTests.swift
-//  TouchGrassBTCUITests
+//  BitShrugUITestsLaunchTests.swift
+//  BitShrugUITests
 //
 //  Created by Rork on April 1, 2026.
 //
 
 import XCTest
 
-final class TouchGrassBTCUITestsLaunchTests: XCTestCase {
+final class BitShrugUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

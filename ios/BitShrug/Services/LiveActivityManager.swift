@@ -3,7 +3,7 @@ import Foundation
 
 class LiveActivityManager {
     static let shared = LiveActivityManager()
-    private var currentActivity: Activity<TouchGrassBTCLiveAttributes>?
+    private var currentActivity: Activity<BitShrugLiveAttributes>?
 
     private init() {}
 
@@ -16,8 +16,8 @@ class LiveActivityManager {
 
         end()
 
-        let attributes = TouchGrassBTCLiveAttributes(appName: "Fog of Bitcoin")
-        let state = TouchGrassBTCLiveAttributes.ContentState(
+        let attributes = BitShrugLiveAttributes(appName: "Fog of Bitcoin")
+        let state = BitShrugLiveAttributes.ContentState(
             price: price,
             change24h: change24h,
             environmentScore: score,
@@ -32,7 +32,7 @@ class LiveActivityManager {
                 pushType: nil
             )
         } catch {
-            print("[TouchGrassBTC] Live Activity start failed: \(error.localizedDescription)")
+            print("[BitShrug] Live Activity start failed: \(error.localizedDescription)")
         }
     }
 
@@ -42,7 +42,7 @@ class LiveActivityManager {
             return
         }
 
-        let state = TouchGrassBTCLiveAttributes.ContentState(
+        let state = BitShrugLiveAttributes.ContentState(
             price: price,
             change24h: change24h,
             environmentScore: score,

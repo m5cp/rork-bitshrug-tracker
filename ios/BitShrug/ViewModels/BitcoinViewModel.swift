@@ -364,24 +364,24 @@ class BitcoinViewModel {
             marketCap = priceData.marketCap
             volume24h = priceData.volume24h
             change24h = priceData.change24h
-            print("[TouchGrassBTC] Price: $\(Int(price)), Change: \(String(format: "%.1f", change24h))%")
+            print("[BitShrug] Price: $\(Int(price)), Change: \(String(format: "%.1f", change24h))%")
         } catch {
-            print("[TouchGrassBTC] Price fetch failed: \(error.localizedDescription)")
+            print("[BitShrug] Price fetch failed: \(error.localizedDescription)")
             errorMessage = "Failed to load price data"
         }
 
         do {
             fearGreedValue = try await fngTask
-            print("[TouchGrassBTC] Fear & Greed: \(fearGreedValue)")
+            print("[BitShrug] Fear & Greed: \(fearGreedValue)")
         } catch {
-            print("[TouchGrassBTC] Fear & Greed failed: \(error.localizedDescription)")
+            print("[BitShrug] Fear & Greed failed: \(error.localizedDescription)")
         }
 
         do {
             actual200WMA = try await weekMATask
-            print("[TouchGrassBTC] 200-Week MA: $\(Int(actual200WMA ?? 0))")
+            print("[BitShrug] 200-Week MA: $\(Int(actual200WMA ?? 0))")
         } catch {
-            print("[TouchGrassBTC] 200-Week MA failed: \(error.localizedDescription)")
+            print("[BitShrug] 200-Week MA failed: \(error.localizedDescription)")
         }
 
         do {
@@ -389,15 +389,15 @@ class BitcoinViewModel {
             hashRate = stats.hashRate
             blockHeight = stats.blockHeight
         } catch {
-            print("[TouchGrassBTC] Blockchain stats failed: \(error.localizedDescription)")
+            print("[BitShrug] Blockchain stats failed: \(error.localizedDescription)")
         }
 
         do {
             let history = try await historyTask
             historicalPrices = history
-            print("[TouchGrassBTC] Historical prices: \(history.count) days")
+            print("[BitShrug] Historical prices: \(history.count) days")
         } catch {
-            print("[TouchGrassBTC] Historical prices failed: \(error.localizedDescription)")
+            print("[BitShrug] Historical prices failed: \(error.localizedDescription)")
         }
 
         if price > 0 {
@@ -426,11 +426,11 @@ class BitcoinViewModel {
                 macdData = service.calculateMACD(prices: historicalPrices)
             }
 
-            print("[TouchGrassBTC] MVRV Z-Score: \(String(format: "%.2f", mvrvZScore))")
-            print("[TouchGrassBTC] S2F Ratio: \(String(format: "%.2f", stockToFlowRatio))")
-            print("[TouchGrassBTC] Puell: \(String(format: "%.2f", puellMultiple))")
+            print("[BitShrug] MVRV Z-Score: \(String(format: "%.2f", mvrvZScore))")
+            print("[BitShrug] S2F Ratio: \(String(format: "%.2f", stockToFlowRatio))")
+            print("[BitShrug] Puell: \(String(format: "%.2f", puellMultiple))")
             if let sp = supplyInProfit {
-                print("[TouchGrassBTC] Supply in Profit: \(String(format: "%.0f", sp.estimatedPercent))%")
+                print("[BitShrug] Supply in Profit: \(String(format: "%.0f", sp.estimatedPercent))%")
             }
         }
 
@@ -511,7 +511,7 @@ class BitcoinViewModel {
             lastFetched: Date(),
             hasError: indicators.allSatisfy { !$0.isAvailable }
         )
-        print("[TouchGrassBTC] FRED: Loaded \(indicators.filter(\.isAvailable).count)/\(indicators.count) indicators, backdrop: \(backdrop.rawValue)")
+        print("[BitShrug] FRED: Loaded \(indicators.filter(\.isAvailable).count)/\(indicators.count) indicators, backdrop: \(backdrop.rawValue)")
     }
 
     var dailyDelta: Int? {
