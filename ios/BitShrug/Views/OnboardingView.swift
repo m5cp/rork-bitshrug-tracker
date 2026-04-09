@@ -55,7 +55,7 @@ struct OnboardingView: View {
                             )
                         )
 
-                    Text("Where signal meets uncertainty.")
+                    Text("Clarity in Chaos")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundStyle(.white.opacity(0.5))
                 }
