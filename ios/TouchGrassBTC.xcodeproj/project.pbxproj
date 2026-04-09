@@ -17,21 +17,21 @@
 			containerPortal = 105FC5722E9EAD3100EA8BCF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 105FC5792E9EAD3100EA8BCF;
-			remoteInfo = BitShrug;
+			remoteInfo = TouchGrassBTC;
 		};
 		105FC5942E9EAD3200EA8BCF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 105FC5722E9EAD3100EA8BCF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 105FC5792E9EAD3100EA8BCF;
-			remoteInfo = BitShrug;
+			remoteInfo = TouchGrassBTC;
 		};
 		XXBEE91196E447A71EB063XX /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 105FC5722E9EAD3100EA8BCF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = XX186114D8907569F9E0A4XX;
-			remoteInfo = BitShrugWidget;
+			remoteInfo = TouchGrassBTCWidget;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -50,9 +50,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		105FC57A2E9EAD3100EA8BCF /* BitShrug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BitShrug.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		105FC5892E9EAD3200EA8BCF /* BitShrugTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BitShrugTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		105FC5932E9EAD3200EA8BCF /* BitShrugUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BitShrugUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		105FC57A2E9EAD3100EA8BCF /* TouchGrassBTC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TouchGrassBTC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		105FC5892E9EAD3200EA8BCF /* TouchGrassBTCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TouchGrassBTCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		105FC5932E9EAD3200EA8BCF /* TouchGrassBTCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TouchGrassBTCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		XXF7C7B702B31B98CDA1C4XX /* BitShrugWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BitShrugWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -62,24 +62,32 @@
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = XX186114D8907569F9E0A4XX /* BitShrugWidget */;
+			target = XX186114D8907569F9E0A4XX /* TouchGrassBTCWidget */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		105FC57C2E9EAD3100EA8BCF /* BitShrug */ = {
+		105FC57C2E9EAD3100EA8BCF /* TouchGrassBTC */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrug;
+			path = TouchGrassBTC;
 			sourceTree = "<group>";
 		};
-		105FC58C2E9EAD3200EA8BCF /* BitShrugTests */ = {
+		105FC58C2E9EAD3200EA8BCF /* TouchGrassBTCTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrugTests;
+			path = TouchGrassBTCTests;
 			sourceTree = "<group>";
 		};
-		105FC5962E9EAD3200EA8BCF /* BitShrugUITests */ = {
+		105FC5962E9EAD3200EA8BCF /* TouchGrassBTCUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrugUITests;
+			path = TouchGrassBTCUITests;
+			sourceTree = "<group>";
+		};
+		XXEB2A47268E1604E2AC1BXX /* BitShrugWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				XXE90DEC98A937D64A7BB2XX /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
+			path = BitShrugWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -116,24 +124,13 @@
 		};
 /* End PBXFrameworksBuildPhase section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		XXEB2A47268E1604E2AC1BXX /* BitShrugWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BitShrugWidget;
-			sourceTree = "<group>";
-			exceptions = (
-				XXE90DEC98A937D64A7BB2XX /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
-			);
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXGroup section */
 		105FC5712E9EAD3100EA8BCF = {
 			isa = PBXGroup;
 			children = (
-				105FC57C2E9EAD3100EA8BCF /* BitShrug */,
-				105FC58C2E9EAD3200EA8BCF /* BitShrugTests */,
-				105FC5962E9EAD3200EA8BCF /* BitShrugUITests */,
+				105FC57C2E9EAD3100EA8BCF /* TouchGrassBTC */,
+				105FC58C2E9EAD3200EA8BCF /* TouchGrassBTCTests */,
+				105FC5962E9EAD3200EA8BCF /* TouchGrassBTCUITests */,
 				105FC57B2E9EAD3100EA8BCF /* Products */,
 				XXEB2A47268E1604E2AC1BXX /* BitShrugWidget */,
 			);
@@ -142,9 +139,9 @@
 		105FC57B2E9EAD3100EA8BCF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				105FC57A2E9EAD3100EA8BCF /* BitShrug.app */,
-				105FC5892E9EAD3200EA8BCF /* BitShrugTests.xctest */,
-				105FC5932E9EAD3200EA8BCF /* BitShrugUITests.xctest */,
+				105FC57A2E9EAD3100EA8BCF /* TouchGrassBTC.app */,
+				105FC5892E9EAD3200EA8BCF /* TouchGrassBTCTests.xctest */,
+				105FC5932E9EAD3200EA8BCF /* TouchGrassBTCUITests.xctest */,
 				XXF7C7B702B31B98CDA1C4XX /* BitShrugWidget.appex */,
 			);
 			name = Products;
@@ -153,9 +150,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		105FC5792E9EAD3100EA8BCF /* BitShrug */ = {
+		105FC5792E9EAD3100EA8BCF /* TouchGrassBTC */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 105FC59D2E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "BitShrug" */;
+			buildConfigurationList = 105FC59D2E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "TouchGrassBTC" */;
 			buildPhases = (
 				105FC5762E9EAD3100EA8BCF /* Sources */,
 				105FC5772E9EAD3100EA8BCF /* Frameworks */,
@@ -168,19 +165,19 @@
 				XXA07CE22F4AF1431601EBXX /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				105FC57C2E9EAD3100EA8BCF /* BitShrug */,
+				105FC57C2E9EAD3100EA8BCF /* TouchGrassBTC */,
 			);
-			name = BitShrug;
+			name = TouchGrassBTC;
 			packageProductDependencies = (
 				XXDCC169DE7B2F3C1C8B10XX /* RevenueCat */,
 			);
-			productName = BitShrug;
-			productReference = 105FC57A2E9EAD3100EA8BCF /* BitShrug.app */;
+			productName = TouchGrassBTC;
+			productReference = 105FC57A2E9EAD3100EA8BCF /* TouchGrassBTC.app */;
 			productType = "com.apple.product-type.application";
 		};
-		105FC5882E9EAD3200EA8BCF /* BitShrugTests */ = {
+		105FC5882E9EAD3200EA8BCF /* TouchGrassBTCTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 105FC5A02E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "BitShrugTests" */;
+			buildConfigurationList = 105FC5A02E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "TouchGrassBTCTests" */;
 			buildPhases = (
 				105FC5852E9EAD3200EA8BCF /* Sources */,
 				105FC5862E9EAD3200EA8BCF /* Frameworks */,
@@ -192,18 +189,18 @@
 				105FC58B2E9EAD3200EA8BCF /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				105FC58C2E9EAD3200EA8BCF /* BitShrugTests */,
+				105FC58C2E9EAD3200EA8BCF /* TouchGrassBTCTests */,
 			);
-			name = BitShrugTests;
+			name = TouchGrassBTCTests;
 			packageProductDependencies = (
 			);
-			productName = BitShrugTests;
-			productReference = 105FC5892E9EAD3200EA8BCF /* BitShrugTests.xctest */;
+			productName = TouchGrassBTCTests;
+			productReference = 105FC5892E9EAD3200EA8BCF /* TouchGrassBTCTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		105FC5922E9EAD3200EA8BCF /* BitShrugUITests */ = {
+		105FC5922E9EAD3200EA8BCF /* TouchGrassBTCUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 105FC5A32E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "BitShrugUITests" */;
+			buildConfigurationList = 105FC5A32E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "TouchGrassBTCUITests" */;
 			buildPhases = (
 				105FC58F2E9EAD3200EA8BCF /* Sources */,
 				105FC5902E9EAD3200EA8BCF /* Frameworks */,
@@ -215,18 +212,18 @@
 				105FC5952E9EAD3200EA8BCF /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				105FC5962E9EAD3200EA8BCF /* BitShrugUITests */,
+				105FC5962E9EAD3200EA8BCF /* TouchGrassBTCUITests */,
 			);
-			name = BitShrugUITests;
+			name = TouchGrassBTCUITests;
 			packageProductDependencies = (
 			);
-			productName = BitShrugUITests;
-			productReference = 105FC5932E9EAD3200EA8BCF /* BitShrugUITests.xctest */;
+			productName = TouchGrassBTCUITests;
+			productReference = 105FC5932E9EAD3200EA8BCF /* TouchGrassBTCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		XX186114D8907569F9E0A4XX /* BitShrugWidget */ = {
+		XX186114D8907569F9E0A4XX /* TouchGrassBTCWidget */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = XX61FC0BDED7DAD1ADE2FFXX /* Build configuration list for PBXNativeTarget "BitShrugWidget" */;
+			buildConfigurationList = XX61FC0BDED7DAD1ADE2FFXX /* Build configuration list for PBXNativeTarget "TouchGrassBTCWidget" */;
 			buildPhases = (
 				XXE0FD6AFA7551401BFCEBXX /* Sources */,
 				XX75B8358D2242CEB782C5XX /* Frameworks */,
@@ -236,13 +233,13 @@
 			);
 			dependencies = (
 			);
-			name = BitShrugWidget;
-			productName = BitShrugWidget;
-			productReference = XXF7C7B702B31B98CDA1C4XX /* BitShrugWidget.appex */;
-			productType = "com.apple.product-type.app-extension";
 			fileSystemSynchronizedGroups = (
 				XXEB2A47268E1604E2AC1BXX /* BitShrugWidget */,
 			);
+			name = TouchGrassBTCWidget;
+			productName = TouchGrassBTCWidget;
+			productReference = XXF7C7B702B31B98CDA1C4XX /* BitShrugWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -267,7 +264,8 @@
 					};
 				};
 			};
-			buildConfigurationList = 105FC5752E9EAD3100EA8BCF /* Build configuration list for PBXProject "BitShrug" */;
+			buildConfigurationList = 105FC5752E9EAD3100EA8BCF /* Build configuration list for PBXProject "TouchGrassBTC" */;
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -276,18 +274,18 @@
 			);
 			mainGroup = 105FC5712E9EAD3100EA8BCF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm.git" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 105FC57B2E9EAD3100EA8BCF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				105FC5792E9EAD3100EA8BCF /* BitShrug */,
-				105FC5882E9EAD3200EA8BCF /* BitShrugTests */,
-				105FC5922E9EAD3200EA8BCF /* BitShrugUITests */,
-				XX186114D8907569F9E0A4XX /* BitShrugWidget */,
-			);
-			packageReferences = (
-				XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				105FC5792E9EAD3100EA8BCF /* TouchGrassBTC */,
+				105FC5882E9EAD3200EA8BCF /* TouchGrassBTCTests */,
+				105FC5922E9EAD3200EA8BCF /* TouchGrassBTCUITests */,
+				XX186114D8907569F9E0A4XX /* TouchGrassBTCWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -357,17 +355,17 @@
 /* Begin PBXTargetDependency section */
 		105FC58B2E9EAD3200EA8BCF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 105FC5792E9EAD3100EA8BCF /* BitShrug */;
+			target = 105FC5792E9EAD3100EA8BCF /* TouchGrassBTC */;
 			targetProxy = 105FC58A2E9EAD3200EA8BCF /* PBXContainerItemProxy */;
 		};
 		105FC5952E9EAD3200EA8BCF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 105FC5792E9EAD3100EA8BCF /* BitShrug */;
+			target = 105FC5792E9EAD3100EA8BCF /* TouchGrassBTC */;
 			targetProxy = 105FC5942E9EAD3200EA8BCF /* PBXContainerItemProxy */;
 		};
 		XXA07CE22F4AF1431601EBXX /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = XX186114D8907569F9E0A4XX /* BitShrugWidget */;
+			target = XX186114D8907569F9E0A4XX /* TouchGrassBTCWidget */;
 			targetProxy = XXBEE91196E447A71EB063XX /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -505,13 +503,13 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fog of Bitcoin";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSSiriUsageDescription = "Fog of Bitcoin uses Siri to provide quick access to Bitcoin environment data.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Fog of Bitcoin";
-				INFOPLIST_KEY_NSSiriUsageDescription = "Fog of Bitcoin uses Siri to provide quick access to Bitcoin environment data.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -542,13 +540,13 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fog of Bitcoin";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSSiriUsageDescription = "Fog of Bitcoin uses Siri to provide quick access to Bitcoin environment data.";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Fog of Bitcoin";
-				INFOPLIST_KEY_NSSiriUsageDescription = "Fog of Bitcoin uses Siri to provide quick access to Bitcoin environment data.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -586,7 +584,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BitShrug.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BitShrug";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TouchGrassBTC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TouchGrassBTC";
 			};
 			name = Debug;
 		};
@@ -608,7 +606,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BitShrug.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BitShrug";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TouchGrassBTC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TouchGrassBTC";
 			};
 			name = Release;
 		};
@@ -628,7 +626,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BitShrug;
+				TEST_TARGET_NAME = TouchGrassBTC;
 			};
 			name = Debug;
 		};
@@ -648,66 +646,66 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = BitShrug;
+				TEST_TARGET_NAME = TouchGrassBTC;
 			};
 			name = Release;
 		};
 		XX5A519822CE3BEB7BA2ADXX /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_BUNDLE_IDENTIFIER = app.rork.mh5qf4z0nqy7olvg1im36.bitshrugwidget;
-				PRODUCT_NAME = BitShrugWidget;
-				SWIFT_VERSION = 5.0;
-				SDKROOT = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BitShrugWidget/Info.plist;
 				CODE_SIGN_ENTITLEMENTS = BitShrugWidget/BitShrugWidget.entitlements;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BitShrugWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.rork.mh5qf4z0nqy7olvg1im36.bitshrugwidget;
+				PRODUCT_NAME = TouchGrassBTCWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 		XX5F81F124AC92E2559952XX /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_BUNDLE_IDENTIFIER = app.rork.mh5qf4z0nqy7olvg1im36.bitshrugwidget;
-				PRODUCT_NAME = BitShrugWidget;
-				SWIFT_VERSION = 5.0;
-				SDKROOT = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BitShrugWidget/Info.plist;
 				CODE_SIGN_ENTITLEMENTS = BitShrugWidget/BitShrugWidget.entitlements;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				MARKETING_VERSION = 1.0.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BitShrugWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "$(PRODUCT_NAME)";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.rork.mh5qf4z0nqy7olvg1im36.bitshrugwidget;
+				PRODUCT_NAME = TouchGrassBTCWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		105FC5752E9EAD3100EA8BCF /* Build configuration list for PBXProject "BitShrug" */ = {
+		105FC5752E9EAD3100EA8BCF /* Build configuration list for PBXProject "TouchGrassBTC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				105FC59B2E9EAD3200EA8BCF /* Debug */,
@@ -716,7 +714,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		105FC59D2E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "BitShrug" */ = {
+		105FC59D2E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "TouchGrassBTC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				105FC59E2E9EAD3200EA8BCF /* Debug */,
@@ -725,7 +723,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		105FC5A02E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "BitShrugTests" */ = {
+		105FC5A02E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "TouchGrassBTCTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				105FC5A12E9EAD3200EA8BCF /* Debug */,
@@ -734,7 +732,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		105FC5A32E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "BitShrugUITests" */ = {
+		105FC5A32E9EAD3200EA8BCF /* Build configuration list for PBXNativeTarget "TouchGrassBTCUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				105FC5A42E9EAD3200EA8BCF /* Debug */,
@@ -743,7 +741,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		XX61FC0BDED7DAD1ADE2FFXX /* Build configuration list for PBXNativeTarget "BitShrugWidget" */ = {
+		XX61FC0BDED7DAD1ADE2FFXX /* Build configuration list for PBXNativeTarget "TouchGrassBTCWidget" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				XX5F81F124AC92E2559952XX /* Debug */,
@@ -755,7 +753,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+		XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
 			requirement = {
@@ -768,7 +766,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		XXDCC169DE7B2F3C1C8B10XX /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			package = XX4AC81916604C4344ADC0XX /* XCRemoteSwiftPackageReference "purchases-ios-spm.git" */;
 			productName = RevenueCat;
 		};
 /* End XCSwiftPackageProductDependency section */

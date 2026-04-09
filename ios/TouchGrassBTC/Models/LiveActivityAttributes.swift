@@ -1,7 +1,7 @@
 import ActivityKit
 import Foundation
 
-nonisolated struct BitShrugLiveAttributes: ActivityAttributes {
+nonisolated struct TouchGrassBTCLiveAttributes: ActivityAttributes {
     nonisolated struct ContentState: Codable, Hashable, Sendable {
         var price: Double
         var change24h: Double

@@ -67,7 +67,7 @@ nonisolated class BitcoinService: Sendable {
         let response = try JSONDecoder().decode(CryptoCompareHistoryResponse.self, from: data)
 
         guard let entries = response.Data?.Data, entries.count >= 1000 else {
-            print("[BitShrug] 200-Week MA: only \(response.Data?.Data?.count ?? 0) entries, using estimate")
+            print("[TouchGrassBTC] 200-Week MA: only \(response.Data?.Data?.count ?? 0) entries, using estimate")
             return estimate200WeekMA()
         }
 
@@ -131,7 +131,7 @@ nonisolated class BitcoinService: Sendable {
         do {
             priceSource = try await fetchFinnhubPrice()
         } catch {
-            print("[BitShrug] Finnhub failed: \(error.localizedDescription), trying CoinGecko...")
+            print("[TouchGrassBTC] Finnhub failed: \(error.localizedDescription), trying CoinGecko...")
             do {
                 let gecko = try await fetchCoinGeckoPrice()
                 let market = try await marketTask
@@ -142,7 +142,7 @@ nonisolated class BitcoinService: Sendable {
                     change24h: gecko.change24h
                 )
             } catch {
-                print("[BitShrug] CoinGecko also failed: \(error.localizedDescription)")
+                print("[TouchGrassBTC] CoinGecko also failed: \(error.localizedDescription)")
                 let market = try await marketTask
                 if let ccPrice = market.price, ccPrice > 0 {
                     return BitcoinPriceData(

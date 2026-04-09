@@ -4,7 +4,7 @@ import AppIntents
 import RevenueCat
 
 @main
-struct BitShrugApp: App {
+struct TouchGrassBTCApp: App {
     @AppStorage("bitshrug_onboarded") private var hasOnboarded: Bool = false
     @AppStorage("appColorScheme") private var appColorScheme: String = "dark"
     @State private var showOnboarding: Bool = false
@@ -16,7 +16,7 @@ struct BitShrugApp: App {
         #else
         Purchases.configure(withAPIKey: Config.EXPO_PUBLIC_REVENUECAT_IOS_API_KEY)
         #endif
-        BitShrugShortcuts.updateAppShortcutParameters()
+        TouchGrassBTCShortcuts.updateAppShortcutParameters()
     }
 
     private var colorScheme: ColorScheme? {
