@@ -52,6 +52,11 @@ class DailyQuestionManager {
             streak = 0
         }
 
+        if correct {
+            AppReviewManager.shared.checkStreakMilestone(streak)
+            AppReviewManager.shared.checkAnsweredMilestone(totalCorrect)
+        }
+
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         UserDefaults.standard.set(formatter.string(from: Date()), forKey: answeredDateKey)

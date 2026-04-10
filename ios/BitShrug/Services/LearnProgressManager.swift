@@ -17,6 +17,7 @@ class LearnProgressManager {
         guard !completedLessons.contains(lessonID) else { return }
         completedLessons.insert(lessonID)
         save()
+        AppReviewManager.shared.checkLessonMilestone(completedLessons.count)
     }
 
     func isRead(_ lessonID: String) -> Bool {
