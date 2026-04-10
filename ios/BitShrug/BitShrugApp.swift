@@ -26,10 +26,20 @@ struct BitShrugApp: App {
         }
     }
 
+    @State private var showSplash: Bool = true
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(colorScheme)
+                .overlay {
+                    if showSplash {
+                        SplashOverlayView {
+                            showSplash = false
+                        }
+                        .transition(.opacity)
+                    }
+                }
                 .fullScreenCover(isPresented: Binding(
                     get: { !hasOnboarded },
                     set: { newValue in
