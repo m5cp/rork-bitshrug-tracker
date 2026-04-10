@@ -1,5 +1,5 @@
 import CoreSpotlight
-import MobileCoreServices
+import UniformTypeIdentifiers
 
 class SpotlightManager {
     static let shared = SpotlightManager()
