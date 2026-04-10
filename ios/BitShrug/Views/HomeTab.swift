@@ -32,6 +32,8 @@ struct HomeTab: View {
 
                         if viewModel.isLoading && viewModel.price == 0 {
                             loadingView
+                        } else if viewModel.price == 0 && viewModel.errorMessage != nil {
+                            errorView
                         } else {
                             SectionJumpBar(sections: sections) { id in
                                 withAnimation(.easeInOut(duration: 0.3)) {
@@ -181,6 +183,43 @@ struct HomeTab: View {
                 .font(.caption)
                 .fontWeight(.semibold)
                 .foregroundStyle(.primary.opacity(0.5))
+        }
+        .frame(maxWidth: .infinity)
+        .frame(minHeight: 400)
+    }
+
+    private var errorView: some View {
+        VStack(spacing: 20) {
+            ShrugBadge(size: .large, style: .hero)
+                .opacity(0.5)
+
+            VStack(spacing: 8) {
+                Text("Unable to load data")
+                    .font(.title3)
+                    .fontWeight(.bold)
+
+                Text(viewModel.errorMessage ?? "Check your internet connection and try again.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+
+            Button {
+                Task { await viewModel.loadData() }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 14, weight: .semibold))
+                    Text("Retry")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.orange)
         }
         .frame(maxWidth: .infinity)
         .frame(minHeight: 400)

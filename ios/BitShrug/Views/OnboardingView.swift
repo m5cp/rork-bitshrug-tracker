@@ -15,6 +15,8 @@ struct OnboardingView: View {
     @State private var fogPulse: Double = 0
     @State private var screenFadeOut: Double = 0
     @State private var fogWhiteout: Double = 0
+    @State private var canSkip: Bool = false
+    @State private var skipTapped: Bool = false
 
     private let fogGreen = Color(red: 0.3, green: 0.75, blue: 0.45)
 
@@ -78,6 +80,25 @@ struct OnboardingView: View {
                 .opacity(screenFadeOut)
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
+
+            if canSkip && phase != .fadingOut {
+                VStack {
+                    Spacer()
+                    Button {
+                        guard !skipTapped else { return }
+                        skipTapped = true
+                        skipToEnd()
+                    } label: {
+                        Text("Tap to continue")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                    }
+                    .padding(.bottom, 80)
+                }
+                .transition(.opacity)
+            }
         }
         .task {
             generateFogLayers()
@@ -265,7 +286,13 @@ struct OnboardingView: View {
             disclaimerOpacity = 1.0
         }
 
+        withAnimation(.easeIn(duration: 0.4)) {
+            canSkip = true
+        }
+
         try? await Task.sleep(for: .milliseconds(2200))
+
+        guard !skipTapped else { return }
 
         phase = .fadingOut
 
@@ -293,7 +320,20 @@ struct OnboardingView: View {
 
         try? await Task.sleep(for: .milliseconds(1300))
 
-        onContinue()
+        if !skipTapped {
+            onContinue()
+        }
+    }
+
+    private func skipToEnd() {
+        withAnimation(.easeIn(duration: 0.6)) {
+            screenFadeOut = 1
+            canSkip = false
+        }
+        Task {
+            try? await Task.sleep(for: .milliseconds(700))
+            onContinue()
+        }
     }
 }
 

@@ -327,10 +327,6 @@ struct PaywallView: View {
             Task { await premium.purchase(package: package) }
         } label: {
             VStack(spacing: 0) {
-                if isLifetime {
-                    launchOfferBanner
-                }
-
                 HStack(spacing: 14) {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 8) {
@@ -411,22 +407,6 @@ struct PaywallView: View {
         .buttonStyle(.plain)
         .disabled(premium.isPurchasing)
         .sensoryFeedback(.selection, trigger: selectedPackageID)
-    }
-
-    private var launchOfferBanner: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 10, weight: .bold))
-            Text("LAUNCH SPECIAL — LIMITED TIME")
-                .font(.system(size: 10, weight: .heavy))
-                .tracking(0.5)
-            Image(systemName: "sparkles")
-                .font(.system(size: 10, weight: .bold))
-        }
-        .foregroundStyle(.white)
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .background(Color.white.opacity(0.15))
     }
 
     private func savingsBar(for package: Package, in offering: Offering) -> some View {

@@ -52,13 +52,13 @@ class BitcoinViewModel {
     var compositeSignal: CompositeSignal {
         let score = environmentScore
         if score >= 70 {
-            return CompositeSignal(label: "Macro Bullish", color: .green)
+            return CompositeSignal(label: "Favorable", color: .green)
         } else if score >= 50 {
-            return CompositeSignal(label: "Leaning Bullish", color: Color(red: 0.4, green: 0.8, blue: 0.3))
+            return CompositeSignal(label: "Constructive", color: Color(red: 0.4, green: 0.8, blue: 0.3))
         } else if score >= 35 {
-            return CompositeSignal(label: "Mixed / Neutral", color: .orange)
+            return CompositeSignal(label: "Mixed", color: .orange)
         } else {
-            return CompositeSignal(label: "Macro Bearish", color: .red)
+            return CompositeSignal(label: "Elevated Risk", color: .red)
         }
     }
 
