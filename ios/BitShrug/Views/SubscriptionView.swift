@@ -181,6 +181,15 @@ struct SubscriptionView: View {
         .offset(y: appeared ? 0 : 16)
     }
 
+    private func sortedPackages(_ packages: [Package]) -> [Package] {
+        let order: [PackageType] = [.annual, .monthly, .weekly]
+        return packages.sorted { a, b in
+            let ai = order.firstIndex(of: a.packageType) ?? 99
+            let bi = order.firstIndex(of: b.packageType) ?? 99
+            return ai < bi
+        }
+    }
+
     private var comparisonHeader: some View {
         HStack(spacing: 0) {
             Text("Features")
@@ -267,7 +276,8 @@ struct SubscriptionView: View {
 
     private func purchaseSection(_ offering: Offering) -> some View {
         VStack(spacing: 12) {
-            ForEach(offering.availablePackages, id: \.identifier) { package in
+            let sorted = sortedPackages(offering.availablePackages)
+            ForEach(sorted, id: \.identifier) { package in
                 purchaseCard(package, offering: offering)
             }
         }
@@ -371,17 +381,29 @@ struct SubscriptionView: View {
     }
 
     private func savingsBar(for package: Package, in offering: Offering) -> some View {
-        let monthly = offering.availablePackages.first { $0.packageType == .monthly }
+        let weeklyPkg = offering.availablePackages.first { $0.packageType == .weekly }
+        let monthlyPkg = offering.availablePackages.first { $0.packageType == .monthly }
+
         let savingsText: String = {
-            guard let monthlyPrice = monthly?.storeProduct.price as? NSDecimalNumber else { return "Save with yearly" }
-            let yearlyTotal = package.storeProduct.price as NSDecimalNumber
-            let monthlyAnnual = monthlyPrice.doubleValue * 12.0
-            let savings = monthlyAnnual - yearlyTotal.doubleValue
-            if savings > 0, monthlyAnnual > 0 {
-                let pct = Int((savings / monthlyAnnual * 100).rounded())
-                return "Save \(pct)% vs. monthly"
+            if let weeklyPrice = weeklyPkg?.storeProduct.price as? NSDecimalNumber {
+                let yearlyTotal = package.storeProduct.price as NSDecimalNumber
+                let weeklyAnnual = weeklyPrice.doubleValue * 52.0
+                let perWeek = yearlyTotal.doubleValue / 52.0
+                if weeklyAnnual > 0 {
+                    let pct = Int(((weeklyAnnual - yearlyTotal.doubleValue) / weeklyAnnual * 100).rounded())
+                    return "Just $\(String(format: "%.2f", perWeek))/week \u{00B7} Save \(pct)%"
+                }
             }
-            return "Save with yearly"
+            if let monthlyPrice = monthlyPkg?.storeProduct.price as? NSDecimalNumber {
+                let yearlyTotal = package.storeProduct.price as NSDecimalNumber
+                let monthlyAnnual = monthlyPrice.doubleValue * 12.0
+                let savings = monthlyAnnual - yearlyTotal.doubleValue
+                if savings > 0, monthlyAnnual > 0 {
+                    let pct = Int((savings / monthlyAnnual * 100).rounded())
+                    return "Save \(pct)% vs. monthly"
+                }
+            }
+            return "Best value \u{2014} less than $1/week"
         }()
 
         return HStack(spacing: 6) {
@@ -438,7 +460,7 @@ struct SubscriptionView: View {
                 .multilineTextAlignment(.center)
                 .lineSpacing(2)
 
-            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. You can manage and cancel subscriptions in your Apple ID account settings.")
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. You can manage and cancel subscriptions in your Apple ID account settings. Free trial automatically converts to a paid subscription unless canceled before the trial ends.")
                 .font(.system(size: 10))
                 .foregroundStyle(.quaternary)
                 .multilineTextAlignment(.center)
@@ -473,6 +495,7 @@ struct SubscriptionView: View {
 
     private func planTitle(for package: Package) -> String {
         switch package.packageType {
+        case .weekly: return "Weekly"
         case .monthly: return "Monthly"
         case .annual: return "Yearly"
         case .lifetime: return "Lifetime"
@@ -482,8 +505,9 @@ struct SubscriptionView: View {
 
     private func planSubtitle(for package: Package) -> String {
         switch package.packageType {
+        case .weekly: return "Cancel anytime"
         case .monthly: return "Cancel anytime"
-        case .annual: return "Billed once per year"
+        case .annual: return "3-day free trial \u{00B7} Billed yearly"
         case .lifetime: return "Pay once, keep forever"
         default: return ""
         }
@@ -491,6 +515,7 @@ struct SubscriptionView: View {
 
     private func planPeriod(for package: Package) -> String {
         switch package.packageType {
+        case .weekly: return "per week"
         case .monthly: return "per month"
         case .annual: return "per year"
         case .lifetime: return "forever"

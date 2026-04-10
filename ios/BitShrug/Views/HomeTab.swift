@@ -127,7 +127,12 @@ struct HomeTab: View {
                 }
             }
             .sheet(isPresented: $showSettings) { ProfileView() }
-            .sheet(isPresented: $showPaywall) { PaywallView() }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    triggerScore: viewModel.environmentScore > 0 ? viewModel.environmentScore : nil,
+                    triggerLabel: viewModel.environmentScoreLabel
+                )
+            }
         }
         .fogBackground()
         .sensoryFeedback(.success, trigger: viewModel.lastUpdated)
@@ -391,39 +396,37 @@ struct HomeTab: View {
                     .lineSpacing(3)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text(viewModel.insightExpansion)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
-                    .lineSpacing(3)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineLimit(2)
-                    .overlay(alignment: .bottom) {
-                        LinearGradient(
-                            colors: [.clear, Color(.systemBackground)],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .frame(height: 20)
-                    }
+                ZStack {
+                    Text(viewModel.insightExpansion)
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .blur(radius: 6)
 
-                Button { showPaywall = true } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "lock.fill")
-                            .font(.system(size: 10))
-                        Text("Unlock full insights")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                        proBadge
+                    Button { showPaywall = true } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 12))
+                            Text("Unlock full insights")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                            proBadge
+                        }
+                        .foregroundStyle(.orange)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 18)
+                        .background(Color.orange.opacity(0.08))
+                        .clipShape(Capsule())
                     }
-                    .foregroundStyle(.orange)
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
         }
         .premiumCard()
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Daily insight: \(viewModel.insightHeadline). \(viewModel.insightExpansion)")
+        .accessibilityLabel("Daily insight: \(viewModel.insightHeadline)")
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
     }
@@ -434,16 +437,106 @@ struct HomeTab: View {
         VStack(alignment: .leading, spacing: 14) {
             SectionHeader(icon: "gauge.with.dots.needle.bottom.50percent", title: "SCORE BREAKDOWN")
 
-            VStack(spacing: 0) {
-                driverRow(name: "Trend", score: viewModel.trendScore, maxScore: 30, status: viewModel.trendStatus, explanation: viewModel.trendExplanation, isLast: false)
-                driverRow(name: "Momentum", score: viewModel.momentumScore, maxScore: 25, status: viewModel.momentumStatus, explanation: viewModel.momentumExplanation, isLast: false)
-                driverRow(name: "Positioning", score: viewModel.positioningScore, maxScore: 25, status: viewModel.positioningStatus, explanation: viewModel.positioningExplanation, isLast: false)
-                driverRow(name: "Volatility", score: viewModel.volatilityScore, maxScore: 20, status: viewModel.volatilityStatus, explanation: viewModel.volatilityExplanation, isLast: true)
+            if premium.canViewFullBreakdown {
+                VStack(spacing: 0) {
+                    driverRow(name: "Trend", score: viewModel.trendScore, maxScore: 30, status: viewModel.trendStatus, explanation: viewModel.trendExplanation, isLast: false)
+                    driverRow(name: "Momentum", score: viewModel.momentumScore, maxScore: 25, status: viewModel.momentumStatus, explanation: viewModel.momentumExplanation, isLast: false)
+                    driverRow(name: "Positioning", score: viewModel.positioningScore, maxScore: 25, status: viewModel.positioningStatus, explanation: viewModel.positioningExplanation, isLast: false)
+                    driverRow(name: "Volatility", score: viewModel.volatilityScore, maxScore: 20, status: viewModel.volatilityStatus, explanation: viewModel.volatilityExplanation, isLast: true)
+                }
+            } else {
+                ZStack {
+                    VStack(spacing: 0) {
+                        lockedDriverRow(name: "Trend", score: viewModel.trendScore, maxScore: 30, isLast: false)
+                        lockedDriverRow(name: "Momentum", score: viewModel.momentumScore, maxScore: 25, isLast: false)
+                        lockedDriverRow(name: "Positioning", score: viewModel.positioningScore, maxScore: 25, isLast: false)
+                        lockedDriverRow(name: "Volatility", score: viewModel.volatilityScore, maxScore: 20, isLast: true)
+                    }
+                    .blur(radius: 6)
+
+                    Button { showPaywall = true } label: {
+                        VStack(spacing: 10) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 20))
+                                .foregroundStyle(.orange)
+
+                            Text("You scored \(viewModel.environmentScore) — unlock to find out what's holding you back")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(2)
+
+                            HStack(spacing: 6) {
+                                Text("See Full Breakdown")
+                                    .font(.caption)
+                                    .fontWeight(.heavy)
+                                proBadge
+                            }
+                            .foregroundStyle(.orange)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 16)
+                            .background(Color.orange.opacity(0.1))
+                            .clipShape(Capsule())
+                        }
+                        .padding(20)
+                        .frame(maxWidth: .infinity)
+                        .background(.ultraThinMaterial)
+                        .clipShape(.rect(cornerRadius: 16))
+                    }
+                    .buttonStyle(.plain)
+                }
             }
         }
         .premiumCard(.highlighted)
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
+    }
+
+    private func lockedDriverRow(name: String, score: Int, maxScore: Int, isLast: Bool) -> some View {
+        let progress = Double(score) / Double(maxScore)
+
+        return VStack(spacing: 0) {
+            HStack(spacing: 12) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(name)
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.primary)
+
+                    Text("Unlock to see details")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+
+                Spacer(minLength: 0)
+
+                Text("\(score)/\(maxScore)")
+                    .font(.system(.caption, design: .monospaced, weight: .bold))
+                    .foregroundStyle(.primary)
+            }
+            .padding(.vertical, 10)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.primary.opacity(0.06))
+
+                    Capsule()
+                        .fill(Color.primary.opacity(0.15))
+                        .frame(width: max(0, geo.size.width * progress))
+                }
+            }
+            .frame(height: 5)
+            .clipShape(Capsule())
+            .padding(.bottom, isLast ? 0 : 8)
+
+            if !isLast {
+                Divider()
+                    .overlay(Color.primary.opacity(0.04))
+                    .padding(.top, 8)
+            }
+        }
     }
 
     private func driverRow(name: String, score: Int, maxScore: Int, status: DriverStatus, explanation: String, isLast: Bool) -> some View {
@@ -531,13 +624,13 @@ struct HomeTab: View {
 
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(spacing: 6) {
-                            Text("Unlock TouchGrass BTC Pro")
+                            Text("Know exactly what to watch")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.primary)
                             proBadge
                         }
-                        Text("All indicators, full insights, weekly summaries & more")
+                        Text("Full breakdown, all indicators, insights & alerts")
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(.secondary)

@@ -10,13 +10,16 @@ struct PaywallView: View {
     @State private var showTerms: Bool = false
     @State private var showPrivacy: Bool = false
 
+    var triggerScore: Int?
+    var triggerLabel: String?
+
     private var isRegular: Bool { sizeClass == .regular }
     private var contentMaxWidth: CGFloat { isRegular ? 520 : .infinity }
 
     var body: some View {
         ZStack(alignment: .topTrailing) {
             LinearGradient(
-                colors: [Color(.systemBackground), Color.orange.opacity(0.03)],
+                colors: [Color(.systemBackground), Color.orange.opacity(0.04)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -24,14 +27,14 @@ struct PaywallView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    heroHeader
-                        .padding(.top, 56)
-                        .padding(.bottom, 32)
+                    tensionHeader
+                        .padding(.top, 20)
+                        .padding(.bottom, 28)
 
-                    freeSection
-                        .padding(.bottom, 24)
+                    blurredPreview
+                        .padding(.bottom, 28)
 
-                    proValueCard
+                    outcomeValue
                         .padding(.bottom, 28)
 
                     if premium.isLoading {
@@ -54,20 +57,6 @@ struct PaywallView: View {
                 .padding(.horizontal, isRegular ? 40 : 20)
             }
             .scrollIndicators(.hidden)
-
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 30, height: 30)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Circle())
-            }
-            .padding(.top, 14)
-            .padding(.trailing, 16)
-            .accessibilityLabel("Close")
         }
         .alert("Error", isPresented: .init(
             get: { premium.error != nil },
@@ -93,156 +82,100 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Hero Header
-
-    private var heroHeader: some View {
-        VStack(spacing: 16) {
+    private var tensionHeader: some View {
+        VStack(spacing: 18) {
             ZStack {
                 Circle()
-                    .fill(.orange.opacity(0.1))
-                    .frame(width: 88, height: 88)
-
-                Circle()
-                    .fill(.orange.opacity(0.06))
+                    .fill(.orange.opacity(0.08))
                     .frame(width: 110, height: 110)
 
-                Image(systemName: "bitcoinsign.circle.fill")
-                    .font(.system(size: 52))
-                    .foregroundStyle(.orange)
-                    .symbolEffect(.pulse, options: .repeating.speed(0.3))
+                Circle()
+                    .fill(.orange.opacity(0.04))
+                    .frame(width: 140, height: 140)
+
+                if let score = triggerScore {
+                    ZStack {
+                        Circle()
+                            .trim(from: 0, to: Double(score) / 100.0)
+                            .stroke(
+                                AngularGradient(
+                                    colors: [.orange.opacity(0.4), .orange],
+                                    center: .center,
+                                    startAngle: .degrees(-90),
+                                    endAngle: .degrees(-90 + 360 * Double(score) / 100.0)
+                                ),
+                                style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                            )
+                            .frame(width: 88, height: 88)
+                            .rotationEffect(.degrees(-90))
+
+                        Text("\(score)")
+                            .font(.system(size: 36, weight: .heavy, design: .monospaced))
+                            .foregroundStyle(.primary)
+                    }
+                } else {
+                    Image(systemName: "lock.circle.fill")
+                        .font(.system(size: 52))
+                        .foregroundStyle(.orange)
+                        .symbolEffect(.pulse, options: .repeating.speed(0.3))
+                }
             }
             .padding(.bottom, 4)
 
-            Text("Upgrade to Pro")
-                .font(.system(size: isRegular ? 34 : 30, weight: .bold))
-                .foregroundStyle(.primary)
+            if let score = triggerScore {
+                VStack(spacing: 8) {
+                    Text("Your Environment Score is \(score)")
+                        .font(.system(size: isRegular ? 28 : 24, weight: .heavy))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)
 
-            Text("Support TouchGrass BTC and get the\ncomplete experience")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .lineSpacing(2)
+                    Text("Unlock to see exactly what's driving it")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+            } else {
+                VStack(spacing: 8) {
+                    Text("Know What's Really\nHappening with Bitcoin")
+                        .font(.system(size: isRegular ? 28 : 24, weight: .heavy))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(2)
+
+                    Text("Full breakdown, insights, and alerts")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+            }
         }
         .opacity(appearAnimated ? 1 : 0)
         .offset(y: appearAnimated ? 0 : 12)
     }
 
-    // MARK: - Free Section
-
-    private var freeSection: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: 8) {
-                Image(systemName: "gift.fill")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
-                Text("FREE FOREVER")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.secondary)
-                    .tracking(0.8)
-            }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
-            .padding(.bottom, 12)
-
-            VStack(spacing: 0) {
-                freeFeatureRow(icon: "gauge.with.dots.needle.33percent", text: "Environment Score & breakdown", isLast: false)
-                freeFeatureRow(icon: "chart.xyaxis.line", text: "Live price & interactive chart", isLast: false)
-                freeFeatureRow(icon: "waveform.path.ecg", text: "All indicators & on-chain data", isLast: false)
-                freeFeatureRow(icon: "arrow.triangle.2.circlepath", text: "Power Law corridor & Rainbow Chart", isLast: false)
-                freeFeatureRow(icon: "clock.arrow.2.circlepath", text: "Halving cycle tracker & history", isLast: false)
-                freeFeatureRow(icon: "book.fill", text: "Full education & learn library", isLast: true)
-            }
-            .padding(.bottom, 12)
-        }
-        .background(Color(.secondarySystemBackground))
-        .clipShape(.rect(cornerRadius: 16))
-        .opacity(appearAnimated ? 1 : 0)
-        .offset(y: appearAnimated ? 0 : 16)
-    }
-
-    private func freeFeatureRow(icon: String, text: String, isLast: Bool) -> some View {
+    private var blurredPreview: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 22)
-
-                Text(text)
-                    .font(.subheadline)
-                    .foregroundStyle(.primary)
-
-                Spacer()
-
-                Image(systemName: "checkmark")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-
-            if !isLast {
-                Divider()
-                    .padding(.leading, 50)
-                    .padding(.trailing, 16)
-            }
-        }
-    }
-
-    // MARK: - Pro Value Card
-
-    private var proValueCard: some View {
-        VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 8) {
-                Image(systemName: "star.fill")
-                    .font(.system(size: 14))
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 11))
                     .foregroundStyle(.orange)
-                Text("PRO BENEFITS")
-                    .font(.system(size: 12, weight: .bold))
+                Text("WHAT YOU'RE MISSING")
+                    .font(.system(size: 11, weight: .heavy))
                     .foregroundStyle(.orange)
                     .tracking(0.8)
-
-                Spacer()
-
-                Text("Everything in Free, plus:")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.top, 16)
             .padding(.bottom, 14)
 
             VStack(spacing: 0) {
-                proFeatureRow(
-                    icon: "bell.badge.fill",
-                    title: "Smart Notifications",
-                    subtitle: "Environment shifts, indicator changes, daily briefings",
-                    isLast: false
-                )
-                proFeatureRow(
-                    icon: "text.badge.star",
-                    title: "Daily Insights",
-                    subtitle: "What changed and why — explained in plain language",
-                    isLast: false
-                )
-                proFeatureRow(
-                    icon: "calendar.badge.clock",
-                    title: "Weekly Summary",
-                    subtitle: "Direction, score change, and weekly narrative",
-                    isLast: false
-                )
-                proFeatureRow(
-                    icon: "target",
-                    title: "Custom Price Alerts",
-                    subtitle: "Set alerts for any price level",
-                    isLast: false
-                )
-                proFeatureRow(
-                    icon: "square.grid.2x2.fill",
-                    title: "Home Screen Widget",
-                    subtitle: "Environment Score at a glance, right on your Home Screen",
-                    isLast: true
-                )
+                blurredRow(icon: "gauge.with.dots.needle.bottom.50percent", title: "Score Breakdown", detail: "See which drivers are bullish, bearish, or neutral", isLast: false)
+                blurredRow(icon: "sparkle", title: "Daily Insights", detail: "What changed today and why — in plain language", isLast: false)
+                blurredRow(icon: "chart.line.uptrend.xyaxis", title: "Full Indicator Access", detail: "Puell, S2F, Supply in Profit, and more", isLast: false)
+                blurredRow(icon: "calendar.badge.clock", title: "Weekly Summary", detail: "Direction, score change, and narrative", isLast: false)
+                blurredRow(icon: "chart.bar.fill", title: "Progress Tracking", detail: "Score history charts over time", isLast: false)
+                blurredRow(icon: "bell.badge.fill", title: "Smart Alerts", detail: "Environment shifts, price targets, daily briefings", isLast: true)
             }
             .padding(.bottom, 12)
         }
@@ -255,34 +188,34 @@ struct PaywallView: View {
                 )
         )
         .opacity(appearAnimated ? 1 : 0)
-        .offset(y: appearAnimated ? 0 : 20)
+        .offset(y: appearAnimated ? 0 : 16)
     }
 
-    private func proFeatureRow(icon: String, title: String, subtitle: String, isLast: Bool) -> some View {
+    private func blurredRow(icon: String, title: String, detail: String, isLast: Bool) -> some View {
         VStack(spacing: 0) {
-            HStack(alignment: .top, spacing: 12) {
+            HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 14))
                     .foregroundStyle(.orange)
-                    .frame(width: 22, height: 22)
+                    .frame(width: 22)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.subheadline)
-                        .fontWeight(.semibold)
+                        .fontWeight(.bold)
                         .foregroundStyle(.primary)
 
-                    Text(subtitle)
+                    Text(detail)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
-                        .lineSpacing(1)
+                        .lineLimit(1)
                 }
 
                 Spacer()
 
-                Image(systemName: "checkmark")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.orange)
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.tertiary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
@@ -295,7 +228,24 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Plan Cards
+    private var outcomeValue: some View {
+        VStack(spacing: 14) {
+            Text("Don't just watch the price.\nUnderstand the environment.")
+                .font(.headline)
+                .fontWeight(.heavy)
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)
+                .lineSpacing(3)
+
+            Text("Know exactly what's holding Bitcoin back — or pushing it forward — after every session.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .lineSpacing(2)
+        }
+        .opacity(appearAnimated ? 1 : 0)
+        .offset(y: appearAnimated ? 0 : 20)
+    }
 
     private func planCards(_ offering: Offering) -> some View {
         VStack(spacing: 12) {
@@ -306,7 +256,8 @@ struct PaywallView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.bottom, 2)
 
-            ForEach(offering.availablePackages, id: \.identifier) { package in
+            let sorted = sortedPackages(offering.availablePackages)
+            ForEach(sorted, id: \.identifier) { package in
                 planCard(package, offering: offering)
             }
         }
@@ -314,9 +265,18 @@ struct PaywallView: View {
         .offset(y: appearAnimated ? 0 : 24)
     }
 
+    private func sortedPackages(_ packages: [Package]) -> [Package] {
+        let order: [PackageType] = [.annual, .monthly, .weekly]
+        return packages.sorted { a, b in
+            let ai = order.firstIndex(of: a.packageType) ?? 99
+            let bi = order.firstIndex(of: b.packageType) ?? 99
+            return ai < bi
+        }
+    }
+
     private func planCard(_ package: Package, offering: Offering) -> some View {
         let isYearly = package.packageType == .annual
-        let isLifetime = package.packageType == .lifetime
+        let isWeekly = package.packageType == .weekly
         let isSelected = selectedPackageID == package.identifier
         let isBestValue = isYearly
 
@@ -332,7 +292,7 @@ struct PaywallView: View {
                         HStack(spacing: 8) {
                             Text(planTitle(for: package))
                                 .font(.system(.body, weight: .semibold))
-                                .foregroundStyle(isLifetime ? .white : .primary)
+                                .foregroundStyle(.primary)
 
                             if isBestValue {
                                 Text("BEST VALUE")
@@ -343,21 +303,11 @@ struct PaywallView: View {
                                     .background(.orange)
                                     .clipShape(.capsule)
                             }
-
-                            if isLifetime {
-                                Text("ONE TIME")
-                                    .font(.system(size: 9, weight: .heavy))
-                                    .foregroundStyle(.white.opacity(0.9))
-                                    .padding(.horizontal, 7)
-                                    .padding(.vertical, 3)
-                                    .background(.white.opacity(0.2))
-                                    .clipShape(.capsule)
-                            }
                         }
 
                         Text(planSubtitle(for: package))
                             .font(.caption)
-                            .foregroundStyle(isLifetime ? AnyShapeStyle(.white.opacity(0.7)) : AnyShapeStyle(.tertiary))
+                            .foregroundStyle(.tertiary)
                     }
 
                     Spacer()
@@ -365,11 +315,11 @@ struct PaywallView: View {
                     VStack(alignment: .trailing, spacing: 2) {
                         Text(package.storeProduct.localizedPriceString)
                             .font(.system(.title3, weight: .bold))
-                            .foregroundStyle(isLifetime ? AnyShapeStyle(.white) : AnyShapeStyle(isBestValue ? .orange : .primary))
+                            .foregroundStyle(isBestValue ? .orange : .primary)
 
                         Text(planPeriod(for: package))
                             .font(.caption2)
-                            .foregroundStyle(isLifetime ? AnyShapeStyle(.white.opacity(0.7)) : AnyShapeStyle(.tertiary))
+                            .foregroundStyle(.tertiary)
                     }
                 }
                 .padding(16)
@@ -379,28 +329,15 @@ struct PaywallView: View {
                 }
             }
             .background(
-                Group {
-                    if isLifetime {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(isBestValue ? Color.orange.opacity(0.04) : Color(.secondarySystemBackground))
+                    .overlay(
                         RoundedRectangle(cornerRadius: 14)
-                            .fill(
-                                LinearGradient(
-                                    colors: [Color.orange, Color.orange.opacity(0.85)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
+                            .strokeBorder(
+                                isBestValue ? Color.orange.opacity(0.3) : Color.clear,
+                                lineWidth: isBestValue ? 1.5 : 0
                             )
-                    } else {
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(isBestValue ? Color.orange.opacity(0.04) : Color(.secondarySystemBackground))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14)
-                                    .strokeBorder(
-                                        isBestValue ? Color.orange.opacity(0.3) : Color.clear,
-                                        lineWidth: isBestValue ? 1.5 : 0
-                                    )
-                            )
-                    }
-                }
+                    )
             )
             .scaleEffect(isSelected && premium.isPurchasing ? 0.98 : 1.0)
         }
@@ -410,17 +347,29 @@ struct PaywallView: View {
     }
 
     private func savingsBar(for package: Package, in offering: Offering) -> some View {
-        let monthly = offering.availablePackages.first { $0.packageType == .monthly }
+        let weeklyPkg = offering.availablePackages.first { $0.packageType == .weekly }
+        let monthlyPkg = offering.availablePackages.first { $0.packageType == .monthly }
+
         let savingsText: String = {
-            guard let monthlyPrice = monthly?.storeProduct.price as? NSDecimalNumber else { return "Save with yearly" }
-            let yearlyTotal = package.storeProduct.price as NSDecimalNumber
-            let monthlyAnnual = monthlyPrice.doubleValue * 12.0
-            let savings = monthlyAnnual - yearlyTotal.doubleValue
-            if savings > 0, monthlyAnnual > 0 {
-                let pct = Int((savings / monthlyAnnual * 100).rounded())
-                return "Save \(pct)% vs. monthly"
+            if let weeklyPrice = weeklyPkg?.storeProduct.price as? NSDecimalNumber {
+                let yearlyTotal = package.storeProduct.price as NSDecimalNumber
+                let weeklyAnnual = weeklyPrice.doubleValue * 52.0
+                let perWeek = yearlyTotal.doubleValue / 52.0
+                if weeklyAnnual > 0 {
+                    let pct = Int(((weeklyAnnual - yearlyTotal.doubleValue) / weeklyAnnual * 100).rounded())
+                    return "Just $\(String(format: "%.2f", perWeek))/week · Save \(pct)%"
+                }
             }
-            return "Save with yearly"
+            if let monthlyPrice = monthlyPkg?.storeProduct.price as? NSDecimalNumber {
+                let yearlyTotal = package.storeProduct.price as NSDecimalNumber
+                let monthlyAnnual = monthlyPrice.doubleValue * 12.0
+                let savings = monthlyAnnual - yearlyTotal.doubleValue
+                if savings > 0, monthlyAnnual > 0 {
+                    let pct = Int((savings / monthlyAnnual * 100).rounded())
+                    return "Save \(pct)% vs. monthly"
+                }
+            }
+            return "Best value — less than $1/week"
         }()
 
         return HStack(spacing: 6) {
@@ -438,6 +387,7 @@ struct PaywallView: View {
 
     private func planTitle(for package: Package) -> String {
         switch package.packageType {
+        case .weekly: return "Weekly"
         case .monthly: return "Monthly"
         case .annual: return "Yearly"
         case .lifetime: return "Lifetime"
@@ -447,8 +397,9 @@ struct PaywallView: View {
 
     private func planSubtitle(for package: Package) -> String {
         switch package.packageType {
+        case .weekly: return "Cancel anytime"
         case .monthly: return "Cancel anytime"
-        case .annual: return "Billed once per year"
+        case .annual: return "3-day free trial · Billed yearly"
         case .lifetime: return "Pay once, keep forever"
         default: return ""
         }
@@ -456,14 +407,13 @@ struct PaywallView: View {
 
     private func planPeriod(for package: Package) -> String {
         switch package.packageType {
+        case .weekly: return "per week"
         case .monthly: return "per month"
         case .annual: return "per year"
         case .lifetime: return "forever"
         default: return ""
         }
     }
-
-    // MARK: - Support Message
 
     private var supportMessage: some View {
         VStack(spacing: 8) {
@@ -480,11 +430,9 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Legal
-
     private var legalLinks: some View {
         VStack(spacing: 10) {
-            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. You can manage and cancel subscriptions in your Apple ID account settings.")
+            Text("Payment will be charged to your Apple ID account at confirmation of purchase. Subscriptions automatically renew unless canceled at least 24 hours before the end of the current period. You can manage and cancel subscriptions in your Apple ID account settings. Free trial automatically converts to a paid subscription unless canceled before the trial ends.")
                 .font(.system(size: 10))
                 .foregroundStyle(.quaternary)
                 .multilineTextAlignment(.center)

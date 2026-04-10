@@ -261,7 +261,40 @@ struct SignalsTab: View {
             }
 
             if !premium.isPremium {
-                lockedIndicatorsTeaser(count: indicators.count - freeCount)
+                let lockedCount = indicators.count - freeCount
+                Button { showPaywall = true } label: {
+                    VStack(spacing: 10) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                            ForEach(Array(indicators.dropFirst(freeCount).enumerated()), id: \.offset) { _, indicator in
+                                lockedIndicatorCell(title: indicator.title)
+                            }
+                        }
+                        .blur(radius: 4)
+
+                        HStack(spacing: 8) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.orange)
+                            Text("+\(lockedCount) more indicators")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.primary)
+                            proBadge
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(12)
+                        .background(Color.orange.opacity(0.06))
+                        .clipShape(.rect(cornerRadius: 10))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(Color.orange.opacity(0.15), lineWidth: 1)
+                        )
+                    }
+                }
+                .buttonStyle(.plain)
             }
 
             if let dir = viewModel.weeklyScoreChange {
@@ -312,6 +345,36 @@ struct SignalsTab: View {
         .premiumCard(.highlighted)
         .opacity(appeared ? 1 : 0)
         .offset(y: appeared ? 0 : 16)
+    }
+
+    private func lockedIndicatorCell(title: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 5) {
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.tertiary)
+                Text(title)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(.tertiary)
+                    .lineLimit(1)
+            }
+
+            Text("--")
+                .font(.system(.caption, design: .monospaced, weight: .bold))
+                .foregroundStyle(.quaternary)
+
+            Text("Locked")
+                .font(.system(size: 8, weight: .heavy))
+                .foregroundStyle(.quaternary)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(Color.primary.opacity(0.04))
+                .clipShape(Capsule())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(Color.primary.opacity(0.02))
+        .clipShape(.rect(cornerRadius: 10))
     }
 
     private func indicatorCell(icon: String, title: String, value: String, status: String, statusColor: Color, detail: String) -> some View {
@@ -408,44 +471,6 @@ struct SignalsTab: View {
 
     private func formatIndicatorPrice(_ value: Double) -> String {
         "$\(Int(value).formatted(.number))"
-    }
-
-    private func lockedIndicatorsTeaser(count: Int) -> some View {
-        Button { showPaywall = true } label: {
-            HStack(spacing: 10) {
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.orange)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
-                        Text("+\(count) more indicators")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.primary)
-                        proBadge
-                    }
-                    Text("Puell Multiple, Stock-to-Flow, Supply in Profit")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(.tertiary)
-                        .lineLimit(1)
-                }
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.tertiary)
-            }
-            .padding(12)
-            .background(Color.orange.opacity(0.06))
-            .clipShape(.rect(cornerRadius: 10))
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color.orange.opacity(0.15), lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
     }
 
     private var proBadge: some View {

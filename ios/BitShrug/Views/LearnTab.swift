@@ -1415,14 +1415,20 @@ struct TrackedLessonCard: View {
     let learnProgress: LearnProgressManager
 
     @State private var isExpanded: Bool = false
+    @State private var premium = PremiumManager.shared
+    @State private var showPaywall: Bool = false
 
     var body: some View {
         Button {
-            withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
-                isExpanded.toggle()
-            }
-            if isExpanded {
-                learnProgress.markRead(id)
+            if premium.isPremium {
+                withAnimation(.spring(duration: 0.35, bounce: 0.15)) {
+                    isExpanded.toggle()
+                }
+                if isExpanded {
+                    learnProgress.markRead(id)
+                }
+            } else {
+                showPaywall = true
             }
         } label: {
             HStack(alignment: .top, spacing: 14) {
@@ -1452,10 +1458,16 @@ struct TrackedLessonCard: View {
                             .fontWeight(.bold)
                             .foregroundStyle(.primary)
                         Spacer(minLength: 0)
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.tertiary)
-                            .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                        if premium.isPremium {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.tertiary)
+                                .rotationEffect(.degrees(isExpanded ? 180 : 0))
+                        } else {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.orange.opacity(0.6))
+                        }
                     }
 
                     Text(summary)
@@ -1463,7 +1475,7 @@ struct TrackedLessonCard: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(isExpanded ? nil : 1)
 
-                    if isExpanded {
+                    if isExpanded && premium.isPremium {
                         Divider()
                             .overlay(Color.primary.opacity(0.06))
                             .padding(.vertical, 8)
@@ -1487,6 +1499,9 @@ struct TrackedLessonCard: View {
         }
         .buttonStyle(.plain)
         .sensoryFeedback(.impact(flexibility: .soft), trigger: isExpanded)
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+        }
     }
 }
 

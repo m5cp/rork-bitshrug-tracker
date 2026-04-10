@@ -12,6 +12,36 @@ class PremiumManager {
     var isPurchasing: Bool = false
     var error: String?
 
+    private let firstAnalysisKey = "bitshrug_first_analysis_seen"
+    private let analysisCountKey = "bitshrug_analysis_count"
+
+    var hasSeenFirstAnalysis: Bool {
+        UserDefaults.standard.bool(forKey: firstAnalysisKey)
+    }
+
+    var analysisCount: Int {
+        UserDefaults.standard.integer(forKey: analysisCountKey)
+    }
+
+    var shouldShowPaywallAfterAnalysis: Bool {
+        !isPremium && hasSeenFirstAnalysis
+    }
+
+    var canViewFullBreakdown: Bool {
+        isPremium || !hasSeenFirstAnalysis
+    }
+
+    func markFirstAnalysisSeen() {
+        guard !hasSeenFirstAnalysis else { return }
+        UserDefaults.standard.set(true, forKey: firstAnalysisKey)
+        UserDefaults.standard.set(1, forKey: analysisCountKey)
+    }
+
+    func incrementAnalysisCount() {
+        let current = analysisCount
+        UserDefaults.standard.set(current + 1, forKey: analysisCountKey)
+    }
+
     private init() {
         Task { await listenForUpdates() }
         Task { await fetchOfferings() }
